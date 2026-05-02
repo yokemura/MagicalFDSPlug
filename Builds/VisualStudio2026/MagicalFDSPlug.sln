@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 18
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicalFDSPlug - Standalone Plugin", "MagicalFDSPlug_StandalonePlugin.vcxproj", "{7966642B-B184-A49F-6050-D8125CD6C7E1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{334D578C-764E-F43F-09DA-1149B0432136} = {334D578C-764E-F43F-09DA-1149B0432136}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicalFDSPlug - VST", "MagicalFDSPlug_VST.vcxproj", "{CF674346-2693-F2BE-7F80-B8A5C546571E}"
+	ProjectSection(ProjectDependencies) = postProject
+		{334D578C-764E-F43F-09DA-1149B0432136} = {334D578C-764E-F43F-09DA-1149B0432136}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicalFDSPlug - VST3", "MagicalFDSPlug_VST3.vcxproj", "{3179CE1C-144D-19FD-EE8D-7B3A165556BA}"
+	ProjectSection(ProjectDependencies) = postProject
+		{334D578C-764E-F43F-09DA-1149B0432136} = {334D578C-764E-F43F-09DA-1149B0432136}
+		{E58E8929-6D97-BF91-C9BB-212956E5E53D} = {E58E8929-6D97-BF91-C9BB-212956E5E53D}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicalFDSPlug - Shared Code", "MagicalFDSPlug_SharedCode.vcxproj", "{334D578C-764E-F43F-09DA-1149B0432136}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MagicalFDSPlug - VST3 Manifest Helper", "MagicalFDSPlug_VST3ManifestHelper.vcxproj", "{E58E8929-6D97-BF91-C9BB-212956E5E53D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CF674346-2693-F2BE-7F80-B8A5C546571E}.Debug|x64.ActiveCfg = Debug|x64
+		{CF674346-2693-F2BE-7F80-B8A5C546571E}.Debug|x64.Build.0 = Debug|x64
+		{CF674346-2693-F2BE-7F80-B8A5C546571E}.Release|x64.ActiveCfg = Release|x64
+		{CF674346-2693-F2BE-7F80-B8A5C546571E}.Release|x64.Build.0 = Release|x64
+		{3179CE1C-144D-19FD-EE8D-7B3A165556BA}.Debug|x64.ActiveCfg = Debug|x64
+		{3179CE1C-144D-19FD-EE8D-7B3A165556BA}.Debug|x64.Build.0 = Debug|x64
+		{3179CE1C-144D-19FD-EE8D-7B3A165556BA}.Release|x64.ActiveCfg = Release|x64
+		{3179CE1C-144D-19FD-EE8D-7B3A165556BA}.Release|x64.Build.0 = Release|x64
+		{7966642B-B184-A49F-6050-D8125CD6C7E1}.Debug|x64.ActiveCfg = Debug|x64
+		{7966642B-B184-A49F-6050-D8125CD6C7E1}.Debug|x64.Build.0 = Debug|x64
+		{7966642B-B184-A49F-6050-D8125CD6C7E1}.Release|x64.ActiveCfg = Release|x64
+		{7966642B-B184-A49F-6050-D8125CD6C7E1}.Release|x64.Build.0 = Release|x64
+		{334D578C-764E-F43F-09DA-1149B0432136}.Debug|x64.ActiveCfg = Debug|x64
+		{334D578C-764E-F43F-09DA-1149B0432136}.Debug|x64.Build.0 = Debug|x64
+		{334D578C-764E-F43F-09DA-1149B0432136}.Release|x64.ActiveCfg = Release|x64
+		{334D578C-764E-F43F-09DA-1149B0432136}.Release|x64.Build.0 = Release|x64
+		{E58E8929-6D97-BF91-C9BB-212956E5E53D}.Debug|x64.ActiveCfg = Debug|x64
+		{E58E8929-6D97-BF91-C9BB-212956E5E53D}.Debug|x64.Build.0 = Debug|x64
+		{E58E8929-6D97-BF91-C9BB-212956E5E53D}.Release|x64.ActiveCfg = Release|x64
+		{E58E8929-6D97-BF91-C9BB-212956E5E53D}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
