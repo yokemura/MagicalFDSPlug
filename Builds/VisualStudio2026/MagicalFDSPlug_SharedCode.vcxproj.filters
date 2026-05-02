@@ -685,7 +685,7 @@
     <ClCompile Include="..\..\Source\PluginEditor.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Source\SineVoice.cpp">
+    <ClCompile Include="..\..\Source\FDSVoice.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClCompile>
     <ClCompile Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -3615,7 +3615,10 @@
     <ClInclude Include="..\..\Source\PluginEditor.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\SineVoice.h">
+    <ClInclude Include="..\..\Source\FDSPatch.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\FDSVoice.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

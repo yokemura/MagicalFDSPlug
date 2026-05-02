@@ -8,7 +8,7 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-#include "SineVoice.h"
+#include "FDSVoice.h"
 
 //==============================================================================
 NewProjectAudioProcessor::NewProjectAudioProcessor()
@@ -23,12 +23,15 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
                        )
 #endif
 {
+    fdsPatch.resetToDefaults();
+
     synth.setCurrentPlaybackSampleRate (44100.0);
 
-    for (int i = 0; i < maxPolyphony; ++i)
-        synth.addVoice (new SineVoice());
+    const int numVoices = juce::jmin (polyphonyLimit, maxPolyphonyCap);
+    for (int i = 0; i < numVoices; ++i)
+        synth.addVoice (new FDSVoice (&fdsPatch));
 
-    synth.addSound (new GenericSound());
+    synth.addSound (new FDSSound (&fdsPatch));
 }
 
 NewProjectAudioProcessor::~NewProjectAudioProcessor()

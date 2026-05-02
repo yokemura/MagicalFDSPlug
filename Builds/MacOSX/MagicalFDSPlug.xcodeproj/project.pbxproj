@@ -27,7 +27,6 @@
 
 /* Begin PBXBuildFile section */
 		000D4CCEE3B9259628E6A7D1 /* PluginProcessor.cpp */ = {isa = PBXBuildFile; fileRef = BBEC3F5E3EFF62F199F31F37; };
-		C4F1A2B83E5D6C709182AB01 /* SineVoice.cpp */ = {isa = PBXBuildFile; fileRef = D5E2B3C94F6E7D809293BC02; };
 		003A82D89F15407CA7159C0F /* DiscRecording.framework */ = {isa = PBXBuildFile; fileRef = 03F5404B18B4FE724C21E05F; };
 		059627FA4D2143D2CFB916FF /* juce_VST3ManifestHelper.mm */ = {isa = PBXBuildFile; fileRef = EEF789DAA10E066CD4E25966; settings = { COMPILER_FLAGS = "-w -DJUCE_SKIP_PRECOMPILED_HEADER"; }; };
 		08724ECB065AE50131906F73 /* include_juce_audio_processors_headless_ara.cpp */ = {isa = PBXBuildFile; fileRef = 67D091D81BE227B9D3A6F192; };
@@ -68,6 +67,7 @@
 		C8F4C620BFEFAE8DB60E3150 /* include_juce_audio_utils.mm */ = {isa = PBXBuildFile; fileRef = 771EB2801F158C8D591CB5A2; };
 		C909629A5D73D92FFFAE61A7 /* include_juce_audio_plugin_client_VST3.mm */ = {isa = PBXBuildFile; fileRef = 33F484BBE32B4C7DD64F72E6; };
 		CA844468F9FC5972FD905FB9 /* include_juce_audio_processors_headless.mm */ = {isa = PBXBuildFile; fileRef = A82C8338B596B1494F459A46; };
+		CD54B590DC2C80C89FF1DF28 /* FDSVoice.cpp */ = {isa = PBXBuildFile; fileRef = 9246C36FFD2CE5011F0744E1; };
 		D0CFD8583269CE5DBC24652E /* VST */ = {isa = PBXBuildFile; fileRef = A0D1400EE3345D14D6C4458D; };
 		D19680BE5AC1483CFF10405E /* MetalKit.framework */ = {isa = PBXBuildFile; fileRef = 0B2EBCD7FBA0A5F09F822431; settings = { ATTRIBUTES = (Weak, ); }; };
 		DA27F079269513D3134FFF5C /* QuartzCore.framework */ = {isa = PBXBuildFile; fileRef = B1EB58CA8F542EBFA1C9E80E; };
@@ -114,10 +114,13 @@
 		68D00A6B0B3ED365A11A1137 /* juce_audio_basics */ /* juce_audio_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_basics; path = /Applications/JUCE/modules/juce_audio_basics; sourceTree = "<absolute>"; };
 		6A11A65118D68413C77F9650 /* Shared Code */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libMagicalFDSPlug-debug.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AB7104D0247EFEB732306CC /* juce_audio_formats */ /* juce_audio_formats */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_formats; path = /Applications/JUCE/modules/juce_audio_formats; sourceTree = "<absolute>"; };
+		738BB9913F88C88DB1F49F5E /* FDSVoice.h */ /* FDSVoice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FDSVoice.h; path = ../../Source/FDSVoice.h; sourceTree = SOURCE_ROOT; };
 		771EB2801F158C8D591CB5A2 /* include_juce_audio_utils.mm */ /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
 		7924F4FA4C5E361DAF026032 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Applications/JUCE/modules/juce_gui_basics; sourceTree = "<absolute>"; };
+		794A175E93FB4138949FDDCF /* FDSPatch.h */ /* FDSPatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FDSPatch.h; path = ../../Source/FDSPatch.h; sourceTree = SOURCE_ROOT; };
 		834BE6F0F9A524E9990878C7 /* Security.framework */ /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		90E868C3D51908F8A273D1CB /* PluginEditor.h */ /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginEditor.h; path = ../../Source/PluginEditor.h; sourceTree = SOURCE_ROOT; };
+		9246C36FFD2CE5011F0744E1 /* FDSVoice.cpp */ /* FDSVoice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FDSVoice.cpp; path = ../../Source/FDSVoice.cpp; sourceTree = SOURCE_ROOT; };
 		99FB97853BE215282C745B55 /* VST3 Manifest Helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_vst3_helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DEEBA0A1CBD27086BD6C951 /* CoreAudio.framework */ /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		A0D1400EE3345D14D6C4458D /* VST */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MagicalFDSPlug-debug.vst"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -127,8 +130,6 @@
 		B722F3D079AEB21DFBFA50A9 /* include_juce_audio_plugin_client_Standalone.cpp */ /* include_juce_audio_plugin_client_Standalone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_Standalone.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp; sourceTree = SOURCE_ROOT; };
 		B8A3DA45AFD0639DF9229E68 /* include_juce_graphics_Sheenbidi.c */ /* include_juce_graphics_Sheenbidi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = include_juce_graphics_Sheenbidi.c; path = ../../JuceLibraryCode/include_juce_graphics_Sheenbidi.c; sourceTree = SOURCE_ROOT; };
 		BBEC3F5E3EFF62F199F31F37 /* PluginProcessor.cpp */ /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
-		D5E2B3C94F6E7D809293BC02 /* SineVoice.cpp */ /* SineVoice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SineVoice.cpp; path = ../../Source/SineVoice.cpp; sourceTree = SOURCE_ROOT; };
-		E6F3C4DA506F8E919394BC03 /* SineVoice.h */ /* SineVoice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SineVoice.h; path = ../../Source/SineVoice.h; sourceTree = SOURCE_ROOT; };
 		BDDD5B72530E397C26E3B37D /* include_juce_audio_processors_headless_lv2_libs.cpp */ /* include_juce_audio_processors_headless_lv2_libs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_headless_lv2_libs.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_headless_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
 		C2387E32406F072B6B42CE46 /* VST3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MagicalFDSPlug-debug.vst3"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C2456E4B06EF7F01B59351C0 /* juce_gui_extra */ /* juce_gui_extra */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_extra; path = /Applications/JUCE/modules/juce_gui_extra; sourceTree = "<absolute>"; };
@@ -322,8 +323,9 @@
 				A79B8C171655FC1AA1FF1E04,
 				FB3F6CB1C48387DE033E1016,
 				90E868C3D51908F8A273D1CB,
-				D5E2B3C94F6E7D809293BC02,
-				E6F3C4DA506F8E919394BC03,
+				794A175E93FB4138949FDDCF,
+				9246C36FFD2CE5011F0744E1,
+				738BB9913F88C88DB1F49F5E,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -807,8 +809,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				000D4CCEE3B9259628E6A7D1,
-				C4F1A2B83E5D6C709182AB01,
 				C4AEAAA4FB0405B12741C730,
+				CD54B590DC2C80C89FF1DF28,
 				F65DA9CD500963CF84AE40EB,
 				BEB92687E8EE0303CEF5A7E9,
 				6A6C724C883FA13EB74638BC,

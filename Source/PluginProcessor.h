@@ -10,13 +10,7 @@
 
 #include <JuceHeader.h>
 
-//==============================================================================
-/** Accept all MIDI notes / channels (same idea as Magical8bitPlug2 GenericSound). */
-struct GenericSound final : public juce::SynthesiserSound
-{
-    bool appliesToNote (int) override { return true; }
-    bool appliesToChannel (int) override { return true; }
-};
+#include "FDSPatch.h"
 
 //==============================================================================
 /**
@@ -63,7 +57,12 @@ public:
 
 private:
     //==============================================================================
-    static constexpr int maxPolyphony = 16;
+    static constexpr int maxPolyphonyCap = 16;
+
+    /** 有効ボイス数（将来 APVTS で 1〜maxPolyphonyCap、既定 1 を想定）。UI 完成まで当面は max と同じ。 */
+    int polyphonyLimit = maxPolyphonyCap;
+
+    FDSPatch fdsPatch;
 
     juce::Synthesiser synth;
 

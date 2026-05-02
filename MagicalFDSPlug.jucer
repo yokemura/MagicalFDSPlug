@@ -12,10 +12,9 @@
       <FILE id="AgXEGB" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="UlF69R" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
-      <FILE id="SnVs01" name="SineVoice.cpp" compile="1" resource="0"
-            file="Source/SineVoice.cpp"/>
-      <FILE id="SnVs02" name="SineVoice.h" compile="0" resource="0"
-            file="Source/SineVoice.h"/>
+      <FILE id="FdPh01" name="FDSPatch.h" compile="0" resource="0" file="Source/FDSPatch.h"/>
+      <FILE id="FdVo01" name="FDSVoice.cpp" compile="1" resource="0" file="Source/FDSVoice.cpp"/>
+      <FILE id="FdVo02" name="FDSVoice.h" compile="0" resource="0" file="Source/FDSVoice.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
