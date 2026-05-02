@@ -12,6 +12,10 @@
       <FILE id="AgXEGB" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
       <FILE id="UlF69R" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <FILE id="SnVs01" name="SineVoice.cpp" compile="1" resource="0"
+            file="Source/SineVoice.cpp"/>
+      <FILE id="SnVs02" name="SineVoice.h" compile="0" resource="0"
+            file="Source/SineVoice.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

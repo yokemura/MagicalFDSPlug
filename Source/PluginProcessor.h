@@ -11,6 +11,14 @@
 #include <JuceHeader.h>
 
 //==============================================================================
+/** Accept all MIDI notes / channels (same idea as Magical8bitPlug2 GenericSound). */
+struct GenericSound final : public juce::SynthesiserSound
+{
+    bool appliesToNote (int) override { return true; }
+    bool appliesToChannel (int) override { return true; }
+};
+
+//==============================================================================
 /**
 */
 class NewProjectAudioProcessor  : public juce::AudioProcessor
@@ -55,5 +63,9 @@ public:
 
 private:
     //==============================================================================
+    static constexpr int maxPolyphony = 16;
+
+    juce::Synthesiser synth;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessor)
 };
