@@ -38,6 +38,23 @@ struct FDSPatch
     /** $4086 low byte + $4087 high nybble => 12-bit modulator timer period. */
     uint16_t modFreq12 = 0x0100;
 
+    // ---- Runtime (from APVTS, updated each block; not part of FDS hardware mirror) ----
+    float pitchBendRangeSemis = 2.f;
+    /** UI Gain 0..1 (M8BP2 準拠リニア). */
+    float masterGainLinear = 0.5f;
+    /** 変調深さ 0..1（モジュレータ ADSR 出力に掛ける）。 */
+    float modDepth = 0.f;
+
+    float carrierAttackSec = 0.f;
+    float carrierDecaySec = 0.f;
+    float carrierSustainLevel = 1.f;
+    float carrierReleaseSec = 0.f;
+
+    float modAttackSec = 0.f;
+    float modDecaySec = 0.f;
+    float modSustainLevel = 1.f;
+    float modReleaseSec = 0.f;
+
     void resetToDefaults()
     {
         reg4080 = 0xff;

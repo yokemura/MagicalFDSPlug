@@ -11,6 +11,19 @@
 #include "FDSVoice.h"
 #include "PatchBuilder.h"
 
+#include <cmath>
+
+namespace
+{
+    int readPolyphonyFromApvts (juce::AudioProcessorValueTreeState& apvts, int maxCap)
+    {
+        if (auto* p = dynamic_cast<juce::AudioParameterFloat*> (apvts.getParameter (MagicalFDS::ParamIDs::polyphony)))
+            return juce::jlimit (1, maxCap, (int) std::lround (p->get()));
+
+        return 1;
+    }
+}
+
 //==============================================================================
 NewProjectAudioProcessor::NewProjectAudioProcessor()
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -33,13 +46,27 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
 
     synth.setCurrentPlaybackSampleRate (44100.0);
 
-    const int numVoices = juce::jmin (polyphonyLimit, maxPolyphonyCap);
-    for (int i = 0; i < numVoices; ++i)
+    synthVoiceCount = readPolyphonyFromApvts (apvts, maxPolyphonyCap);
+    for (int i = 0; i < synthVoiceCount; ++i)
         synth.addVoice (new FDSVoice (&fdsPatch));
 
     synth.addSound (new FDSSound (&fdsPatch));
 
     MagicalFDS::applyApvtsToPatch (apvts, fdsPatch);
+    MagicalFDS::applyRuntimeParametersFromApvts (apvts, fdsPatch);
+}
+
+void NewProjectAudioProcessor::syncPolyphonyFromApvts()
+{
+    const int poly = readPolyphonyFromApvts (apvts, maxPolyphonyCap);
+    if (poly == synthVoiceCount)
+        return;
+
+    synth.clearVoices();
+    for (int i = 0; i < poly; ++i)
+        synth.addVoice (new FDSVoice (&fdsPatch));
+
+    synthVoiceCount = poly;
 }
 
 NewProjectAudioProcessor::~NewProjectAudioProcessor()
@@ -152,6 +179,8 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
     juce::ScopedNoDenormals noDenormals;
 
     MagicalFDS::applyApvtsToPatch (apvts, fdsPatch);
+    MagicalFDS::applyRuntimeParametersFromApvts (apvts, fdsPatch);
+    syncPolyphonyFromApvts();
 
     buffer.clear();
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());

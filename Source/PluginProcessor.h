@@ -64,8 +64,10 @@ private:
     //==============================================================================
     static constexpr int maxPolyphonyCap = 16;
 
-    /** 有効ボイス数（将来 APVTS の polyphony で 1〜maxPolyphonyCap を反映予定）。UI 完成まで当面は max と同じ。 */
-    int polyphonyLimit = maxPolyphonyCap;
+    /** 現在構築済みのシンセボイス数（APVTS polyphony と一致）。 */
+    int synthVoiceCount = 1;
+
+    void syncPolyphonyFromApvts();
 
     FDSPatch fdsPatch;
 

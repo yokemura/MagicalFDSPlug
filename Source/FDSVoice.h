@@ -37,12 +37,13 @@ public:
 private:
     FDSPatch* patch = nullptr;
 
+    juce::ADSR carrierAdsr;
+    juce::ADSR modAdsr;
+    double adsrSampleRate = 0.0;
+
     float carrierPhase = 0.f;
     float modPhase = 0.f;
     int modCounter = 0;
-
-    float volumeEnvGain = 32.f;
-    float modEnvGain = 63.f;
 
     float velocity = 0.f;
     float pitchWheelRatio = 1.f;
@@ -53,11 +54,11 @@ private:
     double modPhaseInc = 0.0;
 
     static constexpr float masterGain = 0.2f;
-    static constexpr float pitchBendSemis = 2.0f;
 
     static void applyModWaveStep (uint8_t code, int& counter);
-    static float pitchWheelToRatio (int wheel14);
+    float pitchWheelToRatio (int wheel14) const;
 
+    void ensureAdsrSampleRate();
     void updateRatesFromPatch();
     float renderOneSample();
 

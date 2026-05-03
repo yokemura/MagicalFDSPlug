@@ -11,6 +11,39 @@
 #include <cmath>
 
 //==============================================================================
+void FDSVoice::ensureAdsrSampleRate()
+{
+    const double sr = getSampleRate();
+    if (sr <= 0.0)
+        return;
+
+    if (sr == adsrSampleRate)
+        return;
+
+    carrierAdsr.setSampleRate (sr);
+    modAdsr.setSampleRate (sr);
+
+    if (patch != nullptr)
+    {
+        carrierAdsr.setParameters ({
+            patch->carrierAttackSec,
+            patch->carrierDecaySec,
+            patch->carrierSustainLevel,
+            patch->carrierReleaseSec
+        });
+
+        modAdsr.setParameters ({
+            patch->modAttackSec,
+            patch->modDecaySec,
+            patch->modSustainLevel,
+            patch->modReleaseSec
+        });
+    }
+
+    adsrSampleRate = sr;
+}
+
+//==============================================================================
 FDSVoice::FDSVoice (FDSPatch* sharedPatch)
     : patch (sharedPatch)
 {
@@ -27,8 +60,6 @@ void FDSVoice::startNote (int midiNoteNumber,
                           juce::SynthesiserSound*,
                           int pitchWheelPosition)
 {
-    juce::ignoreUnused (pitchWheelPosition);
-
     currentMidiNote = midiNoteNumber;
     velocity = vel;
     currentPitchWheel = pitchWheelPosition;
@@ -41,19 +72,53 @@ void FDSVoice::startNote (int midiNoteNumber,
     carrierHz = (double) juce::MidiMessage::getMidiNoteInHertz (midiNoteNumber)
                 * (double) pitchWheelRatio;
 
+    const double sr = getSampleRate() > 0.0 ? getSampleRate() : 44100.0;
+    carrierAdsr.setSampleRate (sr);
+    modAdsr.setSampleRate (sr);
+    adsrSampleRate = sr;
+
     if (patch != nullptr)
     {
-        volumeEnvGain = (float) patch->getVolumeGainClamped();
-        modEnvGain = (float) patch->getModGainClamped();
+        carrierAdsr.setParameters ({
+            patch->carrierAttackSec,
+            patch->carrierDecaySec,
+            patch->carrierSustainLevel,
+            patch->carrierReleaseSec
+        });
+
+        modAdsr.setParameters ({
+            patch->modAttackSec,
+            patch->modDecaySec,
+            patch->modSustainLevel,
+            patch->modReleaseSec
+        });
     }
+    else
+    {
+        carrierAdsr.setParameters ({});
+        modAdsr.setParameters ({});
+    }
+
+    carrierAdsr.reset();
+    modAdsr.reset();
+    carrierAdsr.noteOn();
+    modAdsr.noteOn();
 
     updateRatesFromPatch();
 }
 
 void FDSVoice::stopNote (float /*velocity*/, bool allowTailOff)
 {
-    juce::ignoreUnused (allowTailOff);
-    clearCurrentNote();
+    if (! allowTailOff)
+    {
+        carrierAdsr.reset();
+        modAdsr.reset();
+        clearCurrentNote();
+        return;
+    }
+
+    carrierAdsr.noteOff();
+    modAdsr.noteOff();
 }
 
 void FDSVoice::pitchWheelMoved (int newPitchWheelValue)
@@ -73,10 +138,15 @@ void FDSVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer,
     if (patch == nullptr || getCurrentlyPlayingNote() < 0)
         return;
 
+    ensureAdsrSampleRate();
+
     const auto numChannels = outputBuffer.getNumChannels();
 
     while (--numSamples >= 0)
     {
+        if (getCurrentlyPlayingNote() < 0)
+            break;
+
         const float s = renderOneSample();
 
         for (int ch = 0; ch < numChannels; ++ch)
@@ -124,10 +194,11 @@ void FDSVoice::applyModWaveStep (uint8_t code, int& counter)
         counter += 128;
 }
 
-float FDSVoice::pitchWheelToRatio (int wheel14)
+float FDSVoice::pitchWheelToRatio (int wheel14) const
 {
+    const float semis = (patch != nullptr ? patch->pitchBendRangeSemis : 2.f);
     const float x = ((float) wheel14 - 8192.f) / 8192.f;
-    return std::pow (2.f, x * pitchBendSemis / 12.f);
+    return std::pow (2.f, x * semis / 12.f);
 }
 
 void FDSVoice::updateRatesFromPatch()
@@ -140,7 +211,6 @@ void FDSVoice::updateRatesFromPatch()
         return;
 
     const double m = (double) (patch->modFreq12 & 0x0fff);
-    /** Maps 12-bit mod period to modulation LFO rate (audio-rate approximation). */
     const double modHz = 2.0 + (m / 4095.0) * 40.0;
     modPhaseInc = (modHz / sr) * (double) FDSPatch::waveSteps;
 }
@@ -158,10 +228,17 @@ float FDSVoice::renderOneSample()
     carrierHz = (double) juce::MidiMessage::getMidiNoteInHertz (currentMidiNote)
                 * (double) pitchWheelRatio;
 
-    volumeEnvGain = (float) patch->getVolumeGainClamped();
-    modEnvGain = (float) patch->getModGainClamped();
-
     updateRatesFromPatch();
+
+    const float cEnv = carrierAdsr.getNextSample();
+    const float mEnv = modAdsr.getNextSample();
+
+    if (! carrierAdsr.isActive())
+    {
+        modAdsr.reset();
+        clearCurrentNote();
+        return 0.f;
+    }
 
     modPhase += (float) modPhaseInc;
     while (modPhase >= (float) FDSPatch::waveSteps)
@@ -171,7 +248,7 @@ float FDSVoice::renderOneSample()
     applyModWaveStep (patch->modWave[(size_t) modIndex], modCounter);
 
     const float modNorm = (float) modCounter / 64.f;
-    const float depth = (modEnvGain / 63.f) * 0.05f;
+    const float depth = mEnv * patch->modDepth * 0.05f;
     const float carrierInc = (float) ((carrierHz / sr) * (double) FDSPatch::waveSteps)
                              * (1.f + depth * modNorm);
 
@@ -185,6 +262,7 @@ float FDSVoice::renderOneSample()
     const float w = (float) patch->carrierWave[(size_t) waveIndex] / 63.f;
     const float bipolar = w * 2.f - 1.f;
 
-    const float vol = (volumeEnvGain / 32.f) * velocity * masterGain;
+    const float gain = patch->masterGainLinear;
+    const float vol = cEnv * gain * velocity * masterGain;
     return bipolar * vol;
 }

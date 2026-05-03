@@ -217,4 +217,22 @@ void applyApvtsToPatch (juce::AudioProcessorValueTreeState& apvts, FDSPatch& pat
     patch.modFreq12 = (uint16_t) (getIntParam (apvts, ParamIDs::modRate) & 0x0fff);
 }
 
+//==============================================================================
+void applyRuntimeParametersFromApvts (juce::AudioProcessorValueTreeState& apvts, FDSPatch& patch)
+{
+    patch.pitchBendRangeSemis = (float) juce::jlimit (0, 24, getIntParam (apvts, ParamIDs::bendRange));
+    patch.masterGainLinear    = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::gain));
+    patch.modDepth            = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::modDepth));
+
+    patch.carrierAttackSec    = getFloatParam (apvts, ParamIDs::carrierA);
+    patch.carrierDecaySec     = getFloatParam (apvts, ParamIDs::carrierD);
+    patch.carrierSustainLevel = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::carrierS));
+    patch.carrierReleaseSec   = getFloatParam (apvts, ParamIDs::carrierR);
+
+    patch.modAttackSec        = getFloatParam (apvts, ParamIDs::modA);
+    patch.modDecaySec         = getFloatParam (apvts, ParamIDs::modD);
+    patch.modSustainLevel     = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::modS));
+    patch.modReleaseSec       = getFloatParam (apvts, ParamIDs::modR);
+}
+
 } // namespace MagicalFDS
