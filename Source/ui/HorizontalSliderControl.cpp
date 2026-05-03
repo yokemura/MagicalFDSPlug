@@ -1,0 +1,41 @@
+/*
+  ==============================================================================
+
+    HorizontalSliderControl.cpp
+
+  ==============================================================================
+*/
+
+#include "HorizontalSliderControl.h"
+
+#include "../LayoutConstants.h"
+
+namespace MagicalFDS::UI
+{
+HorizontalSliderControl::HorizontalSliderControl (juce::AudioProcessorValueTreeState& apvts,
+                                                  const juce::String& paramId,
+                                                  const juce::String& name)
+{
+    label.setText (name, juce::dontSendNotification);
+    label.setJustificationType (juce::Justification::centredLeft);
+    addAndMakeVisible (label);
+
+    slider.setSliderStyle (juce::Slider::LinearHorizontal);
+    slider.setTextBoxStyle (juce::Slider::TextBoxRight, false, 80, Layout::rowHeight);
+    addAndMakeVisible (slider);
+
+    attachment = std::make_unique<SliderAttachment> (apvts, paramId, slider);
+}
+
+void HorizontalSliderControl::resized()
+{
+    auto r = getLocalBounds();
+
+    auto labelArea = r.removeFromLeft (Layout::labelColumnWidth);
+    label.setBounds (labelArea.reduced (0, 1));
+
+    r.removeFromLeft (Layout::labelControlGap);
+    slider.setBounds (r.reduced (0, 1));
+}
+} // namespace MagicalFDS::UI
+
