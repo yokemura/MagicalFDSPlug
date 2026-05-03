@@ -688,6 +688,9 @@
     <ClCompile Include="..\..\Source\FDSVoice.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\PatchBuilder.cpp">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClCompile>
     <ClCompile Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
     </ClCompile>
@@ -3619,6 +3622,12 @@
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\FDSVoice.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Parameters.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PatchBuilder.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">

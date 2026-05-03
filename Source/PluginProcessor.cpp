@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 #include "FDSVoice.h"
+#include "PatchBuilder.h"
 
 //==============================================================================
 NewProjectAudioProcessor::NewProjectAudioProcessor()
@@ -37,6 +38,8 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
         synth.addVoice (new FDSVoice (&fdsPatch));
 
     synth.addSound (new FDSSound (&fdsPatch));
+
+    MagicalFDS::applyApvtsToPatch (apvts, fdsPatch);
 }
 
 NewProjectAudioProcessor::~NewProjectAudioProcessor()
@@ -147,6 +150,8 @@ bool NewProjectAudioProcessor::isBusesLayoutSupported (const BusesLayout& layout
 void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
+
+    MagicalFDS::applyApvtsToPatch (apvts, fdsPatch);
 
     buffer.clear();
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
