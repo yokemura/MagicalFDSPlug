@@ -1,40 +1,100 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin editor.
+    PluginEditor.cpp
 
   ==============================================================================
 */
 
-#include "PluginProcessor.h"
 #include "PluginEditor.h"
+
+#include "ColorScheme.h"
+#include "LayoutConstants.h"
+#include "Parameters.h"
 
 //==============================================================================
 NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioProcessor& p)
-    : AudioProcessorEditor (&p), audioProcessor (p)
+    : AudioProcessorEditor (&p)
+    , audioProcessor (p)
+    , globalSection (p.getParameters())
+    , carrierSection (p.getParameters())
+    , modulatorSection (p.getParameters())
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    setSize (400, 300);
+    setLookAndFeel (&lookAndFeel);
+
+    addAndMakeVisible (globalSection);
+    addAndMakeVisible (carrierSection);
+    addAndMakeVisible (modulatorSection);
+
+    applyThemeFromParameters();
+
+    audioProcessor.getParameters().addParameterListener (MagicalFDS::ParamIDs::colorTheme, this);
+
+    setSize (MagicalFDS::Layout::totalWidth, MagicalFDS::Layout::editorHeightHint);
 }
 
 NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()
 {
+    audioProcessor.getParameters().removeParameterListener (MagicalFDS::ParamIDs::colorTheme, this);
+    setLookAndFeel (nullptr);
 }
 
 //==============================================================================
 void NewProjectAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.fillAll (findColour (juce::ResizableWindow::backgroundColourId));
 }
 
 void NewProjectAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    using namespace MagicalFDS::Layout;
+
+    auto content = getLocalBounds();
+    content.removeFromTop (outerMargin);
+    content.removeFromLeft (outerMargin);
+    content.removeFromRight (outerMargin);
+    content.removeFromBottom (bottomMargin);
+
+    constexpr int globalBlockHeight = sectionHeaderHeight + rowHeight * 2;
+
+    globalSection.setBounds (content.removeFromTop (globalBlockHeight));
+    content.removeFromTop (sectionSeparatorHeight);
+
+    const int columnH = content.getHeight();
+    auto carrierArea = content.removeFromLeft (carrierWidth);
+    content.removeFromLeft (verticalSeparatorWidth);
+
+    carrierSection.setBounds (carrierArea.withHeight (columnH));
+    modulatorSection.setBounds (content.withHeight (columnH));
+}
+
+void NewProjectAudioProcessorEditor::parameterChanged (const juce::String& parameterID, float newValue)
+{
+    juce::ignoreUnused (newValue);
+
+    if (parameterID == MagicalFDS::ParamIDs::colorTheme)
+        applyThemeFromParameters();
+}
+
+void NewProjectAudioProcessorEditor::applyThemeFromParameters()
+{
+    int idx = 0;
+
+    if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (
+            audioProcessor.getParameters().getParameter (MagicalFDS::ParamIDs::colorTheme)))
+        idx = p->getIndex();
+
+    static constexpr std::array<MagicalFDS::ColorSchemeType, 6> map {
+        MagicalFDS::kColorSchemeYmck,
+        MagicalFDS::kColorSchemeYmckDark,
+        MagicalFDS::kColorSchemeFamicom,
+        MagicalFDS::kColorSchemeNes,
+        MagicalFDS::kColorSchemeMonotoneLight,
+        MagicalFDS::kColorSchemeMonotoneDark
+    };
+
+    idx = juce::jlimit (0, (int) map.size() - 1, idx);
+    const MagicalFDS::ColorScheme scheme (map[(size_t) idx]);
+    lookAndFeel.applyColorScheme (scheme);
+    repaint();
 }

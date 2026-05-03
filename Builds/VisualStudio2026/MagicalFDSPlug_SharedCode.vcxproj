@@ -148,6 +148,17 @@
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\FDSVoice.cpp"/>
     <ClCompile Include="..\..\Source\PatchBuilder.cpp"/>
+    <ClCompile Include="..\..\Source\ColorScheme.cpp"/>
+    <ClCompile Include="..\..\Source\MagicalFDSLookAndFeel.cpp"/>
+    <ClCompile Include="..\..\Source\ui\HorizontalSliderControl.cpp"/>
+    <ClCompile Include="..\..\Source\ui\VerticalSliderControl.cpp"/>
+    <ClCompile Include="..\..\Source\ui\ChoiceControl.cpp"/>
+    <ClCompile Include="..\..\Source\ui\ToggleSwitchControl.cpp"/>
+    <ClCompile Include="..\..\Source\ui\WaveDisplayComponent.cpp"/>
+    <ClCompile Include="..\..\Source\ui\GlobalSectionComponent.cpp"/>
+    <ClCompile Include="..\..\Source\ui\CarrierSectionComponent.cpp"/>
+    <ClCompile Include="..\..\Source\ui\CarrierControlPanel.cpp"/>
+    <ClCompile Include="..\..\Source\ui\ModulatorSectionComponent.cpp"/>
     <ClCompile Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <ExcludedFromBuild>true</ExcludedFromBuild>
     </ClCompile>
@@ -2899,6 +2910,19 @@
     <ClInclude Include="..\..\Source\FDSVoice.h"/>
     <ClInclude Include="..\..\Source\Parameters.h"/>
     <ClInclude Include="..\..\Source\PatchBuilder.h"/>
+    <ClInclude Include="..\..\Source\LayoutConstants.h"/>
+    <ClInclude Include="..\..\Source\ColorScheme.h"/>
+    <ClInclude Include="..\..\Source\MagicalFDSLookAndFeel.h"/>
+    <ClInclude Include="..\..\Source\ui\HorizontalSliderControl.h"/>
+    <ClInclude Include="..\..\Source\ui\VerticalSliderControl.h"/>
+    <ClInclude Include="..\..\Source\ui\ChoiceControl.h"/>
+    <ClInclude Include="..\..\Source\ui\ToggleSwitchControl.h"/>
+    <ClInclude Include="..\..\Source\ui\SectionLabel.h"/>
+    <ClInclude Include="..\..\Source\ui\WaveDisplayComponent.h"/>
+    <ClInclude Include="..\..\Source\ui\GlobalSectionComponent.h"/>
+    <ClInclude Include="..\..\Source\ui\CarrierSectionComponent.h"/>
+    <ClInclude Include="..\..\Source\ui\CarrierControlPanel.h"/>
+    <ClInclude Include="..\..\Source\ui\ModulatorSectionComponent.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>

@@ -1,7 +1,7 @@
 /*
   ==============================================================================
 
-    This file contains the basic framework code for a JUCE plugin editor.
+    MagicalFDSPlug editor — global / carrier / modulator layout (see docs/UI-Specification.md).
 
   ==============================================================================
 */
@@ -9,25 +9,35 @@
 #pragma once
 
 #include <JuceHeader.h>
+
+#include "MagicalFDSLookAndFeel.h"
 #include "PluginProcessor.h"
+#include "ui/CarrierSectionComponent.h"
+#include "ui/GlobalSectionComponent.h"
+#include "ui/ModulatorSectionComponent.h"
 
 //==============================================================================
-/**
-*/
-class NewProjectAudioProcessorEditor  : public juce::AudioProcessorEditor
+class NewProjectAudioProcessorEditor final : public juce::AudioProcessorEditor,
+                                             private juce::AudioProcessorValueTreeState::Listener
 {
 public:
-    NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
+    explicit NewProjectAudioProcessorEditor (NewProjectAudioProcessor&);
     ~NewProjectAudioProcessorEditor() override;
 
-    //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
+    void parameterChanged (const juce::String& parameterID, float newValue) override;
+    void applyThemeFromParameters();
+
     NewProjectAudioProcessor& audioProcessor;
+
+    MagicalFDS::MagicalFDSLookAndFeel lookAndFeel;
+
+    MagicalFDS::UI::GlobalSectionComponent   globalSection;
+    MagicalFDS::UI::CarrierSectionComponent  carrierSection;
+    MagicalFDS::UI::ModulatorSectionComponent modulatorSection;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (NewProjectAudioProcessorEditor)
 };

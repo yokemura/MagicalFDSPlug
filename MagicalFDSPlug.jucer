@@ -18,6 +18,50 @@
       <FILE id="PaRa01" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="PaRb01" name="PatchBuilder.cpp" compile="1" resource="0" file="Source/PatchBuilder.cpp"/>
       <FILE id="PaRb02" name="PatchBuilder.h" compile="0" resource="0" file="Source/PatchBuilder.h"/>
+      <FILE id="LyCt01" name="LayoutConstants.h" compile="0" resource="0" file="Source/LayoutConstants.h"/>
+      <FILE id="ClSc01" name="ColorScheme.cpp" compile="1" resource="0" file="Source/ColorScheme.cpp"/>
+      <FILE id="ClSc02" name="ColorScheme.h" compile="0" resource="0" file="Source/ColorScheme.h"/>
+      <FILE id="MnLf01" name="MagicalFDSLookAndFeel.cpp" compile="1" resource="0"
+            file="Source/MagicalFDSLookAndFeel.cpp"/>
+      <FILE id="MnLf02" name="MagicalFDSLookAndFeel.h" compile="0" resource="0"
+            file="Source/MagicalFDSLookAndFeel.h"/>
+      <GROUP id="{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}" name="ui">
+        <FILE id="UiHs01" name="HorizontalSliderControl.cpp" compile="1" resource="0"
+              file="Source/ui/HorizontalSliderControl.cpp"/>
+        <FILE id="UiHs02" name="HorizontalSliderControl.h" compile="0" resource="0"
+              file="Source/ui/HorizontalSliderControl.h"/>
+        <FILE id="UiVs01" name="VerticalSliderControl.cpp" compile="1" resource="0"
+              file="Source/ui/VerticalSliderControl.cpp"/>
+        <FILE id="UiVs02" name="VerticalSliderControl.h" compile="0" resource="0"
+              file="Source/ui/VerticalSliderControl.h"/>
+        <FILE id="UiCh01" name="ChoiceControl.cpp" compile="1" resource="0" file="Source/ui/ChoiceControl.cpp"/>
+        <FILE id="UiCh02" name="ChoiceControl.h" compile="0" resource="0" file="Source/ui/ChoiceControl.h"/>
+        <FILE id="UiTg01" name="ToggleSwitchControl.cpp" compile="1" resource="0"
+              file="Source/ui/ToggleSwitchControl.cpp"/>
+        <FILE id="UiTg02" name="ToggleSwitchControl.h" compile="0" resource="0"
+              file="Source/ui/ToggleSwitchControl.h"/>
+        <FILE id="UiLb01" name="SectionLabel.h" compile="0" resource="0" file="Source/ui/SectionLabel.h"/>
+        <FILE id="UiWd01" name="WaveDisplayComponent.cpp" compile="1" resource="0"
+              file="Source/ui/WaveDisplayComponent.cpp"/>
+        <FILE id="UiWd02" name="WaveDisplayComponent.h" compile="0" resource="0"
+              file="Source/ui/WaveDisplayComponent.h"/>
+        <FILE id="UiGl01" name="GlobalSectionComponent.cpp" compile="1" resource="0"
+              file="Source/ui/GlobalSectionComponent.cpp"/>
+        <FILE id="UiGl02" name="GlobalSectionComponent.h" compile="0" resource="0"
+              file="Source/ui/GlobalSectionComponent.h"/>
+        <FILE id="UiCr01" name="CarrierSectionComponent.cpp" compile="1" resource="0"
+              file="Source/ui/CarrierSectionComponent.cpp"/>
+        <FILE id="UiCr02" name="CarrierSectionComponent.h" compile="0" resource="0"
+              file="Source/ui/CarrierSectionComponent.h"/>
+        <FILE id="UiCp01" name="CarrierControlPanel.cpp" compile="1" resource="0"
+              file="Source/ui/CarrierControlPanel.cpp"/>
+        <FILE id="UiCp02" name="CarrierControlPanel.h" compile="0" resource="0"
+              file="Source/ui/CarrierControlPanel.h"/>
+        <FILE id="UiMd01" name="ModulatorSectionComponent.cpp" compile="1" resource="0"
+              file="Source/ui/ModulatorSectionComponent.cpp"/>
+        <FILE id="UiMd02" name="ModulatorSectionComponent.h" compile="0" resource="0"
+              file="Source/ui/ModulatorSectionComponent.h"/>
+      </GROUP>
     </GROUP>
   </MAINGROUP>
   <MODULES>

@@ -19,7 +19,7 @@ public:
     SectionLabel()
     {
         setJustificationType (juce::Justification::centredLeft);
-        setFont (juce::Font (17.0f, juce::Font::plain));
+        setFont (juce::Font (juce::FontOptions (17.0f)));
     }
 
     explicit SectionLabel (const juce::String& text) : SectionLabel()

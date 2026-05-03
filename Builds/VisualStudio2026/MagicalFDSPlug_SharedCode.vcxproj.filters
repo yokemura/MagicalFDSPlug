@@ -2,6 +2,9 @@
 
 <Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="MagicalFDSPlug\Source\ui">
+      <UniqueIdentifier>{CF188CEB-A39A-4EDC-A498-B1A2440D7CCB}</UniqueIdentifier>
+    </Filter>
     <Filter Include="MagicalFDSPlug\Source">
       <UniqueIdentifier>{B0603551-A5CE-C5EA-7F8D-06A9EB961F4C}</UniqueIdentifier>
     </Filter>
@@ -690,6 +693,39 @@
     </ClCompile>
     <ClCompile Include="..\..\Source\PatchBuilder.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ColorScheme.cpp">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MagicalFDSLookAndFeel.cpp">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\HorizontalSliderControl.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\VerticalSliderControl.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\ChoiceControl.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\ToggleSwitchControl.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\WaveDisplayComponent.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\GlobalSectionComponent.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\CarrierSectionComponent.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\CarrierControlPanel.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\ui\ModulatorSectionComponent.cpp">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
     </ClCompile>
     <ClCompile Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>
@@ -3629,6 +3665,45 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PatchBuilder.h">
       <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LayoutConstants.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ColorScheme.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MagicalFDSLookAndFeel.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\HorizontalSliderControl.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\VerticalSliderControl.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\ChoiceControl.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\ToggleSwitchControl.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\SectionLabel.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\WaveDisplayComponent.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\GlobalSectionComponent.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\CarrierSectionComponent.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\CarrierControlPanel.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ui\ModulatorSectionComponent.h">
+      <Filter>MagicalFDSPlug\Source\ui</Filter>
     </ClInclude>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>

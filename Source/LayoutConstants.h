@@ -40,5 +40,19 @@ namespace MagicalFDS::Layout
 
     constexpr int modWaveDisplayWidth  = 252;
     constexpr int modWaveDisplayHeight = 168;
+
+    /** キャリア波形コントロールパートの高さ（仕様: 波形パートと同じ）。 */
+    constexpr int carrierControlPanelHeight = carrierWaveDisplayHeight;
+
+    constexpr int adsrBlockHeight = 4 * rowHeight;
+
+    /** キャリア列の縦積み（見出し+ADSR+余白+モード+余白+波形+余白+コントロール）。 */
+    constexpr int carrierColumnContentHeight = sectionHeaderHeight + adsrBlockHeight + componentMargin + rowHeight
+                                               + componentMargin + carrierWaveDisplayHeight + componentMargin
+                                               + carrierControlPanelHeight;
+
+    /** 上余白 + グローバル + 区切り + キャリア列 + 下余白。 */
+    constexpr int editorHeightHint = outerMargin + sectionHeaderHeight + rowHeight * 2 + sectionSeparatorHeight
+                                     + carrierColumnContentHeight + bottomMargin;
 }
 
