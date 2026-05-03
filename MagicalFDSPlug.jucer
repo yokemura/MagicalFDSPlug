@@ -15,6 +15,7 @@
       <FILE id="FdPh01" name="FDSPatch.h" compile="0" resource="0" file="Source/FDSPatch.h"/>
       <FILE id="FdVo01" name="FDSVoice.cpp" compile="1" resource="0" file="Source/FDSVoice.cpp"/>
       <FILE id="FdVo02" name="FDSVoice.h" compile="0" resource="0" file="Source/FDSVoice.h"/>
+      <FILE id="PaRa01" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>

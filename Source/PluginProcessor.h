@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 
 #include "FDSPatch.h"
+#include "Parameters.h"
 
 //==============================================================================
 /**
@@ -55,14 +56,20 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    //==============================================================================
+    /** UI から扱うパラメータツリー。エディタからは get/setParameterTree 経由で参照する。 */
+    juce::AudioProcessorValueTreeState& getParameters() noexcept { return apvts; }
+
 private:
     //==============================================================================
     static constexpr int maxPolyphonyCap = 16;
 
-    /** 有効ボイス数（将来 APVTS で 1〜maxPolyphonyCap、既定 1 を想定）。UI 完成まで当面は max と同じ。 */
+    /** 有効ボイス数（将来 APVTS の polyphony で 1〜maxPolyphonyCap を反映予定）。UI 完成まで当面は max と同じ。 */
     int polyphonyLimit = maxPolyphonyCap;
 
     FDSPatch fdsPatch;
+
+    juce::AudioProcessorValueTreeState apvts;
 
     juce::Synthesiser synth;
 
