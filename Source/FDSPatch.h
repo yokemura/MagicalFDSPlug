@@ -45,6 +45,9 @@ struct FDSPatch
     /** 変調深さ 0..1（モジュレータ ADSR 出力に掛ける）。 */
     float modDepth = 0.f;
 
+    /** マスター出力 ~2kHz 1-pole LPF（仕様デフォルト ON）。 */
+    bool lowpassEnabled = true;
+
     float carrierAttackSec = 0.f;
     float carrierDecaySec = 0.f;
     float carrierSustainLevel = 1.f;
@@ -62,6 +65,7 @@ struct FDSPatch
         reg408A = 0xe8;
         reg4089 = 0x00;
         modFreq12 = 0x0100;
+        lowpassEnabled = true;
 
         for (int i = 0; i < waveSteps; ++i)
         {

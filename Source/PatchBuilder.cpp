@@ -233,6 +233,9 @@ void applyRuntimeParametersFromApvts (juce::AudioProcessorValueTreeState& apvts,
     patch.modDecaySec         = getFloatParam (apvts, ParamIDs::modD);
     patch.modSustainLevel     = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::modS));
     patch.modReleaseSec       = getFloatParam (apvts, ParamIDs::modR);
+
+    if (auto* p = dynamic_cast<juce::AudioParameterBool*> (apvts.getParameter (ParamIDs::lowpassEnabled)))
+        patch.lowpassEnabled = p->get();
 }
 
 } // namespace MagicalFDS

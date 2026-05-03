@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include <array>
+
 #include <JuceHeader.h>
 
 #include "FDSPatch.h"
@@ -68,6 +70,12 @@ private:
     int synthVoiceCount = 1;
 
     void syncPolyphonyFromApvts();
+
+    static constexpr float kLpfCutoffHz = 2000.f;
+    float lpAlpha = 0.f;
+    std::array<float, 2> lpZ { 0.f, 0.f };
+
+    void updateLpfCoefficient (double sampleRate);
 
     FDSPatch fdsPatch;
 

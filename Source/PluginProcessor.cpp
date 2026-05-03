@@ -140,6 +140,19 @@ void NewProjectAudioProcessor::prepareToPlay (double sampleRate, int samplesPerB
 {
     juce::ignoreUnused (samplesPerBlock);
     synth.setCurrentPlaybackSampleRate (sampleRate);
+    updateLpfCoefficient (sampleRate);
+    lpZ.fill (0.f);
+}
+
+void NewProjectAudioProcessor::updateLpfCoefficient (double sampleRate)
+{
+    if (sampleRate <= 0.0)
+    {
+        lpAlpha = 0.f;
+        return;
+    }
+
+    lpAlpha = 1.0f - std::exp (-juce::MathConstants<float>::twoPi * kLpfCutoffHz / (float) sampleRate);
 }
 
 void NewProjectAudioProcessor::releaseResources()
@@ -184,6 +197,26 @@ void NewProjectAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, j
 
     buffer.clear();
     synth.renderNextBlock (buffer, midiMessages, 0, buffer.getNumSamples());
+
+    if (fdsPatch.lowpassEnabled)
+    {
+        const int numCh = juce::jmin (buffer.getNumChannels(), (int) lpZ.size());
+        const int n = buffer.getNumSamples();
+
+        for (int ch = 0; ch < numCh; ++ch)
+        {
+            auto* d = buffer.getWritePointer (ch);
+            float z = lpZ[(size_t) ch];
+
+            for (int i = 0; i < n; ++i)
+            {
+                z += lpAlpha * (d[i] - z);
+                d[i] = z;
+            }
+
+            lpZ[(size_t) ch] = z;
+        }
+    }
 }
 
 //==============================================================================
