@@ -8,6 +8,7 @@
 
 #include "WaveDisplayComponent.h"
 
+#include "../ModWavePreview.h"
 #include "../PatchBuilder.h"
 
 namespace MagicalFDS::UI
@@ -91,17 +92,18 @@ void WaveDisplayComponent::syncFromPatch()
     FDSPatch patch {};
     applyApvtsToPatch (apvts, patch);
 
-    for (int i = 0; i < FDSPatch::waveSteps; ++i)
+    if (kind == WaveDisplayKind::carrier)
     {
-        auto& s = *sliders[(size_t) i];
+        for (int i = 0; i < FDSPatch::waveSteps; ++i)
+            sliders[(size_t) i]->setValue (patch.carrierWave[(size_t) i], juce::dontSendNotification);
+    }
+    else
+    {
+        std::array<uint8_t, FDSPatch::waveSteps> modPreview {};
+        MagicalFDS::buildModWavePreviewLevels63 (patch.modWave, modPreview);
 
-        if (kind == WaveDisplayKind::carrier)
-            s.setValue (patch.carrierWave[(size_t) i], juce::dontSendNotification);
-        else
-        {
-            const double v = (double) (patch.modWave[(size_t) i] & 0x07) * (63.0 / 7.0);
-            s.setValue (v, juce::dontSendNotification);
-        }
+        for (int i = 0; i < FDSPatch::waveSteps; ++i)
+            sliders[(size_t) i]->setValue (modPreview[(size_t) i], juce::dontSendNotification);
     }
 }
 

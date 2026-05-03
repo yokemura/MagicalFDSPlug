@@ -159,6 +159,7 @@
 		B66C32C9EF57A3956965A510 /* CarrierControlPanel.h */ /* CarrierControlPanel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CarrierControlPanel.h; path = ../../Source/ui/CarrierControlPanel.h; sourceTree = SOURCE_ROOT; };
 		B722F3D079AEB21DFBFA50A9 /* include_juce_audio_plugin_client_Standalone.cpp */ /* include_juce_audio_plugin_client_Standalone.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_Standalone.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_Standalone.cpp; sourceTree = SOURCE_ROOT; };
 		B8A3DA45AFD0639DF9229E68 /* include_juce_graphics_Sheenbidi.c */ /* include_juce_graphics_Sheenbidi.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; name = include_juce_graphics_Sheenbidi.c; path = ../../JuceLibraryCode/include_juce_graphics_Sheenbidi.c; sourceTree = SOURCE_ROOT; };
+		BA7B1D9B64466AC231682B79 /* ModWavePreview.h */ /* ModWavePreview.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ModWavePreview.h; path = ../../Source/ModWavePreview.h; sourceTree = SOURCE_ROOT; };
 		BBEC3F5E3EFF62F199F31F37 /* PluginProcessor.cpp */ /* PluginProcessor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginProcessor.cpp; path = ../../Source/PluginProcessor.cpp; sourceTree = SOURCE_ROOT; };
 		BDDD5B72530E397C26E3B37D /* include_juce_audio_processors_headless_lv2_libs.cpp */ /* include_juce_audio_processors_headless_lv2_libs.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_headless_lv2_libs.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_headless_lv2_libs.cpp; sourceTree = SOURCE_ROOT; };
 		C2387E32406F072B6B42CE46 /* VST3 */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MagicalFDSPlug-debug.vst3"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,6 +395,7 @@
 				1BF9A921A331BA003BDFECC1,
 				6CC51CA7DCCDF4AEFD9224D3,
 				D374CFC90AE1C2BC9646A9E4,
+				BA7B1D9B64466AC231682B79,
 				37E5954F4C1282D0B0DFB48F,
 				E55BCCFAD6EEC233683E9A8F,
 				C8515AFCB2D10544CFC6A8E5,

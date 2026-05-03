@@ -13,8 +13,9 @@
 namespace MagicalFDS::UI
 {
 HorizontalSliderControl::HorizontalSliderControl (juce::AudioProcessorValueTreeState& apvts,
-                                                  const juce::String& paramId,
-                                                  const juce::String& name)
+                                                    const juce::String& paramId,
+                                                    const juce::String& name,
+                                                    bool bipolarFromCentre)
 {
     label.setText (name, juce::dontSendNotification);
     label.setJustificationType (juce::Justification::centredLeft);
@@ -23,6 +24,9 @@ HorizontalSliderControl::HorizontalSliderControl (juce::AudioProcessorValueTreeS
     slider.setSliderStyle (juce::Slider::LinearHorizontal);
     slider.setTextBoxStyle (juce::Slider::TextBoxRight, false, 80, Layout::rowHeight);
     addAndMakeVisible (slider);
+
+    if (bipolarFromCentre)
+        slider.getProperties().set ("magicalFdsBipolarMorph", true);
 
     attachment = std::make_unique<SliderAttachment> (apvts, paramId, slider);
 }

@@ -18,6 +18,7 @@
       <FILE id="PaRa01" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="PaRb01" name="PatchBuilder.cpp" compile="1" resource="0" file="Source/PatchBuilder.cpp"/>
       <FILE id="PaRb02" name="PatchBuilder.h" compile="0" resource="0" file="Source/PatchBuilder.h"/>
+      <FILE id="MwPv01" name="ModWavePreview.h" compile="0" resource="0" file="Source/ModWavePreview.h"/>
       <FILE id="LyCt01" name="LayoutConstants.h" compile="0" resource="0" file="Source/LayoutConstants.h"/>
       <FILE id="ClSc01" name="ColorScheme.cpp" compile="1" resource="0" file="Source/ColorScheme.cpp"/>
       <FILE id="ClSc02" name="ColorScheme.h" compile="0" resource="0" file="Source/ColorScheme.h"/>

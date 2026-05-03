@@ -116,11 +116,35 @@ void MagicalFDSLookAndFeel::drawLinearSlider (juce::Graphics& g, int x, int y, i
         g.fillRoundedRectangle (track, kSliderCorner);
 
         const float sx = juce::jlimit (track.getX(), track.getRight(), sliderPos);
-        auto filled = track.withLeft (track.getX()).withRight (sx);
-        if (filled.getWidth() > 0.5f)
+        const auto& props = slider.getProperties();
+        const bool bipolarMorph = props.contains ("magicalFdsBipolarMorph")
+                                  && (bool) props["magicalFdsBipolarMorph"];
+
+        if (bipolarMorph)
         {
-            g.setColour (fillCol);
-            g.fillRoundedRectangle (filled, kSliderCorner);
+            const double minV = slider.getMinimum();
+            const double maxV = slider.getMaximum();
+            const double span = maxV - minV;
+            const float t0 = (float) ((span > 1.0e-12) ? (0.0 - minV) / span : 0.5);
+            const float centreX = juce::jlimit (track.getX(), track.getRight(), track.getX() + t0 * track.getWidth());
+            const float lo = juce::jmin (centreX, sx);
+            const float hi = juce::jmax (centreX, sx);
+            auto filled = juce::Rectangle<float> (lo, track.getY(), hi - lo, track.getHeight());
+
+            if (filled.getWidth() > 0.5f)
+            {
+                g.setColour (fillCol);
+                g.fillRoundedRectangle (filled, kSliderCorner);
+            }
+        }
+        else
+        {
+            auto filled = track.withLeft (track.getX()).withRight (sx);
+            if (filled.getWidth() > 0.5f)
+            {
+                g.setColour (fillCol);
+                g.fillRoundedRectangle (filled, kSliderCorner);
+            }
         }
 
         const float thumbD = juce::jmin (12.f, (float) height - 4.f, (float) width * 0.12f);

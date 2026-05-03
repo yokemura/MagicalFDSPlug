@@ -31,7 +31,7 @@ CarrierControlPanel::AdditiveStrip::AdditiveStrip (juce::AudioProcessorValueTree
 
 void CarrierControlPanel::AdditiveStrip::resized()
 {
-    auto r = getLocalBounds();
+    auto r = getLocalBounds().reduced (Layout::componentMargin, Layout::componentMargin + 4);
     const int w = juce::jmax (1, r.getWidth() / 8);
 
     for (int i = 0; i < 8; ++i)
@@ -42,7 +42,7 @@ void CarrierControlPanel::AdditiveStrip::resized()
 CarrierControlPanel::CarrierControlPanel (juce::AudioProcessorValueTreeState& apvts)
     : additiveStrip (apvts)
     , presetChoice (apvts, ParamIDs::carrierPreset, "Preset")
-    , morphSlider (apvts, ParamIDs::carrierMorphAmount, "Morph")
+    , morphSlider (apvts, ParamIDs::carrierMorphAmount, "Morph", true)
     , pulseWidth (apvts, ParamIDs::carrierPulseWidth, "Pulse width")
 {
     addAndMakeVisible (additiveStrip);
@@ -80,7 +80,7 @@ void CarrierControlPanel::resized()
     presetChoice.setBounds (morphArea.removeFromTop (Layout::rowHeight));
     morphSlider.setBounds (morphArea.removeFromTop (Layout::rowHeight));
 
-    pulseWidth.setBounds (r);
+    pulseWidth.setBounds (r.withSizeKeepingCentre (r.getWidth(), Layout::rowHeight));
     freeDrawPlaceholder.setBounds (r);
 }
 } // namespace MagicalFDS::UI

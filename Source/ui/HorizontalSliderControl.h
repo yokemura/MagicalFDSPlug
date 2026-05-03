@@ -18,9 +18,11 @@ class HorizontalSliderControl final : public juce::Component
 public:
     using SliderAttachment = juce::AudioProcessorValueTreeState::SliderAttachment;
 
+    /** @param bipolarFromCentre 真のとき、値 0 をトラック中央とみなし左右へ塗り分け（Morph 用）。 */
     HorizontalSliderControl (juce::AudioProcessorValueTreeState& apvts,
-                             const juce::String& paramId,
-                             const juce::String& name);
+                               const juce::String& paramId,
+                               const juce::String& name,
+                               bool bipolarFromCentre = false);
 
     void resized() override;
 

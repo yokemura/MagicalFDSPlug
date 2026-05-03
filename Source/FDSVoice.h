@@ -55,7 +55,6 @@ private:
 
     static constexpr float masterGain = 0.2f;
 
-    static void applyModWaveStep (uint8_t code, int& counter);
     float pitchWheelToRatio (int wheel14) const;
 
     void ensureAdsrSampleRate();

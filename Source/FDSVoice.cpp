@@ -8,6 +8,8 @@
 
 #include "FDSVoice.h"
 
+#include "ModWavePreview.h"
+
 #include <cmath>
 
 //==============================================================================
@@ -157,43 +159,6 @@ void FDSVoice::renderNextBlock (juce::AudioBuffer<float>& outputBuffer,
 }
 
 //==============================================================================
-void FDSVoice::applyModWaveStep (uint8_t code, int& counter)
-{
-    switch (code & 7)
-    {
-        case 0:
-            break;
-        case 1:
-            ++counter;
-            break;
-        case 2:
-            counter += 2;
-            break;
-        case 3:
-            counter += 4;
-            break;
-        case 4:
-            counter = 0;
-            break;
-        case 5:
-            counter -= 4;
-            break;
-        case 6:
-            counter -= 2;
-            break;
-        case 7:
-            --counter;
-            break;
-        default:
-            break;
-    }
-
-    while (counter > 63)
-        counter -= 128;
-    while (counter < -64)
-        counter += 128;
-}
-
 float FDSVoice::pitchWheelToRatio (int wheel14) const
 {
     const float semis = (patch != nullptr ? patch->pitchBendRangeSemis : 2.f);
@@ -245,7 +210,7 @@ float FDSVoice::renderOneSample()
         modPhase -= (float) FDSPatch::waveSteps;
 
     const int modIndex = ((int) modPhase) % FDSPatch::waveSteps;
-    applyModWaveStep (patch->modWave[(size_t) modIndex], modCounter);
+    MagicalFDS::applyModWaveOpcode (patch->modWave[(size_t) modIndex], modCounter);
 
     const float modNorm = (float) modCounter / 64.f;
     const float depth = mEnv * patch->modDepth * 0.05f;
