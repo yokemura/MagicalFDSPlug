@@ -21,6 +21,11 @@ ChoiceControl::ChoiceControl (juce::AudioProcessorValueTreeState& apvts,
     addAndMakeVisible (label);
 
     addAndMakeVisible (comboBox);
+
+    // ComboBoxAttachment does not populate items; mirror AudioParameterChoice strings.
+    if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (paramId)))
+        comboBox.addItemList (p->choices, 1);
+
     attachment = std::make_unique<ComboBoxAttachment> (apvts, paramId, comboBox);
 }
 
