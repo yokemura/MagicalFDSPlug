@@ -34,10 +34,10 @@ public:
     juce::Label&  getLabel()  noexcept { return label; }
 
 private:
-    std::unique_ptr<SliderAttachment> attachment;
-
+    // SliderAttachment::~... が slider に触れるため、attachment は slider より後に破棄する。
     juce::Slider slider;
     juce::Label  label;
+    std::unique_ptr<SliderAttachment> attachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (VerticalSliderControl)
 };

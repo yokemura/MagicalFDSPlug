@@ -47,6 +47,6 @@ public:
     juce::Label* createSliderTextBox (juce::Slider& slider) override;
 
 private:
-    ColorScheme scheme { kColorSchemeYmck };
+    ColorScheme scheme { kColorSchemeFds };
 };
 } // namespace MagicalFDS

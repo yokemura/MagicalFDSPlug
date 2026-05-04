@@ -84,7 +84,8 @@ void NewProjectAudioProcessorEditor::applyThemeFromParameters()
             audioProcessor.getParameters().getParameter (MagicalFDS::ParamIDs::colorTheme)))
         idx = p->getIndex();
 
-    static constexpr std::array<MagicalFDS::ColorSchemeType, 6> map {
+    static constexpr std::array<MagicalFDS::ColorSchemeType, 7> map {
+        MagicalFDS::kColorSchemeFds,
         MagicalFDS::kColorSchemeYmck,
         MagicalFDS::kColorSchemeYmckDark,
         MagicalFDS::kColorSchemeFamicom,

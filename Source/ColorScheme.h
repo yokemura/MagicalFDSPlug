@@ -20,7 +20,8 @@ enum ColorSchemeType
     kColorSchemeFamicom,        // Japan
     kColorSchemeNes,            // Worldwide
     kColorSchemeMonotoneLight,
-    kColorSchemeMonotoneDark
+    kColorSchemeMonotoneDark,
+    kColorSchemeFds
 };
 
 struct ColorScheme

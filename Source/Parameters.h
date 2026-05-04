@@ -76,7 +76,7 @@ namespace ParamChoices
 {
     inline juce::StringArray colorThemeNames()
     {
-        return { "YMCK", "YMCK Dark", "Japan", "Worldwide", "Monotone", "Mono Dark" };
+        return { "FDS", "YMCK", "YMCK Dark", "Japan", "Worldwide", "Monotone", "Mono Dark" };
     }
 
     inline juce::StringArray carrierModeNames()
