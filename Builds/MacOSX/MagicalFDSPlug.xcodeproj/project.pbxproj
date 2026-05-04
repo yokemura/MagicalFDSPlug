@@ -141,6 +141,7 @@
 		6CC51CA7DCCDF4AEFD9224D3 /* PatchBuilder.cpp */ /* PatchBuilder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PatchBuilder.cpp; path = ../../Source/PatchBuilder.cpp; sourceTree = SOURCE_ROOT; };
 		738BB9913F88C88DB1F49F5E /* FDSVoice.h */ /* FDSVoice.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FDSVoice.h; path = ../../Source/FDSVoice.h; sourceTree = SOURCE_ROOT; };
 		771EB2801F158C8D591CB5A2 /* include_juce_audio_utils.mm */ /* include_juce_audio_utils.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_utils.mm; path = ../../JuceLibraryCode/include_juce_audio_utils.mm; sourceTree = SOURCE_ROOT; };
+		78A7D3CBDDE07CBF8991E489 /* FDSModulationUnit.h */ /* FDSModulationUnit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FDSModulationUnit.h; path = ../../Source/FDSModulationUnit.h; sourceTree = SOURCE_ROOT; };
 		7924F4FA4C5E361DAF026032 /* juce_gui_basics */ /* juce_gui_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_gui_basics; path = /Applications/JUCE/modules/juce_gui_basics; sourceTree = "<absolute>"; };
 		794A175E93FB4138949FDDCF /* FDSPatch.h */ /* FDSPatch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = FDSPatch.h; path = ../../Source/FDSPatch.h; sourceTree = SOURCE_ROOT; };
 		834BE6F0F9A524E9990878C7 /* Security.framework */ /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
@@ -396,6 +397,7 @@
 				6CC51CA7DCCDF4AEFD9224D3,
 				D374CFC90AE1C2BC9646A9E4,
 				BA7B1D9B64466AC231682B79,
+				78A7D3CBDDE07CBF8991E489,
 				37E5954F4C1282D0B0DFB48F,
 				E55BCCFAD6EEC233683E9A8F,
 				C8515AFCB2D10544CFC6A8E5,

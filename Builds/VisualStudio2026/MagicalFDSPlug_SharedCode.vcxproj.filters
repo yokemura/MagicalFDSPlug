@@ -3669,6 +3669,9 @@
     <ClInclude Include="..\..\Source\ModWavePreview.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\FDSModulationUnit.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\LayoutConstants.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>

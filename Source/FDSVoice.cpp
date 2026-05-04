@@ -8,6 +8,7 @@
 
 #include "FDSVoice.h"
 
+#include "FDSModulationUnit.h"
 #include "ModWavePreview.h"
 
 #include <cmath>
@@ -68,8 +69,10 @@ void FDSVoice::startNote (int midiNoteNumber,
     pitchWheelRatio = pitchWheelToRatio (currentPitchWheel);
 
     carrierPhase = 0.f;
-    modPhase = 0.f;
     modCounter = 0;
+    modCpuCyclePool = 0.0;
+    modAcc12 = 0;
+    modWalkPhase = 0;
 
     carrierHz = (double) juce::MidiMessage::getMidiNoteInHertz (midiNoteNumber)
                 * (double) pitchWheelRatio;
@@ -105,8 +108,6 @@ void FDSVoice::startNote (int midiNoteNumber,
     modAdsr.reset();
     carrierAdsr.noteOn();
     modAdsr.noteOn();
-
-    updateRatesFromPatch();
 }
 
 void FDSVoice::stopNote (float /*velocity*/, bool allowTailOff)
@@ -166,20 +167,6 @@ float FDSVoice::pitchWheelToRatio (int wheel14) const
     return std::pow (2.f, x * semis / 12.f);
 }
 
-void FDSVoice::updateRatesFromPatch()
-{
-    if (patch == nullptr)
-        return;
-
-    const double sr = getSampleRate();
-    if (sr <= 0.0)
-        return;
-
-    const double m = (double) (patch->modFreq12 & 0x0fff);
-    const double modHz = 2.0 + (m / 4095.0) * 40.0;
-    modPhaseInc = (modHz / sr) * (double) FDSPatch::modWaveSteps;
-}
-
 float FDSVoice::renderOneSample()
 {
     if (patch == nullptr)
@@ -193,8 +180,6 @@ float FDSVoice::renderOneSample()
     carrierHz = (double) juce::MidiMessage::getMidiNoteInHertz (currentMidiNote)
                 * (double) pitchWheelRatio;
 
-    updateRatesFromPatch();
-
     const float cEnv = carrierAdsr.getNextSample();
     const float mEnv = modAdsr.getNextSample();
 
@@ -205,17 +190,38 @@ float FDSVoice::renderOneSample()
         return 0.f;
     }
 
-    modPhase += (float) modPhaseInc;
-    while (modPhase >= (float) FDSPatch::modWaveSteps)
-        modPhase -= (float) FDSPatch::modWaveSteps;
+    // ---- Mod unit: 16 CPU サイクル毎に mod 周波数を加算、12bit 越えでテーブル 1 ステップ ----
+    modCpuCyclePool += MagicalFDS::fdsCpuClockNtsc / sr;
+    const uint32_t pMod = (uint32_t) (patch->modFreq12 & 0x0fffu);
 
-    const int modIndex = ((int) modPhase) % FDSPatch::modWaveSteps;
-    MagicalFDS::applyModWaveOpcode (patch->modWave[(size_t) modIndex], modCounter);
+    while (modCpuCyclePool >= 16.0)
+    {
+        modCpuCyclePool -= 16.0;
 
-    const float modNorm = (float) modCounter / 64.f;
-    const float depth = mEnv * patch->modDepth * 0.05f;
-    const float carrierInc = (float) ((carrierHz / sr) * (double) FDSPatch::carrierWaveSteps)
-                             * (1.f + depth * modNorm);
+        if (pMod == 0)
+            continue;
+
+        uint32_t sum = modAcc12 + pMod;
+        if (sum >= 4096u)
+        {
+            sum -= 4096u;
+            modWalkPhase = (modWalkPhase + 1u) & 63u;
+            const int modIndex = (int) (modWalkPhase >> 1);
+            MagicalFDS::applyModWaveOpcode (patch->modWave[(size_t) modIndex], modCounter);
+        }
+        modAcc12 = sum;
+    }
+
+    // ---- Carrier: MIDI 基準ピッチ -> 12bit、変調は Wiki の wave_pitch -> ティック Hz ----
+    const uint32_t pitch12 = (uint32_t) MagicalFDS::carrierHzToPitch12 (carrierHz);
+    const int modGain6 = (int) std::lround (
+        (double) juce::jlimit (0.f, 1.f, mEnv * patch->modDepth) * 63.0);
+
+    const uint32_t wavePitch20 = MagicalFDS::computeWavePitch20 (
+        pitch12, modCounter, modGain6);
+
+    const double fTick = MagicalFDS::wavePitchToWaveTickHz (wavePitch20);
+    const float carrierInc = (float) (fTick / sr);
 
     carrierPhase += carrierInc;
     while (carrierPhase >= (float) FDSPatch::carrierWaveSteps)

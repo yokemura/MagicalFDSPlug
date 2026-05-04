@@ -42,8 +42,12 @@ private:
     double adsrSampleRate = 0.0;
 
     float carrierPhase = 0.f;
-    float modPhase = 0.f;
     int modCounter = 0;
+
+    /** Mod unit: CPU サイクル 16 ごとに modFreq を加算、bit12 キャリーでテーブル 1 ステップ（Wiki）。 */
+    double modCpuCyclePool = 0.0;
+    uint32_t modAcc12 = 0;
+    uint32_t modWalkPhase = 0;
 
     float velocity = 0.f;
     float pitchWheelRatio = 1.f;
@@ -51,14 +55,12 @@ private:
     int currentMidiNote = 60;
 
     double carrierHz = 440.0;
-    double modPhaseInc = 0.0;
 
     static constexpr float masterGain = 0.2f;
 
     float pitchWheelToRatio (int wheel14) const;
 
     void ensureAdsrSampleRate();
-    void updateRatesFromPatch();
     float renderOneSample();
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FDSVoice)

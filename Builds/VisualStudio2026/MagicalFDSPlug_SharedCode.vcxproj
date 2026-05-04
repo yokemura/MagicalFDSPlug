@@ -2911,6 +2911,7 @@
     <ClInclude Include="..\..\Source\Parameters.h"/>
     <ClInclude Include="..\..\Source\PatchBuilder.h"/>
     <ClInclude Include="..\..\Source\ModWavePreview.h"/>
+    <ClInclude Include="..\..\Source\FDSModulationUnit.h"/>
     <ClInclude Include="..\..\Source\LayoutConstants.h"/>
     <ClInclude Include="..\..\Source\ColorScheme.h"/>
     <ClInclude Include="..\..\Source\MagicalFDSLookAndFeel.h"/>

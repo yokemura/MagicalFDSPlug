@@ -223,6 +223,7 @@ void applyRuntimeParametersFromApvts (juce::AudioProcessorValueTreeState& apvts,
     patch.pitchBendRangeSemis = (float) juce::jlimit (0, 24, getIntParam (apvts, ParamIDs::bendRange));
     patch.masterGainLinear    = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::gain));
     patch.modDepth            = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::modDepth));
+    // 音源側では mEnv * modDepth を 0..63 の mod gain に丸めて NESdev 変調ユニット式へ入力。
 
     patch.carrierAttackSec    = getFloatParam (apvts, ParamIDs::carrierA);
     patch.carrierDecaySec     = getFloatParam (apvts, ParamIDs::carrierD);

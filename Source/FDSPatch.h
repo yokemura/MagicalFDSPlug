@@ -45,7 +45,7 @@ struct FDSPatch
     float pitchBendRangeSemis = 2.f;
     /** UI Gain 0..1 (M8BP2 準拠リニア). */
     float masterGainLinear = 0.5f;
-    /** 変調深さ 0..1（モジュレータ ADSR 出力に掛ける）。 */
+    /** 変調深さ 0..1：モジュレータ ADSR 出力に掛けた後 0..63 の実機 mod gain に量子化して Wiki 変調式へ渡す。 */
     float modDepth = 0.f;
 
     /** マスター出力 ~2kHz 1-pole LPF（仕様デフォルト ON）。 */
