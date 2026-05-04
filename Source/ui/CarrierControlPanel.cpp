@@ -31,7 +31,7 @@ CarrierControlPanel::AdditiveStrip::AdditiveStrip (juce::AudioProcessorValueTree
 
 void CarrierControlPanel::AdditiveStrip::resized()
 {
-    auto r = getLocalBounds().reduced (Layout::componentMargin, Layout::componentMargin + 4);
+    auto r = getLocalBounds().reduced (Layout::componentMargin, 0);
     const int w = juce::jmax (1, r.getWidth() / 8);
 
     for (int i = 0; i < 8; ++i)

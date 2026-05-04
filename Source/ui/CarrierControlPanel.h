@@ -17,7 +17,7 @@
 
 namespace MagicalFDS::UI
 {
-/** 仕様: コントロールパートのサイズはモードに依らず固定。自由描画時は空表示。 */
+/** コントロールパートの高さはレイアウト定数で固定。モードに依らず同じ枠。自由描画時は空表示。 */
 class CarrierControlPanel final : public juce::Component
 {
 public:

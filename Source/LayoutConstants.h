@@ -46,8 +46,8 @@ namespace MagicalFDS::Layout
     constexpr int modWaveDisplayWidth  = 252;
     constexpr int modWaveDisplayHeight = 168;
 
-    /** キャリア波形コントロールパートの高さ（仕様: 波形パートと同じ）。 */
-    constexpr int carrierControlPanelHeight = carrierWaveDisplayHeight;
+    /** キャリア波形コントロールパートの高さ（Additive ドローバー行は波形表示の 1/2 相当に縮小）。 */
+    constexpr int carrierControlPanelHeight = carrierWaveDisplayHeight / 2;
 
     constexpr int adsrBlockHeight = 4 * rowHeight;
 
