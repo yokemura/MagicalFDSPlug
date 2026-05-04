@@ -24,33 +24,44 @@ void MagicalFDSLookAndFeel::applyColorScheme (const ColorScheme& newScheme)
 {
     scheme = newScheme;
 
-    using Id = juce::ComboBox::ColourIds;
+    using CB = juce::ComboBox::ColourIds;
 
     setColour (juce::ResizableWindow::backgroundColourId, scheme.background);
-    setColour (juce::Label::textColourId, scheme.main);
+
+    // Magical8bitPlug2::applyLookAndFeel と同じ割当（Label / TextEditor / Toggle / TextButton / Combo）
+    setColour (juce::Label::textColourId, scheme.mainThinLine);
     setColour (juce::Label::outlineColourId, juce::Colours::transparentBlack);
-    setColour (juce::TextEditor::textColourId, scheme.main);
+    setColour (juce::Label::textWhenEditingColourId, scheme.mainThinLine);
+
+    setColour (juce::TextEditor::textColourId, scheme.mainThinLine);
     setColour (juce::TextEditor::backgroundColourId, scheme.textBoxFill);
     setColour (juce::TextEditor::outlineColourId, scheme.genericBorder);
+
     setColour (juce::Slider::thumbColourId, scheme.accent);
-    setColour (juce::Slider::trackColourId, scheme.mainThinLine);
-    setColour (juce::Slider::backgroundColourId, scheme.boxFill);
-    setColour (juce::Slider::textBoxTextColourId, scheme.mainDarkened);
+    setColour (juce::Slider::trackColourId, scheme.main);
+    setColour (juce::Slider::backgroundColourId, scheme.mainDarkened);
+    setColour (juce::Slider::textBoxTextColourId, scheme.mainThinLine);
     setColour (juce::Slider::textBoxBackgroundColourId, scheme.textBoxFill);
+    setColour (juce::Slider::textBoxHighlightColourId, scheme.mainThinLine);
     setColour (juce::Slider::textBoxOutlineColourId, scheme.genericBorder);
-    setColour (Id::backgroundColourId, scheme.textBoxFill);
-    setColour (Id::outlineColourId, scheme.genericBorder);
-    setColour (Id::textColourId, scheme.main);
-    setColour (Id::arrowColourId, scheme.main);
-    setColour (juce::ToggleButton::textColourId, scheme.main);
-    setColour (juce::ToggleButton::tickColourId, scheme.accent);
-    setColour (juce::ToggleButton::tickDisabledColourId, scheme.mainDarkened);
+
     setColour (juce::TextButton::buttonColourId, scheme.boxFill);
-    setColour (juce::TextButton::textColourOffId, scheme.main);
+    setColour (juce::TextButton::textColourOffId, scheme.reversedForeground);
     setColour (juce::TextButton::textColourOnId, scheme.reversedForeground);
-    setColour (juce::ComboBox::backgroundColourId, scheme.textBoxFill);
+
+    setColour (juce::ToggleButton::textColourId, scheme.mainThinLine);
+    setColour (juce::ToggleButton::tickColourId, scheme.mainThinLine);
+    setColour (juce::ToggleButton::tickDisabledColourId, scheme.mainThinLine);
+
+    setColour (CB::backgroundColourId, scheme.boxFill);
+    setColour (CB::outlineColourId, scheme.genericBorder);
+    setColour (CB::textColourId, scheme.reversedForeground);
+    setColour (CB::arrowColourId, scheme.reversedForeground);
+    setColour (CB::buttonColourId, scheme.mainThinLine);
+
+    // 8bit 未指定: コンボのポップアップは読みやすさのため textBox 系で維持
     setColour (juce::PopupMenu::backgroundColourId, scheme.textBoxFill);
-    setColour (juce::PopupMenu::textColourId, scheme.main);
+    setColour (juce::PopupMenu::textColourId, scheme.mainThinLine);
     setColour (juce::PopupMenu::highlightedBackgroundColourId, scheme.main);
     setColour (juce::PopupMenu::highlightedTextColourId, scheme.reversedForeground);
 }
@@ -211,20 +222,21 @@ void MagicalFDSLookAndFeel::drawComboBox (juce::Graphics& g, int width, int heig
     g.setColour (box.findColour (juce::ComboBox::outlineColourId));
     g.drawRoundedRectangle (juce::Rectangle<float> (0.5f, 0.5f, (float) width - 1.f, (float) height - 1.f), corner, 1.2f);
 
+    // LookAndFeel_V4 と同じ（Magical8bitPlug2 は標準 V4 のコンボ描画）。矢印右端まで 10px 空け、幅 20。
     juce::Rectangle<float> arrowZone;
 
     if (buttonW > 0 && buttonH > 0)
         arrowZone = juce::Rectangle<float> ((float) buttonX, (float) buttonY, (float) buttonW, (float) buttonH);
     else
-        arrowZone = juce::Rectangle<float> ((float) width - 28.f, 0.f, 22.f, (float) height);
+        arrowZone = juce::Rectangle<float> ((float) width - 30.f, 0.f, 20.f, (float) height);
 
     juce::Path path;
-    path.startNewSubPath (arrowZone.getX() + 4.f, arrowZone.getCentreY() - 2.f);
+    path.startNewSubPath (arrowZone.getX() + 3.f, arrowZone.getCentreY() - 2.f);
     path.lineTo (arrowZone.getCentreX(), arrowZone.getCentreY() + 3.f);
-    path.lineTo (arrowZone.getRight() - 4.f, arrowZone.getCentreY() - 2.f);
+    path.lineTo (arrowZone.getRight() - 3.f, arrowZone.getCentreY() - 2.f);
 
-    g.setColour (box.findColour (juce::ComboBox::arrowColourId).withAlpha (box.isEnabled() ? 0.95f : 0.25f));
-    g.strokePath (path, juce::PathStrokeType (2.0f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded));
+    g.setColour (box.findColour (juce::ComboBox::arrowColourId).withAlpha (box.isEnabled() ? 0.9f : 0.2f));
+    g.strokePath (path, juce::PathStrokeType (2.0f));
 }
 
 juce::Font MagicalFDSLookAndFeel::getComboBoxFont (juce::ComboBox& box)
