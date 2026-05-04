@@ -206,7 +206,7 @@ void MagicalFDSLookAndFeel::drawComboBox (juce::Graphics& g, int width, int heig
                                           int buttonX, int buttonY, int buttonW, int buttonH,
                                           juce::ComboBox& box)
 {
-    juce::ignoreUnused (isButtonDown);
+    juce::ignoreUnused (isButtonDown, buttonX, buttonY, buttonW, buttonH);
 
     const bool inPropertySheet = box.findParentComponentOfClass<juce::ChoicePropertyComponent>() != nullptr;
     const float corner = inPropertySheet ? 0.f : kComboCorner;
@@ -222,13 +222,9 @@ void MagicalFDSLookAndFeel::drawComboBox (juce::Graphics& g, int width, int heig
     g.setColour (box.findColour (juce::ComboBox::outlineColourId));
     g.drawRoundedRectangle (juce::Rectangle<float> (0.5f, 0.5f, (float) width - 1.f, (float) height - 1.f), corner, 1.2f);
 
-    // LookAndFeel_V4 と同じ（Magical8bitPlug2 は標準 V4 のコンボ描画）。矢印右端まで 10px 空け、幅 20。
-    juce::Rectangle<float> arrowZone;
-
-    if (buttonW > 0 && buttonH > 0)
-        arrowZone = juce::Rectangle<float> ((float) buttonX, (float) buttonY, (float) buttonW, (float) buttonH);
-    else
-        arrowZone = juce::Rectangle<float> ((float) width - 30.f, 0.f, 20.f, (float) height);
+    // JUCE の ComboBox::paint は (label->getRight() 〜 右端) を button 矩形として渡すため、
+    // その矩形を矢印ゾーンにすると三角が横いっぱいに伸びる。LookAndFeel_V4 と同様、常に右 30×20 の領域だけ使う。
+    const auto arrowZone = juce::Rectangle<float> ((float) width - 30.f, 0.f, 20.f, (float) height);
 
     juce::Path path;
     path.startNewSubPath (arrowZone.getX() + 3.f, arrowZone.getCentreY() - 2.f);
