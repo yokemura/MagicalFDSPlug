@@ -35,7 +35,7 @@ void MagicalFDSLookAndFeel::applyColorScheme (const ColorScheme& newScheme)
     setColour (juce::Slider::thumbColourId, scheme.accent);
     setColour (juce::Slider::trackColourId, scheme.mainThinLine);
     setColour (juce::Slider::backgroundColourId, scheme.boxFill);
-    setColour (juce::Slider::textBoxTextColourId, scheme.main);
+    setColour (juce::Slider::textBoxTextColourId, scheme.mainDarkened);
     setColour (juce::Slider::textBoxBackgroundColourId, scheme.textBoxFill);
     setColour (juce::Slider::textBoxOutlineColourId, scheme.genericBorder);
     setColour (Id::backgroundColourId, scheme.textBoxFill);
@@ -60,11 +60,16 @@ juce::Label* MagicalFDSLookAndFeel::createSliderTextBox (juce::Slider& slider)
 {
     auto* l = LookAndFeel_V4::createSliderTextBox (slider);
 
-    // 左列ラベルと同じテキスト色（LookAndFeel の Label::textColourId）。V4 のグレースキーム特例で白固定になるのを避ける。
-    const auto textCol = slider.findColour (juce::Label::textColourId, true);
+    const auto textCol    = slider.findColour (juce::Slider::textBoxTextColourId, true);
+    const auto fillCol   = slider.findColour (juce::Slider::textBoxBackgroundColourId, true);
+    const auto borderCol = slider.findColour (juce::Slider::textBoxOutlineColourId, true);
+
     l->setColour (juce::Label::textColourId, textCol);
+    l->setColour (juce::Label::backgroundColourId, fillCol);
+    l->setColour (juce::Label::outlineColourId, borderCol);
     l->setColour (juce::TextEditor::textColourId, textCol);
-    l->setColour (juce::Label::outlineColourId, juce::Colours::transparentBlack);
+    l->setColour (juce::TextEditor::backgroundColourId, fillCol);
+    l->setColour (juce::TextEditor::outlineColourId, borderCol);
 
     return l;
 }
@@ -321,6 +326,32 @@ void MagicalFDSLookAndFeel::drawLabel (juce::Graphics& g, juce::Label& label)
         g.setFont (label.getFont().boldened());
         g.drawText (label.getText(), main.reduced (6.f, 0).toNearestInt(), label.getJustificationType(), true);
         return;
+    }
+
+    // Slider の値ラベルは V4 の drawLabel がグレースキーム由来の配色で上書きすることがあるため、
+    // Slider::textBox* の色で自前描画する（Magical8bitPlug2 の TextBoxRight 相当）。
+    if (auto* slider = dynamic_cast<juce::Slider*> (label.getParentComponent()))
+    {
+        if (label.getCurrentTextEditor() == nullptr)
+        {
+            constexpr float kValueBoxCorner = 3.f;
+            auto bounds = label.getLocalBounds().toFloat().reduced (0.5f, 0.5f);
+
+            g.setColour (slider->findColour (juce::Slider::textBoxBackgroundColourId, true));
+            g.fillRoundedRectangle (bounds, kValueBoxCorner);
+
+            g.setColour (slider->findColour (juce::Slider::textBoxOutlineColourId, true));
+            g.drawRoundedRectangle (bounds, kValueBoxCorner, 1.f);
+
+            g.setColour (slider->findColour (juce::Slider::textBoxTextColourId, true)
+                             .withMultipliedAlpha (label.isEnabled() ? 1.f : 0.45f));
+            g.setFont (label.getFont());
+            g.drawFittedText (label.getText(),
+                              label.getLocalBounds().reduced (2, 0),
+                              label.getJustificationType(),
+                              juce::jmax (1, label.getText().length()));
+            return;
+        }
     }
 
     LookAndFeel_V4::drawLabel (g, label);
