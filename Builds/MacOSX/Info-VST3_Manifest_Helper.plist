@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.yourcompany.MagicalFDSPlug</string>
+    <string>com.ymck.magicalFDSPlug</string>
     <key>CFBundleName</key>
     <string>MagicalFDSPlug</string>
     <key>CFBundleDisplayName</key>

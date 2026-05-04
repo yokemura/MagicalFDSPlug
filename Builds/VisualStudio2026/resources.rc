@@ -15,6 +15,7 @@ BEGIN
   BEGIN
     BLOCK "040904E4"
     BEGIN
+      VALUE "CompanyName",  "YMCK\0"
       VALUE "FileDescription",  "MagicalFDSPlug\0"
       VALUE "FileVersion",  "1.0.0\0"
       VALUE "ProductName",  "MagicalFDSPlug\0"

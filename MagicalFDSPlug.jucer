@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="C4U0nk" name="MagicalFDSPlug" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" pluginFormats="buildAU,buildStandalone,buildVST,buildVST3"
-              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn">
+<JUCERPROJECT id="C4U0nk" name="MagicalFDSPlug" projectType="audioplug" companyName="YMCK"
+              companyWebsite="http://ymck.net" companyEmail="info@ymck.net" useAppConfig="0"
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
+              pluginFormats="buildAU,buildStandalone,buildVST,buildVST3"
+              pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
+              pluginChannelConfigs="{0, 2}" pluginAUMainType="'aumu'"
+              bundleIdentifier="com.ymck.magicalFDSPlug" pluginName="MagicalFDSPlug"
+              pluginCode="mfds" pluginDesc="FDS sound generator by YMCK" pluginManufacturer="Ymck"
+              pluginManufacturerCode="Ymck">
   <MAINGROUP id="aumGQM" name="MagicalFDSPlug">
     <GROUP id="{4F7C080B-BF69-5169-D4FE-7D02C8703A82}" name="Source">
       <FILE id="ld56vN" name="PluginProcessor.cpp" compile="1" resource="0"
@@ -16,11 +22,15 @@
       <FILE id="FdVo01" name="FDSVoice.cpp" compile="1" resource="0" file="Source/FDSVoice.cpp"/>
       <FILE id="FdVo02" name="FDSVoice.h" compile="0" resource="0" file="Source/FDSVoice.h"/>
       <FILE id="PaRa01" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
-      <FILE id="PaRb01" name="PatchBuilder.cpp" compile="1" resource="0" file="Source/PatchBuilder.cpp"/>
+      <FILE id="PaRb01" name="PatchBuilder.cpp" compile="1" resource="0"
+            file="Source/PatchBuilder.cpp"/>
       <FILE id="PaRb02" name="PatchBuilder.h" compile="0" resource="0" file="Source/PatchBuilder.h"/>
-      <FILE id="MwPv01" name="ModWavePreview.h" compile="0" resource="0" file="Source/ModWavePreview.h"/>
-      <FILE id="FdMu01" name="FDSModulationUnit.h" compile="0" resource="0" file="Source/FDSModulationUnit.h"/>
-      <FILE id="LyCt01" name="LayoutConstants.h" compile="0" resource="0" file="Source/LayoutConstants.h"/>
+      <FILE id="MwPv01" name="ModWavePreview.h" compile="0" resource="0"
+            file="Source/ModWavePreview.h"/>
+      <FILE id="FdMu01" name="FDSModulationUnit.h" compile="0" resource="0"
+            file="Source/FDSModulationUnit.h"/>
+      <FILE id="LyCt01" name="LayoutConstants.h" compile="0" resource="0"
+            file="Source/LayoutConstants.h"/>
       <FILE id="ClSc01" name="ColorScheme.cpp" compile="1" resource="0" file="Source/ColorScheme.cpp"/>
       <FILE id="ClSc02" name="ColorScheme.h" compile="0" resource="0" file="Source/ColorScheme.h"/>
       <FILE id="MnLf01" name="MagicalFDSLookAndFeel.cpp" compile="1" resource="0"
@@ -36,7 +46,8 @@
               file="Source/ui/VerticalSliderControl.cpp"/>
         <FILE id="UiVs02" name="VerticalSliderControl.h" compile="0" resource="0"
               file="Source/ui/VerticalSliderControl.h"/>
-        <FILE id="UiCh01" name="ChoiceControl.cpp" compile="1" resource="0" file="Source/ui/ChoiceControl.cpp"/>
+        <FILE id="UiCh01" name="ChoiceControl.cpp" compile="1" resource="0"
+              file="Source/ui/ChoiceControl.cpp"/>
         <FILE id="UiCh02" name="ChoiceControl.h" compile="0" resource="0" file="Source/ui/ChoiceControl.h"/>
         <FILE id="UiTg01" name="ToggleSwitchControl.cpp" compile="1" resource="0"
               file="Source/ui/ToggleSwitchControl.cpp"/>
@@ -59,8 +70,8 @@
               file="Source/ui/CarrierControlPanel.cpp"/>
         <FILE id="UiCp02" name="CarrierControlPanel.h" compile="0" resource="0"
               file="Source/ui/CarrierControlPanel.h"/>
-        <FILE id="UiMd01" name="ModulatorSectionComponent.cpp" compile="1" resource="0"
-              file="Source/ui/ModulatorSectionComponent.cpp"/>
+        <FILE id="UiMd01" name="ModulatorSectionComponent.cpp" compile="1"
+              resource="0" file="Source/ui/ModulatorSectionComponent.cpp"/>
         <FILE id="UiMd02" name="ModulatorSectionComponent.h" compile="0" resource="0"
               file="Source/ui/ModulatorSectionComponent.h"/>
       </GROUP>

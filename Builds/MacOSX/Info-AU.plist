@@ -8,7 +8,7 @@
     <key>CFBundleIconFile</key>
     <string></string>
     <key>CFBundleIdentifier</key>
-    <string>com.yourcompany.MagicalFDSPlug</string>
+    <string>com.ymck.magicalFDSPlug</string>
     <key>CFBundleName</key>
     <string>MagicalFDSPlug</string>
     <key>CFBundleDisplayName</key>
@@ -29,17 +29,17 @@
     <array>
       <dict>
         <key>name</key>
-        <string>yourcompany: MagicalFDSPlug</string>
+        <string>Ymck: MagicalFDSPlug</string>
         <key>description</key>
-        <string>MagicalFDSPlug</string>
+        <string>FDS sound generator by YMCK</string>
         <key>factoryFunction</key>
         <string>MagicalFDSPlugAUFactory</string>
         <key>manufacturer</key>
-        <string>Manu</string>
+        <string>Ymck</string>
         <key>type</key>
         <string>aumu</string>
         <key>subtype</key>
-        <string>C4u0</string>
+        <string>mfds</string>
         <key>version</key>
         <integer>65536</integer>
         <key>resourceUsage</key>

@@ -44,22 +44,22 @@
  #define JucePlugin_Name                   "MagicalFDSPlug"
 #endif
 #ifndef  JucePlugin_Desc
- #define JucePlugin_Desc                   "MagicalFDSPlug"
+ #define JucePlugin_Desc                   "FDS sound generator by YMCK"
 #endif
 #ifndef  JucePlugin_Manufacturer
- #define JucePlugin_Manufacturer           "yourcompany"
+ #define JucePlugin_Manufacturer           "Ymck"
 #endif
 #ifndef  JucePlugin_ManufacturerWebsite
- #define JucePlugin_ManufacturerWebsite    "www.yourcompany.com"
+ #define JucePlugin_ManufacturerWebsite    "http://ymck.net"
 #endif
 #ifndef  JucePlugin_ManufacturerEmail
- #define JucePlugin_ManufacturerEmail      ""
+ #define JucePlugin_ManufacturerEmail      "info@ymck.net"
 #endif
 #ifndef  JucePlugin_ManufacturerCode
- #define JucePlugin_ManufacturerCode       0x4d616e75
+ #define JucePlugin_ManufacturerCode       0x596d636b
 #endif
 #ifndef  JucePlugin_PluginCode
- #define JucePlugin_PluginCode             0x43347530
+ #define JucePlugin_PluginCode             0x6d666473
 #endif
 #ifndef  JucePlugin_IsSynth
  #define JucePlugin_IsSynth                1
@@ -110,10 +110,10 @@
  #define JucePlugin_AUManufacturerCode     JucePlugin_ManufacturerCode
 #endif
 #ifndef  JucePlugin_CFBundleIdentifier
- #define JucePlugin_CFBundleIdentifier     com.yourcompany.MagicalFDSPlug
+ #define JucePlugin_CFBundleIdentifier     com.ymck.magicalFDSPlug
 #endif
 #ifndef  JucePlugin_AAXIdentifier
- #define JucePlugin_AAXIdentifier          com.yourcompany.MagicalFDSPlug
+ #define JucePlugin_AAXIdentifier          com.YMCK.MagicalFDSPlug
 #endif
 #ifndef  JucePlugin_AAXManufacturerCode
  #define JucePlugin_AAXManufacturerCode    JucePlugin_ManufacturerCode
@@ -137,7 +137,7 @@
  #define JucePlugin_IAASubType             JucePlugin_PluginCode
 #endif
 #ifndef  JucePlugin_IAAName
- #define JucePlugin_IAAName                "yourcompany: MagicalFDSPlug"
+ #define JucePlugin_IAAName                "Ymck: MagicalFDSPlug"
 #endif
 #ifndef  JucePlugin_VSTNumMidiInputs
  #define JucePlugin_VSTNumMidiInputs       16
@@ -152,11 +152,20 @@
  #define JucePlugin_ARATransformationFlags  0
 #endif
 #ifndef  JucePlugin_ARAFactoryID
- #define JucePlugin_ARAFactoryID           "com.yourcompany.MagicalFDSPlug.factory"
+ #define JucePlugin_ARAFactoryID           "com.YMCK.MagicalFDSPlug.factory"
 #endif
 #ifndef  JucePlugin_ARADocumentArchiveID
- #define JucePlugin_ARADocumentArchiveID   "com.yourcompany.MagicalFDSPlug.aradocumentarchive.1.0.0"
+ #define JucePlugin_ARADocumentArchiveID   "com.YMCK.MagicalFDSPlug.aradocumentarchive.1.0.0"
 #endif
 #ifndef  JucePlugin_ARACompatibleArchiveIDs
  #define JucePlugin_ARACompatibleArchiveIDs  ""
+#endif
+#ifndef  JucePlugin_MaxNumInputChannels
+ #define JucePlugin_MaxNumInputChannels    0
+#endif
+#ifndef  JucePlugin_MaxNumOutputChannels
+ #define JucePlugin_MaxNumOutputChannels   2
+#endif
+#ifndef  JucePlugin_PreferredChannelConfigurations
+ #define JucePlugin_PreferredChannelConfigurations  {0, 2}
 #endif
