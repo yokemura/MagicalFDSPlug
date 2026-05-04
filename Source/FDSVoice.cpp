@@ -177,7 +177,7 @@ void FDSVoice::updateRatesFromPatch()
 
     const double m = (double) (patch->modFreq12 & 0x0fff);
     const double modHz = 2.0 + (m / 4095.0) * 40.0;
-    modPhaseInc = (modHz / sr) * (double) FDSPatch::waveSteps;
+    modPhaseInc = (modHz / sr) * (double) FDSPatch::modWaveSteps;
 }
 
 float FDSVoice::renderOneSample()
@@ -206,24 +206,24 @@ float FDSVoice::renderOneSample()
     }
 
     modPhase += (float) modPhaseInc;
-    while (modPhase >= (float) FDSPatch::waveSteps)
-        modPhase -= (float) FDSPatch::waveSteps;
+    while (modPhase >= (float) FDSPatch::modWaveSteps)
+        modPhase -= (float) FDSPatch::modWaveSteps;
 
-    const int modIndex = ((int) modPhase) % FDSPatch::waveSteps;
+    const int modIndex = ((int) modPhase) % FDSPatch::modWaveSteps;
     MagicalFDS::applyModWaveOpcode (patch->modWave[(size_t) modIndex], modCounter);
 
     const float modNorm = (float) modCounter / 64.f;
     const float depth = mEnv * patch->modDepth * 0.05f;
-    const float carrierInc = (float) ((carrierHz / sr) * (double) FDSPatch::waveSteps)
+    const float carrierInc = (float) ((carrierHz / sr) * (double) FDSPatch::carrierWaveSteps)
                              * (1.f + depth * modNorm);
 
     carrierPhase += carrierInc;
-    while (carrierPhase >= (float) FDSPatch::waveSteps)
-        carrierPhase -= (float) FDSPatch::waveSteps;
+    while (carrierPhase >= (float) FDSPatch::carrierWaveSteps)
+        carrierPhase -= (float) FDSPatch::carrierWaveSteps;
     while (carrierPhase < 0.f)
-        carrierPhase += (float) FDSPatch::waveSteps;
+        carrierPhase += (float) FDSPatch::carrierWaveSteps;
 
-    const int waveIndex = ((int) carrierPhase) % FDSPatch::waveSteps;
+    const int waveIndex = ((int) carrierPhase) % FDSPatch::carrierWaveSteps;
     const float w = (float) patch->carrierWave[(size_t) waveIndex] / 63.f;
     const float bipolar = w * 2.f - 1.f;
 

@@ -2,7 +2,7 @@
   ==============================================================================
 
     WaveDisplayComponent.h
-    32-step vertical sliders for carrier / modulator wavetable preview.
+    キャリア 64 本 / モジュレータ 32 本の縦スライダーで wavetable プレビュー。
 
   ==============================================================================
 */
@@ -10,6 +10,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+
+#include <memory>
+#include <vector>
 
 #include "../FDSPatch.h"
 #include "../Parameters.h"
@@ -42,10 +45,10 @@ private:
 
     juce::AudioProcessorValueTreeState& apvts;
     WaveDisplayKind kind;
+    const int numSteps;
 
-    std::array<std::unique_ptr<juce::Slider>, FDSPatch::waveSteps> sliders;
-    std::array<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>, FDSPatch::waveSteps>
-        freeDrawAttachments;
+    std::vector<std::unique_ptr<juce::Slider>> sliders;
+    std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> freeDrawAttachments;
 
     bool carrierFreeDraw = false;
 

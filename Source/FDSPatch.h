@@ -18,10 +18,13 @@
 /** Register-sized mirror of FDS state shared across voices (patch layer). */
 struct FDSPatch
 {
-    static constexpr int waveSteps = 32;
+    /** メイン wavetable RAM 64×6bit（実機 $4040-$407F）。 */
+    static constexpr int carrierWaveSteps = 64;
+    /** モジュレータ用 32×3bit 命令列（実機の mod テーブル長）。 */
+    static constexpr int modWaveSteps = 32;
 
-    std::array<uint8_t, waveSteps> carrierWave{};
-    std::array<uint8_t, waveSteps> modWave{};
+    std::array<uint8_t, carrierWaveSteps> carrierWave{};
+    std::array<uint8_t, modWaveSteps> modWave{};
 
     /** $4080 volume envelope / gain control (raw register byte). */
     uint8_t reg4080 = 0xff;
@@ -67,9 +70,9 @@ struct FDSPatch
         modFreq12 = 0x0100;
         lowpassEnabled = true;
 
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierWaveSteps; ++i)
         {
-            const double p = juce::MathConstants<double>::twoPi * (double) i / (double) waveSteps;
+            const double p = juce::MathConstants<double>::twoPi * (double) i / (double) carrierWaveSteps;
             const int v = (int) std::lround (31.5 + 31.5 * std::sin (p));
             carrierWave[(size_t) i] = (uint8_t) juce::jlimit (0, 63, v);
         }

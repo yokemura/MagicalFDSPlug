@@ -2,8 +2,8 @@
   ==============================================================================
 
     ModWavePreview.h
-    FDS モジュレータ 3bit 命令列 → 32 ステップ累積波形のプレビュー用レベル（0..63）。
-    音源側 FDSVoice::applyModWaveStep と同じオペコード意味・ラップ規則。
+    FDS モジュレータ 3bit 命令列（実機どおり 32 ステップ）の累積波形プレビュー用レベル（0..63）。
+    音源側 applyModWaveOpcode と同じオペコード意味・ラップ規則。
 
   ==============================================================================
 */
@@ -60,12 +60,12 @@ inline void applyModWaveOpcode (uint8_t code, int& counter)
  * テーブル 1 周分を先頭から適用したあとの累積値を各ステップで 0..63 に写像。
  * @a out[i] は @a modWave[0..i] を順に適用した直後のカウンタに対応。
  */
-inline void buildModWavePreviewLevels63 (const std::array<uint8_t, FDSPatch::waveSteps>& modWave,
-                                          std::array<uint8_t, FDSPatch::waveSteps>& out)
+inline void buildModWavePreviewLevels63 (const std::array<uint8_t, FDSPatch::modWaveSteps>& modWave,
+                                          std::array<uint8_t, FDSPatch::modWaveSteps>& out)
 {
     int c = 0;
 
-    for (int i = 0; i < FDSPatch::waveSteps; ++i)
+    for (int i = 0; i < FDSPatch::modWaveSteps; ++i)
     {
         applyModWaveOpcode (modWave[(size_t) i], c);
         const int u = (int) std::lround (((double) c + 64.0) * 63.0 / 127.0);

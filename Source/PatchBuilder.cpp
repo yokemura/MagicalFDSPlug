@@ -17,17 +17,17 @@ namespace MagicalFDS
 {
 namespace
 {
-    constexpr int waveSteps = FDSPatch::waveSteps;
+    constexpr int carrierN = FDSPatch::carrierWaveSteps;
 
     // NSDL 由来の三角は +/-1 中心で累積が -4..+4 に留まり表示が平坦になるため、
     // 同じ立ち上がり/落ち形状を保ちつつ +4/-4（opcode 3/5）に置き換えてレンジを拡げる。
-    static constexpr std::array<uint8_t, waveSteps> kFdsModTriangle = {
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModTriangle = {
         0, 5, 0, 5, 0, 5, 0, 5, 0, 3, 0, 3, 0, 3, 0, 3,
         0, 3, 0, 3, 0, 3, 0, 3, 0, 5, 0, 5, 0, 5, 0, 5
     };
 
     // +1 連打は 1 周で c が 0..32 程度に留まるため、+4（opcode 3）でランプを急にし表示・変調とも振れを大きくする。
-    static constexpr std::array<uint8_t, waveSteps> kFdsModSaw = {
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModSaw = {
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
     };
@@ -66,9 +66,9 @@ namespace
         return juce::jlimit (0, 63, v);
     }
 
-    void writeCarrierFromBipolar (const float* bipolar, std::array<uint8_t, waveSteps>& dest)
+    void writeCarrierFromBipolar (const float* bipolar, std::array<uint8_t, carrierN>& dest)
     {
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
         {
             const float x = juce::jlimit (-1.f, 1.f, bipolar[(size_t) i]);
             const double u = ((double) x + 1.0) * 0.5;
@@ -78,13 +78,13 @@ namespace
 
     //--- Additive -----------------------------------------------------------
     void buildCarrierAdditive (juce::AudioProcessorValueTreeState& apvts,
-                               std::array<uint8_t, waveSteps>& dest)
+                               std::array<uint8_t, carrierN>& dest)
     {
-        float raw[waveSteps]{};
+        float raw[carrierN]{};
 
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
         {
-            const double phase = juce::MathConstants<double>::twoPi * (double) i / (double) waveSteps;
+            const double phase = juce::MathConstants<double>::twoPi * (double) i / (double) carrierN;
             double sum = 0.0;
 
             for (int h = 1; h <= ParamIDs::carrierDrawbarCount; ++h)
@@ -97,13 +97,13 @@ namespace
         }
 
         float peak = 0.f;
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
             peak = juce::jmax (peak, std::abs (raw[i]));
 
         const float scale = (peak > 1.f) ? (1.f / peak) : 1.f;
 
-        float bipolar[waveSteps]{};
-        for (int i = 0; i < waveSteps; ++i)
+        float bipolar[carrierN]{};
+        for (int i = 0; i < carrierN; ++i)
             bipolar[i] = juce::jlimit (-1.f, 1.f, raw[i] * scale);
 
         writeCarrierFromBipolar (bipolar, dest);
@@ -121,16 +121,16 @@ namespace
     }
 
     void buildCarrierPresetMorph (juce::AudioProcessorValueTreeState& apvts,
-                                  std::array<uint8_t, waveSteps>& dest)
+                                  std::array<uint8_t, carrierN>& dest)
     {
         const int preset = getChoiceParam (apvts, ParamIDs::carrierPreset);
         const float morphAmount = getFloatParam (apvts, ParamIDs::carrierMorphAmount);
 
-        float bipolar[waveSteps]{};
+        float bipolar[carrierN]{};
 
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
         {
-            const float ph = (float) i / (float) waveSteps;
+            const float ph = (float) i / (float) carrierN;
             float x = 0.f;
 
             switch (preset)
@@ -167,19 +167,19 @@ namespace
 
     //--- Pulse --------------------------------------------------------------
     void buildCarrierPulse (juce::AudioProcessorValueTreeState& apvts,
-                            std::array<uint8_t, waveSteps>& dest)
+                            std::array<uint8_t, carrierN>& dest)
     {
-        const int w = juce::jlimit (1, 31, getIntParam (apvts, ParamIDs::carrierPulseWidth));
+        const int w = juce::jlimit (1, 63, getIntParam (apvts, ParamIDs::carrierPulseWidth));
 
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
             dest[(size_t) i] = (i < w) ? 63 : 0;
     }
 
     //--- Free draw ----------------------------------------------------------
     void buildCarrierFreeDraw (juce::AudioProcessorValueTreeState& apvts,
-                                 std::array<uint8_t, waveSteps>& dest)
+                                 std::array<uint8_t, carrierN>& dest)
     {
-        for (int i = 0; i < waveSteps; ++i)
+        for (int i = 0; i < carrierN; ++i)
             dest[(size_t) i] = (uint8_t) juce::jlimit (0, 63, getIntParam (apvts, makeFreeDrawId (i)));
     }
 } // namespace

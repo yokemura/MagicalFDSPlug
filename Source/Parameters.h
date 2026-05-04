@@ -52,10 +52,10 @@ namespace ParamIDs
     // ---- (3) Pulse ----
     inline constexpr const char* carrierPulseWidth = "carrierPulseWidth";
 
-    // ---- (4) FreeDraw: 32 steps, 6bit (0..63) ----
-    // IDs: carrierFreeDraw00 .. carrierFreeDraw31 (zero-padded to 2 digits)
+    // ---- (4) FreeDraw: 64 steps (FDS キャリア wavetable 長), 6bit (0..63) ----
+    // IDs: carrierFreeDraw00 .. carrierFreeDraw63 (zero-padded to 2 digits)
     inline constexpr const char* carrierFreeDrawPrefix = "carrierFreeDraw";
-    inline constexpr int         carrierFreeDrawCount  = 32;
+    inline constexpr int         carrierFreeDrawCount  = 64;
 
     // ---- Modulator ADSR ----
     inline constexpr const char* modA = "modA";
@@ -104,12 +104,10 @@ inline juce::String makeDrawbarId (int index)
     return juce::String (ParamIDs::carrierDrawbarPrefix) + juce::String (index);
 }
 
-/** Build the parameter ID for the i-th free-draw step (i=0..31, zero-padded). */
+/** Build the parameter ID for the i-th free-draw step (i=0..63, two-digit zero-padded). */
 inline juce::String makeFreeDrawId (int index)
 {
-    return juce::String (ParamIDs::carrierFreeDrawPrefix)
-         + (index < 10 ? juce::String ("0") : juce::String())
-         + juce::String (index);
+    return juce::String (ParamIDs::carrierFreeDrawPrefix) + juce::String::formatted ("%02d", index);
 }
 
 //==============================================================================
@@ -193,12 +191,12 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
         juce::NormalisableRange<float> (-10.0f, 10.0f, 0.001f), 0.0f));
 
     //--- (3) Pulse ------------------------------------------------------------
-    // 中央付近（16）を既定。Hi/Lo パルス幅の自然な中点。
+    // 64 点テーブル中央付近（32）を既定。
     params.push_back (std::make_unique<API> (
         juce::ParameterID { ParamIDs::carrierPulseWidth, v },
-        "Pulse Width", 1, 31, 16));
+        "Pulse Width", 1, 63, 32));
 
-    //--- (4) FreeDraw: 32 steps ----------------------------------------------
+    //--- (4) FreeDraw: 64 steps (wavetable 1 sample per step) ----------------
     // 既定は中点 32。方式切替時に音源側の現在値で上書きする想定のため、初回値は任意でよい。
     for (int i = 0; i < ParamIDs::carrierFreeDrawCount; ++i)
     {

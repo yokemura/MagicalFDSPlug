@@ -15,9 +15,14 @@ namespace MagicalFDS::UI
 {
 WaveDisplayComponent::WaveDisplayComponent (juce::AudioProcessorValueTreeState& apvtsIn,
                                             WaveDisplayKind kindIn)
-    : apvts (apvtsIn), kind (kindIn)
+    : apvts (apvtsIn)
+    , kind (kindIn)
+    , numSteps (kindIn == WaveDisplayKind::carrier ? FDSPatch::carrierWaveSteps
+                                                    : FDSPatch::modWaveSteps)
 {
-    for (int i = 0; i < FDSPatch::waveSteps; ++i)
+    freeDrawAttachments.resize ((size_t) numSteps);
+
+    for (int i = 0; i < numSteps; ++i)
     {
         auto s = std::make_unique<juce::Slider>();
         s->setSliderStyle (juce::Slider::LinearVertical);
@@ -25,7 +30,7 @@ WaveDisplayComponent::WaveDisplayComponent (juce::AudioProcessorValueTreeState& 
         s->setRange (0.0, 63.0, 1.0);
         s->setScrollWheelEnabled (false);
         addAndMakeVisible (*s);
-        sliders[(size_t) i] = std::move (s);
+        sliders.push_back (std::move (s));
     }
 
     updateAttachmentsAndTimer();
@@ -54,7 +59,7 @@ void WaveDisplayComponent::updateAttachmentsAndTimer()
     {
         stopTimer();
 
-        for (int i = 0; i < FDSPatch::waveSteps; ++i)
+        for (int i = 0; i < numSteps; ++i)
         {
             auto& s = *sliders[(size_t) i];
             s.setEnabled (true);
@@ -94,15 +99,15 @@ void WaveDisplayComponent::syncFromPatch()
 
     if (kind == WaveDisplayKind::carrier)
     {
-        for (int i = 0; i < FDSPatch::waveSteps; ++i)
+        for (int i = 0; i < numSteps; ++i)
             sliders[(size_t) i]->setValue (patch.carrierWave[(size_t) i], juce::dontSendNotification);
     }
     else
     {
-        std::array<uint8_t, FDSPatch::waveSteps> modPreview {};
+        std::array<uint8_t, FDSPatch::modWaveSteps> modPreview {};
         MagicalFDS::buildModWavePreviewLevels63 (patch.modWave, modPreview);
 
-        for (int i = 0; i < FDSPatch::waveSteps; ++i)
+        for (int i = 0; i < numSteps; ++i)
             sliders[(size_t) i]->setValue (modPreview[(size_t) i], juce::dontSendNotification);
     }
 }
@@ -120,10 +125,9 @@ void WaveDisplayComponent::paint (juce::Graphics& g)
 void WaveDisplayComponent::resized()
 {
     auto r = getLocalBounds().reduced (4, 4);
-    const int n = FDSPatch::waveSteps;
-    const int w = juce::jmax (1, r.getWidth() / n);
+    const int w = juce::jmax (1, r.getWidth() / numSteps);
 
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i < numSteps; ++i)
         sliders[(size_t) i]->setBounds (r.getX() + i * w, r.getY(), w, r.getHeight());
 }
 } // namespace MagicalFDS::UI
