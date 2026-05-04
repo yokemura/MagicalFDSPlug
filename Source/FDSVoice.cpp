@@ -10,14 +10,8 @@
 
 #include "FDSModulationUnit.h"
 #include "ModWavePreview.h"
-#include "Parameters.h"
 
 #include <cmath>
-
-namespace
-{
-    constexpr float kLfoModDepthScale = 0.05f;
-}
 
 //==============================================================================
 void FDSVoice::ensureAdsrSampleRate()
@@ -220,9 +214,7 @@ float FDSVoice::renderOneSample()
 
     // ---- Carrier: MIDI 基準ピッチ -> 12bit、変調は Wiki の wave_pitch -> ティック Hz ----
     const uint32_t pitch12 = (uint32_t) MagicalFDS::carrierHzToPitch12 (carrierHz);
-    const float depthPreEnv = patch->modRateUseIndex == MagicalFDS::ParamChoices::ModRateLFO
-        ? (float) patch->modDepth * kLfoModDepthScale
-        : (float) patch->modDepth;
+    const float depthPreEnv = (float) patch->modDepth;
     const int modGain6 = (int) juce::jlimit (0.f, 63.f, mEnv * depthPreEnv);
 
     const uint32_t wavePitch20 = MagicalFDS::computeWavePitch20 (

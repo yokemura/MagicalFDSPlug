@@ -45,7 +45,7 @@ struct FDSPatch
     float pitchBendRangeSemis = 2.f;
     /** UI Gain 0..1 (M8BP2 準拠リニア). */
     float masterGainLinear = 0.5f;
-    /** スライダ 0..63。LFO 用途時は FDSVoice 側で係数を掛けてから Wiki 式へ。 */
+    /** Mod Depth（APVTS）。FM は 0..63、LFO は UI で 1..5 に制限。ボイスで mEnv と積算。 */
     int modDepth = 0;
 
     /** `modRateUse`（LFO/FM/OFF）の APVTS 選択インデックス。 */

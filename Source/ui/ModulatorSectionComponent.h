@@ -35,6 +35,10 @@ private:
     void syncModRateSliderFromParameter();
     void pushModRateSliderToParameter();
 
+    void clampModDepthToModeRange();
+    void syncModDepthSliderFromParameter();
+    void pushModDepthSliderToParameter();
+
     void setModWaveIndex (int index);
 
     juce::AudioProcessorValueTreeState& apvts;
@@ -50,7 +54,8 @@ private:
     juce::Label modRateLabel;
     juce::Slider modRateSlider;
 
-    HorizontalSliderControl modDepth;
+    juce::Label modDepthLabel;
+    juce::Slider modDepthSlider;
 
     HorizontalSliderControl modA;
     HorizontalSliderControl modD;

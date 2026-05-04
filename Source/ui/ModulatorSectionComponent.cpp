@@ -17,7 +17,6 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     : apvts (apvtsIn)
     , waveDisplay (apvtsIn, WaveDisplayKind::modulator)
     , modRateUseControl (apvtsIn, ParamIDs::modRateUse, "Use")
-    , modDepth (apvtsIn, ParamIDs::modDepth, "Mod depth")
     , modA (apvtsIn, ParamIDs::modA, "Attack")
     , modD (apvtsIn, ParamIDs::modD, "Decay")
     , modS (apvtsIn, ParamIDs::modS, "Sustain")
@@ -58,7 +57,17 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
 
     modRateSlider.onValueChange = [this] { pushModRateSliderToParameter(); };
 
-    addAndMakeVisible (modDepth);
+    modDepthLabel.setText ("Mod depth", juce::dontSendNotification);
+    modDepthLabel.setJustificationType (juce::Justification::centredLeft);
+    addAndMakeVisible (modDepthLabel);
+
+    modDepthSlider.setSliderStyle (juce::Slider::LinearHorizontal);
+    modDepthSlider.setTextBoxStyle (juce::Slider::TextBoxRight, false, 80, Layout::rowHeight);
+    modDepthSlider.setScrollWheelEnabled (false);
+    addAndMakeVisible (modDepthSlider);
+
+    modDepthSlider.onValueChange = [this] { pushModDepthSliderToParameter(); };
+
     addAndMakeVisible (modA);
     addAndMakeVisible (modD);
     addAndMakeVisible (modS);
@@ -67,10 +76,13 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     apvts.addParameterListener (ParamIDs::modWaveType, this);
     apvts.addParameterListener (ParamIDs::modRateUse, this);
     apvts.addParameterListener (ParamIDs::modRate, this);
+    apvts.addParameterListener (ParamIDs::modDepth, this);
 
     syncWaveButtonsFromParameter();
     clampModRateToModeRange();
     syncModRateSliderFromParameter();
+    clampModDepthToModeRange();
+    syncModDepthSliderFromParameter();
 }
 
 ModulatorSectionComponent::~ModulatorSectionComponent()
@@ -78,6 +90,7 @@ ModulatorSectionComponent::~ModulatorSectionComponent()
     apvts.removeParameterListener (ParamIDs::modWaveType, this);
     apvts.removeParameterListener (ParamIDs::modRateUse, this);
     apvts.removeParameterListener (ParamIDs::modRate, this);
+    apvts.removeParameterListener (ParamIDs::modDepth, this);
 }
 
 void ModulatorSectionComponent::parameterChanged (const juce::String& parameterID, float newValue)
@@ -90,9 +103,13 @@ void ModulatorSectionComponent::parameterChanged (const juce::String& parameterI
     {
         clampModRateToModeRange();
         syncModRateSliderFromParameter();
+        clampModDepthToModeRange();
+        syncModDepthSliderFromParameter();
     }
     else if (parameterID == ParamIDs::modRate)
         syncModRateSliderFromParameter();
+    else if (parameterID == ParamIDs::modDepth)
+        syncModDepthSliderFromParameter();
 }
 
 void ModulatorSectionComponent::clampModRateToModeRange()
@@ -158,6 +175,84 @@ void ModulatorSectionComponent::pushModRateSliderToParameter()
     rateP->endChangeGesture();
 }
 
+void ModulatorSectionComponent::clampModDepthToModeRange()
+{
+    auto* useP   = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modRateUse));
+    auto* depthP = dynamic_cast<juce::AudioParameterInt*> (apvts.getParameter (ParamIDs::modDepth));
+    if (useP == nullptr || depthP == nullptr)
+        return;
+
+    const int mode = useP->getIndex();
+    if (mode == ParamChoices::ModRateOff)
+        return;
+
+    int lo = 0;
+    int hi = 63;
+    if (mode == ParamChoices::ModRateLFO)
+    {
+        lo = 1;
+        hi = 5;
+    }
+
+    const int d = depthP->get();
+    const int c = juce::jlimit (lo, hi, d);
+    if (c == d)
+        return;
+
+    depthP->beginChangeGesture();
+    depthP->setValueNotifyingHost (depthP->getNormalisableRange().convertTo0to1 ((float) c));
+    depthP->endChangeGesture();
+}
+
+void ModulatorSectionComponent::syncModDepthSliderFromParameter()
+{
+    auto* useP   = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modRateUse));
+    auto* depthP = dynamic_cast<juce::AudioParameterInt*> (apvts.getParameter (ParamIDs::modDepth));
+    if (useP == nullptr || depthP == nullptr)
+        return;
+
+    const int mode = useP->getIndex();
+    if (mode == ParamChoices::ModRateOff)
+    {
+        modDepthLabel.setVisible (false);
+        modDepthSlider.setVisible (false);
+        return;
+    }
+
+    modDepthLabel.setVisible (true);
+    modDepthSlider.setVisible (true);
+
+    int lo = 0;
+    int hi = 63;
+    if (mode == ParamChoices::ModRateLFO)
+    {
+        lo = 1;
+        hi = 5;
+    }
+
+    modDepthSlider.setRange ((double) lo, (double) hi, 1.0);
+    const int v = juce::jlimit (lo, hi, depthP->get());
+    modDepthSlider.setValue ((double) v, juce::dontSendNotification);
+}
+
+void ModulatorSectionComponent::pushModDepthSliderToParameter()
+{
+    if (! modDepthSlider.isVisible())
+        return;
+
+    auto* depthP = dynamic_cast<juce::AudioParameterInt*> (apvts.getParameter (ParamIDs::modDepth));
+    if (depthP == nullptr)
+        return;
+
+    const int v = (int) std::lround (modDepthSlider.getValue());
+    if (depthP->get() == v)
+        return;
+
+    depthP->beginChangeGesture();
+    depthP->setValueNotifyingHost (depthP->getNormalisableRange().convertTo0to1 ((float) v));
+    depthP->endChangeGesture();
+}
+
 void ModulatorSectionComponent::setModWaveIndex (int index)
 {
     if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modWaveType)))
@@ -214,7 +309,14 @@ void ModulatorSectionComponent::resized()
     }
 
     r.removeFromTop (Layout::componentMargin);
-    modDepth.setBounds (r.removeFromTop (Layout::rowHeight));
+
+    auto modDepthRow = r.removeFromTop (Layout::rowHeight);
+    {
+        auto labelArea = modDepthRow.removeFromLeft (Layout::labelColumnWidth);
+        modDepthLabel.setBounds (labelArea.reduced (0, 1));
+        modDepthRow.removeFromLeft (Layout::labelControlGap);
+        modDepthSlider.setBounds (modDepthRow.reduced (0, 1));
+    }
 
     r.removeFromTop (Layout::componentMargin);
 
