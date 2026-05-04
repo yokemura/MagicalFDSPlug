@@ -214,7 +214,15 @@ void applyApvtsToPatch (juce::AudioProcessorValueTreeState& apvts, FDSPatch& pat
     else
         patch.modWave = kFdsModSaw;
 
-    patch.modFreq12 = (uint16_t) (getIntParam (apvts, ParamIDs::modRate) & 0x0fff);
+    const int rateUse = getChoiceParam (apvts, ParamIDs::modRateUse);
+    const int rateRaw = getIntParam (apvts, ParamIDs::modRate);
+
+    if (rateUse == ParamChoices::ModRateOff)
+        patch.modFreq12 = 0;
+    else if (rateUse == ParamChoices::ModRateLFO)
+        patch.modFreq12 = (uint16_t) juce::jlimit (1, 30, rateRaw);
+    else
+        patch.modFreq12 = (uint16_t) juce::jlimit (30, 4095, rateRaw);
 }
 
 //==============================================================================
@@ -222,8 +230,8 @@ void applyRuntimeParametersFromApvts (juce::AudioProcessorValueTreeState& apvts,
 {
     patch.pitchBendRangeSemis = (float) juce::jlimit (0, 24, getIntParam (apvts, ParamIDs::bendRange));
     patch.masterGainLinear    = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::gain));
-    patch.modDepth            = juce::jlimit (0.f, 1.f, getFloatParam (apvts, ParamIDs::modDepth));
-    // 音源側では mEnv * modDepth を 0..63 の mod gain に丸めて NESdev 変調ユニット式へ入力。
+    patch.modDepth            = juce::jlimit (0, 63, getIntParam (apvts, ParamIDs::modDepth));
+    patch.modRateUseIndex     = getChoiceParam (apvts, ParamIDs::modRateUse);
 
     patch.carrierAttackSec    = getFloatParam (apvts, ParamIDs::carrierA);
     patch.carrierDecaySec     = getFloatParam (apvts, ParamIDs::carrierD);

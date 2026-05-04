@@ -65,6 +65,8 @@ namespace ParamIDs
 
     // ---- Modulator controls ----
     inline constexpr const char* modWaveType = "modWaveType";
+    /** LFO / FM / OFF — OFF のとき音源は modFreq12=0（変調ユニット停止）。 */
+    inline constexpr const char* modRateUse = "modRateUse";
     inline constexpr const char* modRate     = "modRate";
     inline constexpr const char* modDepth    = "modDepth";
 }
@@ -95,6 +97,14 @@ namespace ParamChoices
     enum CarrierMode    { ModeAdditive = 0, ModePresetMorph, ModePulseShape, ModeFreeDraw };
     enum CarrierPreset  { PresetTriangle = 0, PresetSawtooth, PresetSine };
     enum ModWaveType    { ModWaveTriangle = 0, ModWaveSawtooth };
+
+    inline juce::StringArray modRateUseNames()
+    {
+        return { "LFO", "FM", "OFF" };
+    }
+
+    /** modRateUse の列順と一致（既定は従来どおり FM + レート 256 に近い挙動）。 */
+    enum ModRateUse { ModRateLFO = 0, ModRateFM, ModRateOff };
 }
 
 //==============================================================================
@@ -222,16 +232,19 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
         juce::ParameterID { ParamIDs::modWaveType, v },
         "Mod Wave Type", ParamChoices::modWaveNames(), ParamChoices::ModWaveTriangle));
 
-    // TODO: レンジ内の「聴感上自然な」既定が未確定。暫定 256（旧 FDSPatch::modFreq12=0x0100 相当）。
+    params.push_back (std::make_unique<APC> (
+        juce::ParameterID { ParamIDs::modRateUse, v },
+        "Mod Rate Use", ParamChoices::modRateUseNames(), ParamChoices::ModRateFM));
+
+    // LFO 時 UI は 1..30、FM 時は 30..4095。内部は常に 1..4095（モード切替でクランプ）。
     params.push_back (std::make_unique<API> (
         juce::ParameterID { ParamIDs::modRate, v },
-        "Mod Rate", 0, 4095, 256));
+        "Mod Rate", 1, 4095, 256));
 
-    // 無変調で起動（原キャリアをそのまま確認しやすい）。
-    params.push_back (std::make_unique<APF> (
+    // 実機 mod gain 相当 0..63（UI 値を DSP にそのまま渡す）。
+    params.push_back (std::make_unique<API> (
         juce::ParameterID { ParamIDs::modDepth, v },
-        "Mod Depth",
-        juce::NormalisableRange<float> (0.0f, 1.0f), 0.0f));
+        "Mod Depth", 0, 63, 0));
 
     return { params.begin(), params.end() };
 }

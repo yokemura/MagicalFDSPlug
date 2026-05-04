@@ -45,8 +45,11 @@ struct FDSPatch
     float pitchBendRangeSemis = 2.f;
     /** UI Gain 0..1 (M8BP2 準拠リニア). */
     float masterGainLinear = 0.5f;
-    /** 変調深さ 0..1：モジュレータ ADSR 出力に掛けた後 0..63 の実機 mod gain に量子化して Wiki 変調式へ渡す。 */
-    float modDepth = 0.f;
+    /** スライダ 0..63。LFO 用途時は FDSVoice 側で係数を掛けてから Wiki 式へ。 */
+    int modDepth = 0;
+
+    /** `modRateUse`（LFO/FM/OFF）の APVTS 選択インデックス。 */
+    int modRateUseIndex = 1; // ParamChoices::ModRateFM 既定
 
     /** マスター出力 ~2kHz 1-pole LPF（仕様デフォルト ON）。 */
     bool lowpassEnabled = true;

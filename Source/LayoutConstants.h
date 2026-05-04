@@ -53,6 +53,6 @@ namespace MagicalFDS::Layout
 
     /** 上余白 + グローバル + 区切り + キャリア列 + 下余白。 */
     constexpr int editorHeightHint = outerMargin + sectionHeaderHeight + rowHeight * 2 + sectionSeparatorHeight
-                                     + carrierColumnContentHeight + bottomMargin;
+                                     + carrierColumnContentHeight + bottomMargin + rowHeight + componentMargin;
 }
 

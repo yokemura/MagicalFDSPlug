@@ -11,6 +11,7 @@
 
 #include <JuceHeader.h>
 
+#include "ChoiceControl.h"
 #include "HorizontalSliderControl.h"
 #include "SectionLabel.h"
 #include "WaveDisplayComponent.h"
@@ -30,6 +31,10 @@ private:
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     void syncWaveButtonsFromParameter();
 
+    void clampModRateToModeRange();
+    void syncModRateSliderFromParameter();
+    void pushModRateSliderToParameter();
+
     void setModWaveIndex (int index);
 
     juce::AudioProcessorValueTreeState& apvts;
@@ -41,7 +46,10 @@ private:
     juce::ToggleButton modWaveTri { "Triangle" };
     juce::ToggleButton modWaveSaw { "Saw" };
 
-    HorizontalSliderControl modRate;
+    ChoiceControl modRateUseControl;
+    juce::Label modRateLabel;
+    juce::Slider modRateSlider;
+
     HorizontalSliderControl modDepth;
 
     HorizontalSliderControl modA;
