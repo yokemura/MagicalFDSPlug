@@ -18,7 +18,7 @@ HorizontalSliderControl::HorizontalSliderControl (juce::AudioProcessorValueTreeS
                                                     bool bipolarFromCentre)
 {
     label.setText (name, juce::dontSendNotification);
-    label.setJustificationType (juce::Justification::centredLeft);
+    label.setJustificationType (juce::Justification::centredRight);
     addAndMakeVisible (label);
 
     slider.setSliderStyle (juce::Slider::LinearHorizontal);

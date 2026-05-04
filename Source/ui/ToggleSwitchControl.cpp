@@ -17,7 +17,7 @@ ToggleSwitchControl::ToggleSwitchControl (juce::AudioProcessorValueTreeState& ap
                                           const juce::String& name)
 {
     label.setText (name, juce::dontSendNotification);
-    label.setJustificationType (juce::Justification::centredLeft);
+    label.setJustificationType (juce::Justification::centredRight);
     addAndMakeVisible (label);
 
     addAndMakeVisible (toggle);

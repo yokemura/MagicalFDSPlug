@@ -18,10 +18,10 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     , waveDisplay (apvtsIn, WaveDisplayKind::modulator)
     , modRateUseControl (apvtsIn, ParamIDs::modRateUse, "Use")
     , modDepth (apvtsIn, ParamIDs::modDepth, "Mod depth")
-    , modA (apvtsIn, ParamIDs::modA, "A")
-    , modD (apvtsIn, ParamIDs::modD, "D")
-    , modS (apvtsIn, ParamIDs::modS, "S")
-    , modR (apvtsIn, ParamIDs::modR, "R")
+    , modA (apvtsIn, ParamIDs::modA, "Attack")
+    , modD (apvtsIn, ParamIDs::modD, "Decay")
+    , modS (apvtsIn, ParamIDs::modS, "Sustain")
+    , modR (apvtsIn, ParamIDs::modR, "Release")
 {
     addAndMakeVisible (heading);
     addAndMakeVisible (waveDisplay);
@@ -185,6 +185,7 @@ void ModulatorSectionComponent::resized()
     auto r = getLocalBounds();
 
     heading.setBounds (r.removeFromTop (Layout::sectionHeaderHeight));
+    r.removeFromTop (Layout::sectionHeadingContentGap);
 
     const int waveH = Layout::modWaveDisplayHeight;
     auto waveRow = r.removeFromTop (waveH);

@@ -23,11 +23,16 @@ namespace MagicalFDS::Layout
 
     // Typography / rows (match Magical8bitPlug2 rhythm)
     constexpr int sectionHeaderHeight = 22;
+    /** Space between the section title row and the controls below. */
+    constexpr int sectionHeadingContentGap = 8;
     constexpr int rowHeight           = 28;
 
     // Label column
     constexpr int labelColumnWidth = 60;
     constexpr int labelControlGap  = 8;
+
+    /** Gap between Global section left and right columns (at the right edge of the left block). */
+    constexpr int globalSectionColumnMargin = 40;
 
     // Column widths (3:2 ratio inside inner area)
     constexpr int innerWidth   = totalWidth - outerMargin * 2; // 780
@@ -46,13 +51,13 @@ namespace MagicalFDS::Layout
 
     constexpr int adsrBlockHeight = 4 * rowHeight;
 
-    /** キャリア列の縦積み（見出し+ADSR+余白+モード+余白+波形+余白+コントロール）。 */
-    constexpr int carrierColumnContentHeight = sectionHeaderHeight + adsrBlockHeight + componentMargin + rowHeight
+    /** キャリア列の縦積み（見出し+ギャップ+ADSR+余白+モード+余白+波形+余白+コントロール）。 */
+    constexpr int carrierColumnContentHeight = sectionHeaderHeight + sectionHeadingContentGap + adsrBlockHeight + componentMargin + rowHeight
                                                + componentMargin + carrierWaveDisplayHeight + componentMargin
                                                + carrierControlPanelHeight;
 
     /** 上余白 + グローバル + 区切り + キャリア列 + 下余白。 */
-    constexpr int editorHeightHint = outerMargin + sectionHeaderHeight + rowHeight * 2 + sectionSeparatorHeight
+    constexpr int editorHeightHint = outerMargin + sectionHeaderHeight + sectionHeadingContentGap + rowHeight * 3 + sectionSeparatorHeight
                                      + carrierColumnContentHeight + bottomMargin + rowHeight + componentMargin;
 }
 

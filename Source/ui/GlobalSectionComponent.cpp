@@ -33,17 +33,17 @@ void GlobalSectionComponent::resized()
     auto r = getLocalBounds();
 
     heading.setBounds (r.removeFromTop (Layout::sectionHeaderHeight));
+    r.removeFromTop (Layout::sectionHeadingContentGap);
 
-    auto row1 = r.removeFromTop (Layout::rowHeight);
-    auto row2 = r.removeFromTop (Layout::rowHeight);
+    const int leftW = (r.getWidth() * 3) / 4;
+    auto leftCol = r.removeFromLeft (leftW);
+    r.removeFromLeft (Layout::globalSectionColumnMargin);
 
-    const int w1 = row1.getWidth() / 3;
-    gain.setBounds (row1.removeFromLeft (w1));
-    polyphony.setBounds (row1.removeFromLeft (w1));
-    bendRange.setBounds (row1);
+    gain.setBounds (leftCol.removeFromTop (Layout::rowHeight));
+    polyphony.setBounds (leftCol.removeFromTop (Layout::rowHeight));
+    bendRange.setBounds (leftCol.removeFromTop (Layout::rowHeight));
 
-    const int w2 = row2.getWidth() / 2;
-    colorTheme.setBounds (row2.removeFromLeft (w2));
-    lowpass.setBounds (row2);
+    colorTheme.setBounds (r.removeFromTop (Layout::rowHeight));
+    lowpass.setBounds (r.removeFromTop (Layout::rowHeight));
 }
 } // namespace MagicalFDS::UI

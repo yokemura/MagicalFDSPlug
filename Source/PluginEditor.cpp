@@ -55,7 +55,7 @@ void NewProjectAudioProcessorEditor::resized()
     content.removeFromRight (outerMargin);
     content.removeFromBottom (bottomMargin);
 
-    constexpr int globalBlockHeight = sectionHeaderHeight + rowHeight * 2;
+    constexpr int globalBlockHeight = sectionHeaderHeight + sectionHeadingContentGap + rowHeight * 3;
 
     globalSection.setBounds (content.removeFromTop (globalBlockHeight));
     content.removeFromTop (sectionSeparatorHeight);

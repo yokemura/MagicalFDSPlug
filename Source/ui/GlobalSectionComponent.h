@@ -2,7 +2,7 @@
   ==============================================================================
 
     GlobalSectionComponent.h
-    Volume, polyphony, bend, color theme, lowpass — two rows.
+    Volume, polyphony, bend (left column); color theme, lowpass (right column) — 3:1 split.
 
   ==============================================================================
 */

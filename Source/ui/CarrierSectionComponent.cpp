@@ -15,10 +15,10 @@ namespace MagicalFDS::UI
 {
 CarrierSectionComponent::CarrierSectionComponent (juce::AudioProcessorValueTreeState& apvtsIn)
     : apvts (apvtsIn)
-    , carrierA (apvtsIn, ParamIDs::carrierA, "A")
-    , carrierD (apvtsIn, ParamIDs::carrierD, "D")
-    , carrierS (apvtsIn, ParamIDs::carrierS, "S")
-    , carrierR (apvtsIn, ParamIDs::carrierR, "R")
+    , carrierA (apvtsIn, ParamIDs::carrierA, "Attack")
+    , carrierD (apvtsIn, ParamIDs::carrierD, "Decay")
+    , carrierS (apvtsIn, ParamIDs::carrierS, "Sustain")
+    , carrierR (apvtsIn, ParamIDs::carrierR, "Release")
     , carrierMode (apvtsIn, ParamIDs::carrierMode, "Wave mode")
     , waveDisplay (apvtsIn, WaveDisplayKind::carrier)
     , controlPanel (apvtsIn)
@@ -53,6 +53,7 @@ void CarrierSectionComponent::resized()
     auto r = getLocalBounds();
 
     heading.setBounds (r.removeFromTop (Layout::sectionHeaderHeight));
+    r.removeFromTop (Layout::sectionHeadingContentGap);
 
     auto adsr = r.removeFromTop (Layout::adsrBlockHeight);
     carrierA.setBounds (adsr.removeFromTop (Layout::rowHeight));
