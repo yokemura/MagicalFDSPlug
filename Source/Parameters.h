@@ -91,12 +91,14 @@ namespace ParamChoices
 
     inline juce::StringArray modWaveNames()
     {
-        return { "Triangle", "Sawtooth" };
+        return { "Triangle", "Sawtooth", "Sine", "Square", "Rise", "Fall" };
     }
 
     enum CarrierMode    { ModeAdditive = 0, ModePresetMorph, ModePulseShape, ModeFreeDraw };
     enum CarrierPreset  { PresetTriangle = 0, PresetSawtooth, PresetSine };
-    enum ModWaveType    { ModWaveTriangle = 0, ModWaveSawtooth };
+    enum ModWaveType    { ModWaveTriangle = 0, ModWaveSawtooth,
+                          ModWaveSine, ModWaveSquare,
+                          ModWaveOneShotUp, ModWaveOneShotDown };
 
     inline juce::StringArray modRateUseNames()
     {

@@ -32,6 +32,38 @@ namespace
         3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3
     };
 
+    // サイン近似: c が 0 → +15 → 0 → -15 → 0 と正負に振れる 1 周期。合計 0（ドリフトなし）。
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModSine = {
+        1, 1, 2, 2, 3, 2, 2, 1,   // +15: 正のハーフ 上昇
+        7, 7, 6, 6, 5, 6, 6, 7,   // -15: 正のハーフ 下降 → c=0
+        7, 7, 6, 6, 5, 6, 6, 7,   // -15: 負のハーフ 下降
+        1, 1, 2, 2, 3, 2, 2, 1    // +15: 負のハーフ 上昇 → c=0
+    };
+
+    // 疑似矩形波: +8（6 step ホールド）→ 0（6 step ホールド）→ -8（6 step）→ 0 の 4 段ステップ。合計 0。
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModSquare = {
+        3, 3, 0, 0, 0, 0, 0, 0,   // +8 → ホールド
+        5, 5, 0, 0, 0, 0, 0, 0,   // -8 → 0 へ → ホールド
+        5, 5, 0, 0, 0, 0, 0, 0,   // -8 → ホールド
+        3, 3, 0, 0, 0, 0, 0, 0    // +8 → 0 へ → ホールド
+    };
+
+    // ワンショット上昇: +4×8 で +32 へ最速上昇し残り 24 step ホールド。ループで +32/周 ドリフト。
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModOneShotUp = {
+        3, 3, 3, 3, 3, 3, 3, 3,   // +4×8 = +32
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0
+    };
+
+    // ワンショット下降: -4×8 で -32 へ最速下降し残り 24 step ホールド。ループで -32/周 ドリフト。
+    static constexpr std::array<uint8_t, FDSPatch::modWaveSteps> kFdsModOneShotDown = {
+        5, 5, 5, 5, 5, 5, 5, 5,   // -4×8 = -32
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0
+    };
+
     //==============================================================================
     float getFloatParam (juce::AudioProcessorValueTreeState& apvts, const juce::String& id)
     {
@@ -209,10 +241,15 @@ void applyApvtsToPatch (juce::AudioProcessorValueTreeState& apvts, FDSPatch& pat
     }
 
     const int modWaveIdx = getChoiceParam (apvts, ParamIDs::modWaveType);
-    if (modWaveIdx == ParamChoices::ModWaveTriangle)
-        patch.modWave = kFdsModTriangle;
-    else
-        patch.modWave = kFdsModSaw;
+    switch (modWaveIdx)
+    {
+        case ParamChoices::ModWaveSawtooth:    patch.modWave = kFdsModSaw;          break;
+        case ParamChoices::ModWaveSine:        patch.modWave = kFdsModSine;         break;
+        case ParamChoices::ModWaveSquare:      patch.modWave = kFdsModSquare;       break;
+        case ParamChoices::ModWaveOneShotUp:   patch.modWave = kFdsModOneShotUp;    break;
+        case ParamChoices::ModWaveOneShotDown: patch.modWave = kFdsModOneShotDown;  break;
+        default:                               patch.modWave = kFdsModTriangle;     break;
+    }
 
     const int rateUse = getChoiceParam (apvts, ParamIDs::modRateUse);
     const int rateRaw = getIntParam (apvts, ParamIDs::modRate);

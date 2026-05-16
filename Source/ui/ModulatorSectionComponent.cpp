@@ -28,10 +28,22 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     const int radioGroup = 90210;
     modWaveTri.setRadioGroupId (radioGroup);
     modWaveSaw.setRadioGroupId (radioGroup);
+    modWaveSine.setRadioGroupId (radioGroup);
+    modWaveSquare.setRadioGroupId (radioGroup);
+    modWaveRise.setRadioGroupId (radioGroup);
+    modWaveFall.setRadioGroupId (radioGroup);
     modWaveTri.setClickingTogglesState (true);
     modWaveSaw.setClickingTogglesState (true);
+    modWaveSine.setClickingTogglesState (true);
+    modWaveSquare.setClickingTogglesState (true);
+    modWaveRise.setClickingTogglesState (true);
+    modWaveFall.setClickingTogglesState (true);
     addAndMakeVisible (modWaveTri);
     addAndMakeVisible (modWaveSaw);
+    addAndMakeVisible (modWaveSine);
+    addAndMakeVisible (modWaveSquare);
+    addAndMakeVisible (modWaveRise);
+    addAndMakeVisible (modWaveFall);
 
     modWaveTri.onClick = [this]
     {
@@ -42,6 +54,26 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     {
         if (modWaveSaw.getToggleState())
             setModWaveIndex (ParamChoices::ModWaveSawtooth);
+    };
+    modWaveSine.onClick = [this]
+    {
+        if (modWaveSine.getToggleState())
+            setModWaveIndex (ParamChoices::ModWaveSine);
+    };
+    modWaveSquare.onClick = [this]
+    {
+        if (modWaveSquare.getToggleState())
+            setModWaveIndex (ParamChoices::ModWaveSquare);
+    };
+    modWaveRise.onClick = [this]
+    {
+        if (modWaveRise.getToggleState())
+            setModWaveIndex (ParamChoices::ModWaveOneShotUp);
+    };
+    modWaveFall.onClick = [this]
+    {
+        if (modWaveFall.getToggleState())
+            setModWaveIndex (ParamChoices::ModWaveOneShotDown);
     };
 
     addAndMakeVisible (modRateUseControl);
@@ -271,8 +303,12 @@ void ModulatorSectionComponent::syncWaveButtonsFromParameter()
     if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modWaveType)))
         idx = p->getIndex();
 
-    modWaveTri.setToggleState (idx == ParamChoices::ModWaveTriangle, juce::dontSendNotification);
-    modWaveSaw.setToggleState (idx == ParamChoices::ModWaveSawtooth, juce::dontSendNotification);
+    modWaveTri.setToggleState    (idx == ParamChoices::ModWaveTriangle,   juce::dontSendNotification);
+    modWaveSaw.setToggleState    (idx == ParamChoices::ModWaveSawtooth,   juce::dontSendNotification);
+    modWaveSine.setToggleState   (idx == ParamChoices::ModWaveSine,       juce::dontSendNotification);
+    modWaveSquare.setToggleState (idx == ParamChoices::ModWaveSquare,     juce::dontSendNotification);
+    modWaveRise.setToggleState   (idx == ParamChoices::ModWaveOneShotUp,  juce::dontSendNotification);
+    modWaveFall.setToggleState   (idx == ParamChoices::ModWaveOneShotDown, juce::dontSendNotification);
 }
 
 void ModulatorSectionComponent::resized()
@@ -289,10 +325,23 @@ void ModulatorSectionComponent::resized()
 
     r.removeFromTop (Layout::componentMargin);
 
-    auto waveBtnRow = r.removeFromTop (Layout::rowHeight);
-    const int half = waveBtnRow.getWidth() / 2;
-    modWaveTri.setBounds (waveBtnRow.removeFromLeft (half).reduced (2, 1));
-    modWaveSaw.setBounds (waveBtnRow.reduced (2, 1));
+    {
+        auto row = r.removeFromTop (Layout::rowHeight);
+        const int third = row.getWidth() / 3;
+        modWaveTri.setBounds    (row.removeFromLeft (third).reduced (2, 1));
+        modWaveSaw.setBounds    (row.removeFromLeft (third).reduced (2, 1));
+        modWaveSine.setBounds   (row.reduced (2, 1));
+    }
+
+    r.removeFromTop (Layout::componentMargin);
+
+    {
+        auto row = r.removeFromTop (Layout::rowHeight);
+        const int third = row.getWidth() / 3;
+        modWaveSquare.setBounds (row.removeFromLeft (third).reduced (2, 1));
+        modWaveRise.setBounds   (row.removeFromLeft (third).reduced (2, 1));
+        modWaveFall.setBounds   (row.reduced (2, 1));
+    }
 
     r.removeFromTop (Layout::componentMargin);
 

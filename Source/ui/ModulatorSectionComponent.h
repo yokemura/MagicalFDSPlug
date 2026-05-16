@@ -47,8 +47,12 @@ private:
 
     WaveDisplayComponent waveDisplay;
 
-    juce::ToggleButton modWaveTri { "Triangle" };
-    juce::ToggleButton modWaveSaw { "Saw" };
+    juce::ToggleButton modWaveTri    { "Triangle" };
+    juce::ToggleButton modWaveSaw    { "Saw" };
+    juce::ToggleButton modWaveSine   { "Sine" };
+    juce::ToggleButton modWaveSquare { "Square" };
+    juce::ToggleButton modWaveRise   { "Rise" };
+    juce::ToggleButton modWaveFall   { "Fall" };
 
     ChoiceControl modRateUseControl;
     juce::Label modRateLabel;
