@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="C4U0nk" name="MagicalFDSPlug" projectType="audioplug" companyName="YMCK"
-              companyWebsite="http://ymck.net" companyEmail="info@ymck.net" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" version="1.0.0"
-              pluginFormats="buildAU,buildStandalone,buildVST,buildVST3"
+              companyWebsite="http://ymck.net" companyEmail="info@ymck.net"
+              useAppConfig="0" addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1"
+              version="1.0.0" pluginFormats="buildAU,buildStandalone,buildVST3"
               pluginCharacteristicsValue="pluginIsSynth,pluginWantsMidiIn"
-              pluginChannelConfigs="{0, 2}" pluginAUMainType="'aumu'"
-              bundleIdentifier="com.ymck.magicalFDSPlug" pluginName="MagicalFDSPlug"
-              pluginCode="mfds" pluginDesc="FDS sound generator by YMCK" pluginManufacturer="Ymck"
-              pluginManufacturerCode="Ymck">
+              pluginChannelConfigs="{0, 2}" pluginAUMainType="'aumu'" bundleIdentifier="com.ymck.magicalFDSPlug"
+              pluginName="MagicalFDSPlug" pluginCode="mfds" pluginDesc="FDS sound generator by YMCK"
+              pluginManufacturer="Ymck" pluginManufacturerCode="Ymck">
   <MAINGROUP id="aumGQM" name="MagicalFDSPlug">
     <GROUP id="{4F7C080B-BF69-5169-D4FE-7D02C8703A82}" name="Source">
       <FILE id="ld56vN" name="PluginProcessor.cpp" compile="1" resource="0"

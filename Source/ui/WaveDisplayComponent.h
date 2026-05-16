@@ -43,12 +43,16 @@ private:
     void syncFromPatch();
     void updateAttachmentsAndTimer();
 
+    struct CarrierFreeDrawOverlay;
+
     juce::AudioProcessorValueTreeState& apvts;
     WaveDisplayKind kind;
     const int numSteps;
 
     std::vector<std::unique_ptr<juce::Slider>> sliders;
     std::vector<std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment>> freeDrawAttachments;
+
+    std::unique_ptr<CarrierFreeDrawOverlay> carrierFreeDrawOverlay;
 
     bool carrierFreeDraw = false;
 
