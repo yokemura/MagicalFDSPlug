@@ -80,7 +80,7 @@ void CarrierControlPanel::resized()
     presetChoice.setBounds (morphArea.removeFromTop (Layout::rowHeight));
     morphSlider.setBounds (morphArea.removeFromTop (Layout::rowHeight));
 
-    pulseWidth.setBounds (r.withSizeKeepingCentre (r.getWidth(), Layout::rowHeight));
+    pulseWidth.setBounds (r.removeFromTop (Layout::rowHeight));
     freeDrawPlaceholder.setBounds (r);
 }
 } // namespace MagicalFDS::UI
