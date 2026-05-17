@@ -200,7 +200,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::carrierMorphAmount, v },
         "Morph Amount",
-        juce::NormalisableRange<float> (-10.0f, 10.0f, 0.001f), 0.0f));
+        juce::NormalisableRange<float> (-1.0f, 1.0f, 0.001f), 0.0f));
 
     //--- (3) Pulse ------------------------------------------------------------
     // 64 点テーブル中央付近（32）を既定。

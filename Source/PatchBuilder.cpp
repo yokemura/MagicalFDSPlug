@@ -142,6 +142,14 @@ namespace
     }
 
     //--- Preset + morph -----------------------------------------------------
+    constexpr float morphExponentBase = 10.0f;
+
+    float morphExponentFromSlider (float t)
+    {
+        t = juce::jlimit (-1.f, 1.f, t);
+        return (float) std::pow ((double) morphExponentBase, (double) t);
+    }
+
     float morphSignedPow (float x, float r)
     {
         const float ax = std::abs (x);
@@ -187,7 +195,7 @@ namespace
 
             if (std::abs (morphAmount) > 1.0e-6f)
             {
-                const float r = juce::jlimit (-10.f, 10.f, morphAmount);
+                const float r = morphExponentFromSlider (morphAmount);
                 x = morphSignedPow (x, r);
             }
 
