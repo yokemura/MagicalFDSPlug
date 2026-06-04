@@ -212,15 +212,10 @@ float FDSVoice::renderOneSample()
         modAcc12 = sum;
     }
 
-    // ---- Carrier: MIDI 基準ピッチ -> 12bit、変調は Wiki の wave_pitch -> ティック Hz ----
-    const uint32_t pitch12 = (uint32_t) MagicalFDS::carrierHzToPitch12 (carrierHz);
+    // ---- Carrier: carrierHz × 変調係数 -> ティック Hz（12bit pitch 飽和なし） ----
     const float depthPreEnv = (float) patch->modDepth;
     const int modGain6 = (int) juce::jlimit (0.f, 63.f, mEnv * depthPreEnv);
-
-    const uint32_t wavePitch20 = MagicalFDS::computeWavePitch20 (
-        pitch12, modCounter, modGain6);
-
-    const double fTick = MagicalFDS::wavePitchToWaveTickHz (wavePitch20);
+    const double fTick = MagicalFDS::carrierHzToTickHz (carrierHz, modCounter, modGain6);
     const float carrierInc = (float) (fTick / sr);
 
     carrierPhase += carrierInc;
