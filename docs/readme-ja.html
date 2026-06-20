@@ -326,12 +326,13 @@
     <p>モジュレータは、FDS 実機と同様 32 ステップの 3 bit 命令列(opcode列; 後述)として動作し、キャリア波形の読み出し速度（＝音色）を変調します（上図 ③）。</p>
 
     <h3>波形プレビューと波形選択</h3>
+    <img class="half" src="./img/modulator_wave.png">
     <p>32 点の累積波形を表示します（読み取り専用）。Triangle / Saw / Sine / Square / Rise / Fall / Custom から選択します。
       Custom 選択時は opcode テキスト欄が表示されます。
     </p>
 
     <h3>Use / Rate / Depth</h3>
-    <img class="half" src="./img/modulator_fm.png">
+    <img class="half" src="./img/modulator_use_rate_depth.png">
     <p>変調レートの使い方を Use で切り替えます。</p>
     <table>
       <tr>
@@ -354,11 +355,8 @@
       <dd>変調の深さ。モジュレータ ADSR の出力と掛け合わせ、FDS 実機の mod gain（0〜63）相当として使われます。</dd>
     </dl>
 
-    <h3>LFO モード</h3>
-    <img class="half" src="./img/modulator_lfo.png">
-    <p>Use を LFO にすると、Rate と Depth のレンジが LFO 向け（Rate 1〜30、Depth 1〜5）に制限されます。</p>
-
     <h3>モジュレータエンベロープ</h3>
+    <img class="half" src="./img/modulator_adsr.png">
     <p>変調量の時間変化（ADSR）です。キャリア ADSR と同様、秒と相対レベルで指定します。</p>
     <dl>
       <dt>Mod Attack</dt>
