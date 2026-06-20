@@ -126,15 +126,14 @@
 
     ---------------------------------------------------------->
     <h1>What is Magical FDS Plug?</h1>
-    <p> Magical FDS Plug is a software synthesizer that reproduces the sound of the Famicom Disk System (FDS) audio
-      chip — often called the "Disk System sound source" in Japanese chiptune culture. It runs as a plug-in in host
-      applications that support Audio Units (Mac) or VST3 (Mac / Windows).
+    <p> Magical FDS Plug is a software synthesizer that reproduces the sound of the so-called "Disk System sound source"
+      (FDS sound source). It runs as a plug-in in host applications that support Audio Units (Mac) or VST3
+      (Mac / Windows).
     </p>
-    <p> The FDS generates sound by reading a 64-sample wavetable (the <strong>carrier</strong>) while a separate
-      32-step sequence of 3-bit opcodes (the <strong>modulator</strong>) changes how fast that table is scanned —
-      which effectively modulates timbre. The real hardware offered great freedom but required hand-editing raw
-      waveform data. This plug-in keeps that flexibility while providing logical editors: additive drawbars, preset
-      morphing, pulse shaping, and free drawing.
+    <p> The FDS sound source has a unique mechanism: a 64-sample wavetable (the <strong>carrier</strong>) is modulated
+      by a separate 32-step command sequence (the <strong>modulator</strong>). Because it offers extremely high freedom,
+      it is difficult to configure; this plug-in keeps that freedom while providing a logical interface to build
+      waveforms — additive synthesis, preset morphing, and more.
     </p>
 
     <h2>Features</h2>
@@ -145,7 +144,6 @@
       <li><strong>Mod rate modes: LFO / FM / OFF</strong> — From slow vibrato-like sweeps to timbral FM</li>
       <li><strong>Separate ADSR envelopes</strong> for carrier and modulator (same feel as Magical 8bit Plug 2)</li>
       <li><strong>~2 kHz output low-pass filter</strong> (on by default) for hardware-like tone</li>
-      <li><strong>UI aligned with Magical 8bit Plug 2</strong> — Seven color themes, section layout, ADSR controls</li>
     </ul>
 
     <h2>Carrier and modulator</h2>
@@ -174,12 +172,20 @@
 
     ---------------------------------------------------------->
     <h1>Installation</h1>
-    <p>Basically put the plug-in file in the appropriate folder to start using. As the actual installation method will
-      vary according to your system and host application, please refer to the instructions from them for the detail.
+    <p>Basically put the plug-in file in the folder specified by your OS or host application to start using.
+      Typical installation paths are listed below. The actual location varies by environment; please refer to your OS
+      or DAW documentation.
     </p>
-    <p>If you have any questions please don't ask me but ask Google. I'm not going to be your kindly technical assistant.
-      Please don't ask me about the installation because I don't know about your system.</p>
+    <p>Host applications including DAWs have become increasingly diverse, and it is practically impossible for me to
+      know how each one handles plug-ins. If you have questions, please search for answers or ask your software's user
+      community rather than contacting me. I will not respond to inquiries about basic installation methods.</p>
     <table>
+      <tr>
+        <td>Platform</td>
+        <td>Plug-in format</td>
+        <td>Extension</td>
+        <td>Typical installation path</td>
+      </tr>
       <tr>
         <td rowspan="2">Mac</td>
         <td>AudioUnits</td>
@@ -251,7 +257,7 @@
     <p>The carrier is a 64-sample, 6-bit (64-level) wavetable — what you actually hear (see (2) above).</p>
 
     <h3>Envelope</h3>
-    <p>Volume envelope with four parameters. Same behavior as Magical 8bit Plug 2.</p>
+    <p>Volume envelope with four parameters.</p>
     <dl>
       <dt>Carrier Attack</dt>
       <dd>Time until volume reaches maximum after key on (seconds, 0–5).</dd>
@@ -283,9 +289,6 @@
         <td>Draw 64 samples directly</td>
       </tr>
     </table>
-    <p> Settings for Additive, Preset Morph, and Pulse Shape are <strong>remembered</strong> when you switch modes.
-      Free Draw is an exception: slider values map directly to the sounding wavetable.
-    </p>
 
     <h3>Wave display</h3>
     <p>64 vertical bars show the table. Read-only except in Free Draw, where each bar is editable (0–63).</p>
@@ -303,7 +306,7 @@
       <dd>Triangle, Sawtooth, or Sine.</dd>
       <dt>Morph</dt>
       <dd>Center = no change. Move right to <strong>compress</strong> (emphasize smaller amplitudes); left to
-        <strong>expand</strong> (attenuate them further). Implemented as power-law shaping.</dd>
+        <strong>expand</strong> (attenuate them further).</dd>
     </dl>
 
     <h3>Pulse Shape</h3>
@@ -321,12 +324,12 @@
 
     <h2><a name="modulator">Modulator Section</a></h2>
 
-    <p>The modulator is a 32-step sequence of 3-bit opcodes (as on real FDS hardware). It modulates how the carrier
-      wavetable is scanned, changing timbre (see (3) above).</p>
+    <p>The modulator runs as a 32-step sequence of 3-bit opcodes (see below), as on real FDS hardware. It modulates
+      how the carrier wavetable is scanned, changing timbre (see (3) above).</p>
 
     <h3>Wave preview and wave type</h3>
     <p>32-step cumulative shape (read-only). Choose Triangle, Saw, Sine, Square, Rise, Fall, or Custom.
-      Six presets embed hardware-equivalent opcode sequences. Custom shows a text field for opcodes.</p>
+      When Custom is selected, an opcode text field is shown.</p>
 
     <h3>Use / Rate / Depth</h3>
     <img class="half" src="./img/modulator_fm.png">
@@ -378,12 +381,15 @@
 
     <img class="half" src="./img/modulator_custom.png">
 
-    <p> When Custom is selected, enter exactly <strong>32 digits</strong> 0–7 in one line. Spaces are ignored.
-      Full-width digits are not allowed. The custom sequence applies once valid input is committed.
-      Switching from a preset to Custom starts from that preset's opcode sequence.
+    <p> Unlike the carrier wavetable, the modulator shape is specified by placing value-manipulation commands (opcodes)
+      at each step. Commands basically only raise or lower the value, so you cannot create waveforms that jump up and
+      down abruptly. (The sole exception is the reset command, which instantly resets the value to 0.)</p>
+    <p>
+      Opcodes are digits 0–7. When Custom is selected, enter 32 of them in one line. Spaces are ignored.
+      Full-width digits are not allowed. Once valid input is committed, the timbre is updated.
     </p>
 
-    <h2>Opcode meanings (FDS hardware)</h2>
+    <h2>Meaning of each digit (opcode) (FDS hardware)</h2>
     <table>
       <tr>
         <td>Digit</td>
