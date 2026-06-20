@@ -21,6 +21,8 @@
 
 namespace MagicalFDS
 {
+inline constexpr int maxPolyphony = 32;
+
 //==============================================================================
 namespace ParamIDs
 {
@@ -169,7 +171,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::polyphony, v },
         "Polyphony",
-        juce::NormalisableRange<float> (1.0f, 16.0f, 1.0f, 1.0f), 1.0f));
+        juce::NormalisableRange<float> (1.0f, (float) maxPolyphony, 1.0f, 1.0f), 1.0f));
 
     params.push_back (std::make_unique<API> (
         juce::ParameterID { ParamIDs::bendRange, v },

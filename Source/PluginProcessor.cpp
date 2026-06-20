@@ -46,7 +46,7 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
 
     synth.setCurrentPlaybackSampleRate (44100.0);
 
-    synthVoiceCount = readPolyphonyFromApvts (apvts, maxPolyphonyCap);
+    synthVoiceCount = readPolyphonyFromApvts (apvts, MagicalFDS::maxPolyphony);
     for (int i = 0; i < synthVoiceCount; ++i)
         synth.addVoice (new FDSVoice (&fdsPatch));
 
@@ -58,7 +58,7 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
 
 void NewProjectAudioProcessor::syncPolyphonyFromApvts()
 {
-    const int poly = readPolyphonyFromApvts (apvts, maxPolyphonyCap);
+    const int poly = readPolyphonyFromApvts (apvts, MagicalFDS::maxPolyphony);
     if (poly == synthVoiceCount)
         return;
 

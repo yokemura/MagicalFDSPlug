@@ -70,8 +70,6 @@ public:
 
 private:
     //==============================================================================
-    static constexpr int maxPolyphonyCap = 16;
-
     /** 現在構築済みのシンセボイス数（APVTS polyphony と一致）。 */
     int synthVoiceCount = 1;
 
