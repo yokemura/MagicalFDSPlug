@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Magical FDS Plug</title>
+  <style type="text/css">
+    body {
+      margin-right: auto;
+      margin-left: auto;
+      background-color: #f7f7f7;
+      color: #666666;
+      font-size: 14px;
+      line-height: 160%;
+      max-width: 800px;
+    }
+
+    strong {
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-weight: bold;
+      color: #666666;
+    }
+
+    p {
+      margin: 10px 10px 10px 10px;
+    }
+
+    a[href] {
+      color: #666666;
+      text-decoration: underline;
+    }
+
+    a[name] {
+      color: #666666;
+    }
+
+    h1 {
+      font-size: 20px;
+      background-color: #eeeeee;
+      color: #666666;
+      padding: 15px 15px 15px 15px;
+      margin: 30px 0px 20px 0px;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin: 20px 0px 5px 0px;
+      padding: 10px 15px 10px 12px;
+      border-top: solid 2px #eeeeee;
+      border-left: solid 5px #eeeeee;
+      padding: none;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 15px 0px 15px 0px;
+      padding: none;
+      border-bottom: solid 1px #eeeeee;
+    }
+
+    dt {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    dd {
+      margin-left: 20px;
+      margin-bottom: 7px;
+    }
+
+    table,
+    td,
+    th {
+      font-size: 13px;
+      border-collapse: collapse;
+      border: 1px #808080 solid;
+      padding: 10px 10px 10px 10px;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    img.half {
+      max-width: 50%;
+    }
+
+    .main_div {
+      background-color: #ffffff;
+      padding: 20px 20px 20px 20px;
+      text-align: left;
+    }
+
+    .caption {
+      padding: 3px;
+    }
+
+    .small_text {
+      color: #666666;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .title_text {
+      font-size: 18px;
+    }
+
+    pre {
+      margin: 10px 10px 10px 10px;
+      background-color: #f4f4f4;
+      padding: 10px 10px 10px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main_div"> <img src="./img/icon-512.png" width="58" height="58" style="float:left; margin-right:20px;">
+    <strong class="title_text">Magical FDS Plug Operation Manual</strong><br>
+    by Yokemura(YMCK) <a href="http://www.ymck.net/" target="_blank">http://www.ymck.net/</a> <br>
+    <br>
+
+    <!--------------------------------------------------------
+
+    What is Magical FDS Plug?
+
+    ---------------------------------------------------------->
+    <h1>What is Magical FDS Plug?</h1>
+    <p> Magical FDS Plug is a software synthesizer that reproduces the sound of the Famicom Disk System (FDS) audio
+      chip — often called the "Disk System sound source" in Japanese chiptune culture. It runs as a plug-in in host
+      applications that support Audio Units (Mac) or VST3 (Mac / Windows).
+    </p>
+    <p> The FDS generates sound by reading a 64-sample wavetable (the <strong>carrier</strong>) while a separate
+      32-step sequence of 3-bit opcodes (the <strong>modulator</strong>) changes how fast that table is scanned —
+      which effectively modulates timbre. The real hardware offered great freedom but required hand-editing raw
+      waveform data. This plug-in keeps that flexibility while providing logical editors: additive drawbars, preset
+      morphing, pulse shaping, and free drawing.
+    </p>
+
+    <h2>Features</h2>
+    <ul>
+      <li><strong>Carrier + modulator architecture</strong> — Design the audible wavetable and the modulator sequence independently</li>
+      <li><strong>Four carrier editing modes</strong> — Additive, Preset Morph, Pulse Shape, and Free Draw</li>
+      <li><strong>Six modulator presets + Custom</strong> — Triangle, saw, sine, square, rise, fall, or a 32-digit custom opcode string</li>
+      <li><strong>Mod rate modes: LFO / FM / OFF</strong> — From slow vibrato-like sweeps to timbral FM</li>
+      <li><strong>Separate ADSR envelopes</strong> for carrier and modulator (same feel as Magical 8bit Plug 2)</li>
+      <li><strong>~2 kHz output low-pass filter</strong> (on by default) for hardware-like tone</li>
+      <li><strong>UI aligned with Magical 8bit Plug 2</strong> — Seven color themes, section layout, ADSR controls</li>
+    </ul>
+
+    <h2>Carrier and modulator</h2>
+    <table>
+      <tr>
+        <td><strong>Carrier</strong></td>
+        <td>The basic waveform you actually hear</td>
+        <td>A 64-sample, 6-bit wavetable. Built with additive drawbars, preset morph, pulse shape, or free draw</td>
+      </tr>
+      <tr>
+        <td><strong>Modulator</strong></td>
+        <td>The waveform that modulates the carrier</td>
+        <td>A 32-step opcode sequence. Choose from six presets and adjust rate/depth for LFO-like or FM-like effects</td>
+      </tr>
+    </table>
+
+    <h2>Open source</h2>
+    <p>Magical FDS Plug is an open source software, so you can modify or enhance the functionality as you want and
+      contribute it to share your improvement. The GitHub repository is <a
+        href="https://github.com/yokemura/MagicalFDSPlug">here</a>.</p>
+    <p>If you want to support the development but are not familiar with coding you can contribute through a donation.</p>
+
+    <!--------------------------------------------------------
+
+    Installation
+
+    ---------------------------------------------------------->
+    <h1>Installation</h1>
+    <p>Basically put the plug-in file in the appropriate folder to start using. As the actual installation method will
+      vary according to your system and host application, please refer to the instructions from them for the detail.
+    </p>
+    <p>If you have any questions please don't ask me but ask Google. I'm not going to be your kindly technical assistant.
+      Please don't ask me about the installation because I don't know about your system.</p>
+    <table>
+      <tr>
+        <td rowspan="2">Mac</td>
+        <td>AudioUnits</td>
+        <td>.component</td>
+        <td>/Library/Audio/Plug-ins/Components</td>
+      </tr>
+      <tr>
+        <td>VST3</td>
+        <td>.vst3</td>
+        <td>/Library/Audio/Plug-ins/VST3</td>
+      </tr>
+      <tr>
+        <td>Windows</td>
+        <td>VST3</td>
+        <td>.vst3</td>
+        <td>C:\Program Files\Common Files\VST3</td>
+      </tr>
+    </table>
+
+    <!--------------------------------------------------------
+
+    Usage
+
+    ---------------------------------------------------------->
+    <h1>Usage</h1>
+
+    <p>Magical FDS Plug has three sections in its UI: <strong>Global</strong>, <strong>Carrier</strong>, and
+      <strong>Modulator</strong>. Global is on top; Carrier and Modulator sit side by side below (width ratio 3:2).
+      Visible controls depend on <strong>Carrier Wave Mode</strong> and <strong>Mod Rate Use (LFO/FM/OFF)</strong>.
+      If you don't see the control you want, check those selections first.
+    </p>
+
+    <img src="./img/sections.png">
+
+    <dl>
+      <dt><a href="#global">(1) Global Section</a></dt>
+      <dd>General settings: master gain, polyphony, bend range, theme, low-pass filter, preset load/save.</dd>
+      <dt><a href="#carrier">(2) Carrier Section</a></dt>
+      <dd>Carrier ADSR and wavetable editing. Control contents vary according to Carrier Wave Mode.</dd>
+      <dt><a href="#modulator">(3) Modulator Section</a></dt>
+      <dd>Modulator waveform, rate/depth, and ADSR. Rate and Depth visibility depends on the Use setting.</dd>
+    </dl>
+
+    <!--- Global -->
+
+    <h2><a name="global">Global Section</a></h2>
+
+    <p>The Global section at the top contains plug-in-wide settings (see (1) in the screenshot above).</p>
+
+    <dl>
+      <dt>Gain</dt>
+      <dd>Master output level (0–1). Default 0.5. Useful for balancing against other instruments.</dd>
+      <dt>Polyphony</dt>
+      <dd>Number of voices (1–32). Default 1.</dd>
+      <dt>Bend</dt>
+      <dd>Pitch bend range in semitones (0–24). Default 2. This is the deviation when the bend wheel is at maximum.</dd>
+      <dt>Load / Save</dt>
+      <dd>Save or restore all parameters as an XML preset file.</dd>
+      <dt>Theme</dt>
+      <dd>UI color: FDS, YMCK, YMCK Dark, Japan, Worldwide, Monotone, Mono Dark.</dd>
+      <dt>LPF</dt>
+      <dd>Toggle the ~2 kHz low-pass filter. Default ON. Cutoff and Q are not adjustable.</dd>
+    </dl>
+
+    <!--- Carrier -->
+
+    <h2><a name="carrier">Carrier Section</a></h2>
+
+    <p>The carrier is a 64-sample, 6-bit (64-level) wavetable — what you actually hear (see (2) above).</p>
+
+    <h3>Envelope</h3>
+    <p>Volume envelope with four parameters. Same behavior as Magical 8bit Plug 2.</p>
+    <dl>
+      <dt>Carrier Attack</dt>
+      <dd>Time until volume reaches maximum after key on (seconds, 0–5).</dd>
+      <dt>Carrier Decay</dt>
+      <dd>Time until volume reaches the sustain level (seconds, 0–5).</dd>
+      <dt>Carrier Sustain</dt>
+      <dd>Level held until key off (0–1).</dd>
+      <dt>Carrier Release</dt>
+      <dd>Time until volume reaches zero after key off (seconds, 0–5).</dd>
+    </dl>
+
+    <h3>Carrier Wave Mode</h3>
+    <p>Select how the wavetable is built. The control panel below switches accordingly.</p>
+    <table>
+      <tr>
+        <td>Additive</td>
+        <td>Mix harmonics with 8 drawbars</td>
+      </tr>
+      <tr>
+        <td>Preset Morph</td>
+        <td>Morph triangle, saw, or sine</td>
+      </tr>
+      <tr>
+        <td>Pulse Shape</td>
+        <td>Adjust rectangular pulse width</td>
+      </tr>
+      <tr>
+        <td>Free Draw</td>
+        <td>Draw 64 samples directly</td>
+      </tr>
+    </table>
+    <p> Settings for Additive, Preset Morph, and Pulse Shape are <strong>remembered</strong> when you switch modes.
+      Free Draw is an exception: slider values map directly to the sounding wavetable.
+    </p>
+
+    <h3>Wave display</h3>
+    <p>64 vertical bars show the table. Read-only except in Free Draw, where each bar is editable (0–63).</p>
+
+    <h3>Additive</h3>
+    <img class="half" src="./img/carrier_additive.png">
+    <p>Eight Hammond-style drawbars:</p>
+    <pre>8', 4', 2 2/3', 2', 1 3/5', 1 1/3', 1 1/7', 1'</pre>
+    <p>Sliders (0–1) mix sine partials; the result is quantized to 64 samples. Levels are normalized if they would exceed full scale.</p>
+
+    <h3>Preset Morph</h3>
+    <img class="half" src="./img/carrier_presetMorph.png">
+    <dl>
+      <dt>Preset</dt>
+      <dd>Triangle, Sawtooth, or Sine.</dd>
+      <dt>Morph</dt>
+      <dd>Center = no change. Move right to <strong>compress</strong> (emphasize smaller amplitudes); left to
+        <strong>expand</strong> (attenuate them further). Implemented as power-law shaping.</dd>
+    </dl>
+
+    <h3>Pulse Shape</h3>
+    <img class="half" src="./img/carrier_pulseShape.png">
+    <dl>
+      <dt>Pulse width</dt>
+      <dd>High segment length from 1 to 63 steps (of 64). Default 32. Levels are 63 (high) and 0 (low).</dd>
+    </dl>
+
+    <h3>Free Draw</h3>
+    <img class="half" src="./img/carrier_freeDraw.png">
+    <p>No control panel — edit the 64 bars in the wave display directly.</p>
+
+    <!--- Modulator -->
+
+    <h2><a name="modulator">Modulator Section</a></h2>
+
+    <p>The modulator is a 32-step sequence of 3-bit opcodes (as on real FDS hardware). It modulates how the carrier
+      wavetable is scanned, changing timbre (see (3) above).</p>
+
+    <h3>Wave preview and wave type</h3>
+    <p>32-step cumulative shape (read-only). Choose Triangle, Saw, Sine, Square, Rise, Fall, or Custom.
+      Six presets embed hardware-equivalent opcode sequences. Custom shows a text field for opcodes.</p>
+
+    <h3>Use / Rate / Depth</h3>
+    <img class="half" src="./img/modulator_fm.png">
+    <p>Switch modulation behavior with Use:</p>
+    <table>
+      <tr>
+        <td>LFO</td>
+        <td>Slow modulation (vibrato-like). Rate 1–30, Depth 1–5</td>
+      </tr>
+      <tr>
+        <td>FM</td>
+        <td>Timbral FM. Rate 30–4095, Depth 0–63</td>
+      </tr>
+      <tr>
+        <td>OFF</td>
+        <td>No modulation. Rate and Depth are hidden</td>
+      </tr>
+    </table>
+    <dl>
+      <dt>Rate</dt>
+      <dd>Modulation speed. Not a simple Hz readout; higher values = faster / more FM-like. Default 256 in FM mode.</dd>
+      <dt>Depth</dt>
+      <dd>Modulation amount, scaled by the modulator envelope, mapped to FDS mod gain (0–63).</dd>
+    </dl>
+
+    <h3>LFO mode</h3>
+    <img class="half" src="./img/modulator_lfo.png">
+    <p>When Use is LFO, Rate and Depth ranges are limited to LFO-friendly values (Rate 1–30, Depth 1–5).</p>
+
+    <h3>Modulator envelope</h3>
+    <p>Envelope on modulation depth. Same units as the carrier ADSR.</p>
+    <dl>
+      <dt>Mod Attack</dt>
+      <dd>Time until modulation reaches maximum after key on.</dd>
+      <dt>Mod Decay</dt>
+      <dd>Time until modulation reaches the sustain level.</dd>
+      <dt>Mod Sustain</dt>
+      <dd>Level held until key off.</dd>
+      <dt>Mod Release</dt>
+      <dd>Time until modulation reaches zero after key off.</dd>
+    </dl>
+
+    <!--------------------------------------------------------
+
+    Custom opcodes
+
+    ---------------------------------------------------------->
+    <h1>Custom opcodes</h1>
+
+    <img class="half" src="./img/modulator_custom.png">
+
+    <p> When Custom is selected, enter exactly <strong>32 digits</strong> 0–7 in one line. Spaces are ignored.
+      Full-width digits are not allowed. The custom sequence applies once valid input is committed.
+      Switching from a preset to Custom starts from that preset's opcode sequence.
+    </p>
+
+    <h2>Opcode meanings (FDS hardware)</h2>
+    <table>
+      <tr>
+        <td>Digit</td>
+        <td>Action</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>Hold</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>Counter +1</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Counter +2</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Counter +4</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Reset counter to 0</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Counter −4</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Counter −2</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Counter −1</td>
+      </tr>
+    </table>
+    <p>The counter wraps between −64 and 63. The 32 steps loop each cycle.</p>
+
+    <h2>Example</h2>
+    <p>Opcode sequence equivalent to the triangle preset:</p>
+    <pre>0505050303030303030305050505</pre>
+
+    <h1>License</h1>
+    <p>This plug-in is released under the <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL v3</a> License.
+      The source code is open on GitHub; you can duplicate, distribute, or modify it under the conditions of GPL.</p>
+
+    <h1>Donation</h1>
+    <p>You can support developing Magical FDS Plug not only by contributing source code but by a donation as well.
+      We really appreciate your support.</p>
+    <p>You can make a donation from <a href="https://ymck.net/app/magical-8bit-plug-en/">this page</a>.</p>
+  </div>
+</body>
+
+</html>

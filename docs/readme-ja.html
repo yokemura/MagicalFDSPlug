@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Magical FDS Plug</title>
+  <style type="text/css">
+    body {
+      margin-right: auto;
+      margin-left: auto;
+      background-color: #f7f7f7;
+      color: #666666;
+      font-size: 14px;
+      line-height: 160%;
+      max-width: 800px;
+    }
+
+    strong {
+      font-size: 14px;
+      letter-spacing: 1px;
+      font-weight: bold;
+      color: #666666;
+    }
+
+    p {
+      margin: 10px 10px 10px 10px;
+    }
+
+    a[href] {
+      color: #666666;
+      text-decoration: underline;
+    }
+
+    a[name] {
+      color: #666666;
+    }
+
+    h1 {
+      font-size: 20px;
+      background-color: #eeeeee;
+      color: #666666;
+      padding: 15px 15px 15px 15px;
+      margin: 30px 0px 20px 0px;
+    }
+
+    h2 {
+      font-size: 16px;
+      margin: 20px 0px 5px 0px;
+      padding: 10px 15px 10px 12px;
+      border-top: solid 2px #eeeeee;
+      border-left: solid 5px #eeeeee;
+      padding: none;
+    }
+
+    h3 {
+      font-size: 15px;
+      margin: 15px 0px 15px 0px;
+      padding: none;
+      border-bottom: solid 1px #eeeeee;
+    }
+
+    dt {
+      margin-left: 10px;
+      font-weight: bold;
+    }
+
+    dd {
+      margin-left: 20px;
+      margin-bottom: 7px;
+    }
+
+    table,
+    td,
+    th {
+      font-size: 13px;
+      border-collapse: collapse;
+      border: 1px #808080 solid;
+      padding: 10px 10px 10px 10px;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    img.half {
+      max-width: 50%;
+    }
+
+    .main_div {
+      background-color: #ffffff;
+      padding: 20px 20px 20px 20px;
+      text-align: left;
+    }
+
+    .caption {
+      padding: 3px;
+    }
+
+    .small_text {
+      color: #666666;
+      font-size: 10px;
+      letter-spacing: 2px;
+    }
+
+    .title_text {
+      font-size: 18px;
+    }
+
+    pre {
+      margin: 10px 10px 10px 10px;
+      background-color: #f4f4f4;
+      padding: 10px 10px 10px 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="main_div"> <img src="./img/icon-512.png" width="58" height="58" style="float:left; margin-right:20px;">
+    <strong class="title_text">Magical FDS Plug Operation Manual</strong><br>
+    by Yokemura(YMCK) <a href="http://www.ymck.net/" target="_blank">http://www.ymck.net/</a> <br>
+    <br>
+
+    <!--------------------------------------------------------
+
+    Magical FDS Plugとは
+
+    ---------------------------------------------------------->
+    <h1>Magical FDS Plugとは</h1>
+    <p> Magical FDS Plug は、8bit 時代の「ディスクシステム音源」（FDS 音源）の音色を再現するソフトウェア・シンセサイザーです。
+      Audio Units および VST3 をサポートする Mac / Windows のホストアプリケーションで、プラグインとして利用できます。
+    </p>
+    <p> FDS 音源は、64 サンプルの波形メモリ（キャリア）を、別の 32 ステップの命令列（モジュレータ）で変調するという独特の仕組みを持ちます。
+      自由度は高い一方、実機では波形データを直接編集する必要があり、設定が難しい面もありました。
+      本プラグインでは、その自由度を保ちつつ、加算合成やプリセット変形など、ロジカルな方法で波形を組み立てられるインターフェースを提供しています。
+    </p>
+
+    <h2>特徴</h2>
+    <ul>
+      <li><strong>キャリア＋モジュレータの 2 系統</strong> — 聴こえる基本波形（キャリア）と、それを変える側（モジュレータ）を独立に設計できます</li>
+      <li><strong>4 通りのキャリア波形編集</strong> — 加算合成／プリセット変形／パルス変形／自由描画</li>
+      <li><strong>モジュレータ波形 6 種＋ Custom</strong> — 三角波・のこぎり波・サイン波・矩形波・上昇・下降、および 32 ステップの opcode 列をテキスト入力</li>
+      <li><strong>変調レート LFO / FM / OFF</strong> — ゆっくり揺らす LFO から、音色を変える FM まで使い分け</li>
+      <li><strong>キャリア・モジュレータそれぞれ ADSR エンベロープ</strong> — Magical 8bit Plug 2 と同様の操作感</li>
+      <li><strong>実機近似の出力ローパス（約 2 kHz）</strong> — オン／オフ切替（デフォルト：オン）</li>
+      <li><strong>Magical 8bit Plug 2 に準拠した UI</strong> — カラーテーマ 7 種類、セクション構成、ADSR の操作感</li>
+    </ul>
+
+    <h2>キャリアとモジュレータ</h2>
+    <table>
+      <tr>
+        <td><strong>キャリア</strong></td>
+        <td>実際に聴こえる基本の波形</td>
+        <td>64 サンプル・64 段階（6 bit）の波形テーブル。加算合成・プリセット変形・パルス・自由描画の 4 通りで作れます</td>
+      </tr>
+      <tr>
+        <td><strong>モジュレータ</strong></td>
+        <td>キャリアを変える側の波形</td>
+        <td>32 ステップの命令列として動作。三角波など 6 種類から選び、レートと深さで「揺らす」か「音色を変える」かを調整します</td>
+      </tr>
+    </table>
+
+    <h2>開発について</h2>
+    <p>Magical FDS Plug はオープンソースですので、欲しい機能や修正があれば、ご自身で改良することが可能です。
+      もちろん、それをフィードバックしていただければ今後のバージョンに生かさせていただきます。
+      GitHub レポジトリは<a href="https://github.com/yokemura/MagicalFDSPlug">こちら</a>です。</p>
+    <p>また、ドネーションも受け付けておりますので、コーディング以外でサポートしていただける方はぜひこちらをよろしくお願いします。</p>
+
+    <!--------------------------------------------------------
+
+    インストール方法
+
+    ---------------------------------------------------------->
+    <h1>インストール方法</h1>
+    <p>プラグイン本体を、OS またはホストアプリケーションで指定されたフォルダへとコピーします。
+      一般的なインストール先は以下の通りです。実際のインストール場所は環境によって異なりますので、お使いの OS や DAW の説明をご参照ください。
+    </p>
+    <p>
+      特に最近では DAW 含むアプリは多様化していますので、それぞれについてプラグイン使用方法について把握しきれておりませんし、実質不可能です。
+      ですのでご質問は私ではなく、Google 先生か、またはお使いのソフトのユーザコミュニティなどにお問い合わせいただければと思います。
+      基本的なインストール方法の問題については、お問い合わせいただいてもお答えいたしませんのであらかじめご了承ください。
+    </p>
+    <table>
+      <tr>
+        <td rowspan="2">Mac</td>
+        <td>AudioUnits</td>
+        <td>.component</td>
+        <td>/Library/Audio/Plug-ins/Components</td>
+      </tr>
+      <tr>
+        <td>VST3</td>
+        <td>.vst3</td>
+        <td>/Library/Audio/Plug-ins/VST3</td>
+      </tr>
+      <tr>
+        <td>Windows</td>
+        <td>VST3</td>
+        <td>.vst3</td>
+        <td>C:\Program Files\Common Files\VST3</td>
+      </tr>
+    </table>
+
+    <!--------------------------------------------------------
+
+    使い方
+
+    ---------------------------------------------------------->
+    <h1>使い方</h1>
+
+    <p>Magical FDS Plug の UI は、Global（全体）・Carrier（キャリア）・Modulator（モジュレータ）の 3 セクションに分かれています。
+      Global が上部にあり、その下に Carrier と Modulator が横並び（横幅比 3:2）で配置されます。
+      キャリア波形の編集方法や、モジュレータの Use（LFO/FM/OFF）の選択によって、表示されるコントロールが変わります。
+      目的のパラメータが見当たらない場合は、これらの選択状態を確認してください。
+    </p>
+
+    <img src="./img/sections.png">
+
+    <dl>
+      <dt><a href="#global">①Global セクション</a></dt>
+      <dd>全体設定（ゲイン、同時発音数、ベンドレンジ、テーマ、フィルタ、プリセット保存／読込）を行うセクションです。</dd>
+      <dt><a href="#carrier">②Carrier セクション</a></dt>
+      <dd>キャリアの ADSR と波形編集を行うセクションです。Carrier Wave Mode の選択によってコントロールの内容が変わります。</dd>
+      <dt><a href="#modulator">③Modulator セクション</a></dt>
+      <dd>モジュレータ波形、変調レート／深さ、ADSR を設定するセクションです。Use の選択によって Rate / Depth の表示が変わります。</dd>
+    </dl>
+
+    <!--- Global -->
+
+    <h2><a name="global">Global セクション</a></h2>
+
+    <p>画面上部の Global セクションには、プラグイン全体に関わる設定がまとまっています（上図 ①）。</p>
+
+    <dl>
+      <dt>Gain</dt>
+      <dd>プラグイン出力のマスタゲイン（0〜1）。パルス波などは聞こえ方が大きくなりがちなので、他の楽器とのバランス調整に使います。デフォルト 0.5。</dd>
+      <dt>Polyphony</dt>
+      <dd>同時発音数（1〜32）。デフォルト 1。</dd>
+      <dt>Bend</dt>
+      <dd>ピッチベンドの振れ幅（半音数、0〜24）。ベンドホイールを最大まで振ったときの変化量です。デフォルト 2（全音）。</dd>
+      <dt>Load / Save</dt>
+      <dd>プラグインの全パラメータを XML ファイルとして保存・読み込みします。自作音色のバックアップや共有に使えます。</dd>
+      <dt>Theme</dt>
+      <dd>UI のカラーテーマ。FDS / YMCK / YMCK Dark / Japan / Worldwide / Monotone / Mono Dark から選択できます。</dd>
+      <dt>LPF</dt>
+      <dd>実機に近い約 2 kHz のローパスフィルタのオン／オフ。デフォルトはオン。カットオフや Q 値の調整はできません。</dd>
+    </dl>
+
+    <!--- Carrier -->
+
+    <h2><a name="carrier">Carrier セクション</a></h2>
+
+    <p>キャリアは、実際に聴こえる 64 サンプル・64 段階（6 bit）の波形です（上図 ②）。</p>
+
+    <h3>エンベロープ</h3>
+    <p>音量の時間変化を 4 つのパラメータで指定します。Magical 8bit Plug 2 と同様の操作感です。</p>
+    <dl>
+      <dt>Carrier Attack</dt>
+      <dd>鍵盤を押してから音量が最大に達するまでの時間（秒、0〜5）。</dd>
+      <dt>Carrier Decay</dt>
+      <dd>最大音量に達してから Sustain レベルまで減衰する時間（秒、0〜5）。</dd>
+      <dt>Carrier Sustain</dt>
+      <dd>Decay 後、鍵盤を離すまで維持される音量（0〜1）。</dd>
+      <dt>Carrier Release</dt>
+      <dd>鍵盤を離した後、音量が 0 になるまでの時間（秒、0〜5）。</dd>
+    </dl>
+
+    <h3>Carrier Wave Mode</h3>
+    <p>波形の作り方を選びます。選択に応じてコントロールパートの内容が切り替わります。</p>
+    <table>
+      <tr>
+        <td>Additive</td>
+        <td>8 本のドローバーで倍音を混ぜ合わせる</td>
+      </tr>
+      <tr>
+        <td>Preset Morph</td>
+        <td>三角波・のこぎり波・サイン波をベースに変形する</td>
+      </tr>
+      <tr>
+        <td>Pulse Shape</td>
+        <td>矩形波のパルス幅を変更する</td>
+      </tr>
+      <tr>
+        <td>Free Draw</td>
+        <td>64 点を直接描画する</td>
+      </tr>
+    </table>
+    <p> Additive / Preset Morph / Pulse Shape の設定値は、モードを切り替えても内部に保持されます。
+      別モードを試したあと元に戻すと、以前の値が復元されます。Free Draw のみ例外で、スライダーの値がそのまま発音用パラメータになります。
+    </p>
+
+    <h3>波形表示パート</h3>
+    <p>64 本の縦スライダーで波形を表示します。Free Draw 以外は読み取り専用で、コントロールの変更に応じて更新されます。
+      Free Draw では各スライダーを直接操作できます（各点 0〜63、6 bit）。
+    </p>
+
+    <h3>Additive（加算合成）</h3>
+    <img class="half" src="./img/carrier_additive.png">
+    <p>電子オルガンのドローバー風に、次の 8 本の倍音スライダーを横並びで配置しています。</p>
+    <pre>8', 4', 2 2/3', 2', 1 3/5', 1 1/3', 1 1/7', 1'</pre>
+    <p>各スライダー（0〜1）の振幅で正弦波を合成し、64 サンプルに量子化した波形を生成します。振幅が 1 を超える場合は自動的に正規化されます。</p>
+
+    <h3>Preset Morph（プリセット変形）</h3>
+    <img class="half" src="./img/carrier_presetMorph.png">
+    <dl>
+      <dt>Preset</dt>
+      <dd>Triangle / Sawtooth / Sine からベース波形を選択します。</dd>
+      <dt>Morph</dt>
+      <dd>中央（0）で無変形。右に動かすと<strong>圧縮</strong>（小さい振幅を相対的に強調）、左に動かすと<strong>伸長</strong>（小さい振幅をさらに下げる）。内部的にはべき乗変形です。</dd>
+    </dl>
+
+    <h3>Pulse Shape（パルス変形）</h3>
+    <img class="half" src="./img/carrier_pulseShape.png">
+    <dl>
+      <dt>Pulse width</dt>
+      <dd>矩形波の High 部分の幅（1〜63 ステップ、64 サンプル中）。デフォルト 32（50% 付近）。Hi/Lo レベルは 63/0 です。</dd>
+    </dl>
+
+    <h3>Free Draw（自由描画）</h3>
+    <img class="half" src="./img/carrier_freeDraw.png">
+    <p>コントロールパートは表示されません。波形表示パートの 64 本スライダーを直接操作して波形を指定します。</p>
+
+    <!--- Modulator -->
+
+    <h2><a name="modulator">Modulator セクション</a></h2>
+
+    <p>モジュレータは、FDS 実機と同様 32 ステップの 3 bit 命令列として動作し、キャリア波形の読み出し速度（＝音色）を変調します（上図 ③）。</p>
+
+    <h3>波形プレビューと波形選択</h3>
+    <p>32 点の累積波形を表示します（読み取り専用）。Triangle / Saw / Sine / Square / Rise / Fall / Custom から選択します。
+      プリセット 6 種は、実機 opcode 列に相当する命令列を内部に保持しています。Custom 選択時は opcode テキスト欄が表示されます。
+    </p>
+
+    <h3>Use / Rate / Depth</h3>
+    <img class="half" src="./img/modulator_fm.png">
+    <p>変調レートの使い方を Use で切り替えます。</p>
+    <table>
+      <tr>
+        <td>LFO</td>
+        <td>ゆっくり揺らす（ビブラート的）。Rate 1〜30、Depth 1〜5</td>
+      </tr>
+      <tr>
+        <td>FM</td>
+        <td>音色を変える（FM 的）。Rate 30〜4095、Depth 0〜63</td>
+      </tr>
+      <tr>
+        <td>OFF</td>
+        <td>変調なし。Rate / Depth は非表示</td>
+      </tr>
+    </table>
+    <dl>
+      <dt>Rate</dt>
+      <dd>変調の周期。実際の Hz とは単純な比例ではありませんが、値を大きくするほど速く、FM 的な効果が強まります。デフォルト 256（FM モード）。</dd>
+      <dt>Depth</dt>
+      <dd>変調の深さ。モジュレータ ADSR の出力と掛け合わせ、FDS 実機の mod gain（0〜63）相当として使われます。</dd>
+    </dl>
+
+    <h3>LFO モード</h3>
+    <img class="half" src="./img/modulator_lfo.png">
+    <p>Use を LFO にすると、Rate と Depth のレンジが LFO 向け（Rate 1〜30、Depth 1〜5）に制限されます。</p>
+
+    <h3>モジュレータエンベロープ</h3>
+    <p>変調量の時間変化（ADSR）です。キャリア ADSR と同様、秒と相対レベルで指定します。</p>
+    <dl>
+      <dt>Mod Attack</dt>
+      <dd>鍵盤を押してから変調量が最大に達するまでの時間。</dd>
+      <dt>Mod Decay</dt>
+      <dd>最大変調量から Sustain レベルまで減衰する時間。</dd>
+      <dt>Mod Sustain</dt>
+      <dd>Decay 後、鍵盤を離すまで維持される変調量。</dd>
+      <dt>Mod Release</dt>
+      <dd>鍵盤を離した後、変調量が 0 になるまでの時間。</dd>
+    </dl>
+
+    <!--------------------------------------------------------
+
+    Custom opcode
+
+    ---------------------------------------------------------->
+    <h1>Custom opcode</h1>
+
+    <img class="half" src="./img/modulator_custom.png">
+
+    <p> Custom 選択時、32 桁の数字（各 0〜7）を 1 行で入力します。空白は無視されます。全角数字は使用できません。
+      有効な 32 桁が入力確定した時点で、カスタム opcode 列が反映されます。
+      プリセット波形（Triangle など）を選んだあと Custom に切り替えると、直前のプリセットを起点に編集を始められます。
+    </p>
+
+    <h2>各数字の意味（FDS 実機準拠）</h2>
+    <table>
+      <tr>
+        <td>数字</td>
+        <td>動作</td>
+      </tr>
+      <tr>
+        <td>0</td>
+        <td>変化なし（ホールド）</td>
+      </tr>
+      <tr>
+        <td>1</td>
+        <td>カウンタ +1</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>カウンタ +2</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>カウンタ +4</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>カウンタを 0 にリセット</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>カウンタ −4</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>カウンタ −2</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>カウンタ −1</td>
+      </tr>
+    </table>
+    <p>カウンタは −64〜63 の範囲でラップします。32 ステップを 1 周すると、同じ周期で繰り返します。</p>
+
+    <h2>入力例</h2>
+    <p>三角波プリセット相当の opcode 列：</p>
+    <pre>0505050303030303030305050505</pre>
+
+    <h1>ライセンス</h1>
+    <p>本プラグインは <a href="https://www.gnu.org/licenses/gpl-3.0.html">GPL
+        v3</a> ライセンスにて配布しています。ソースコードを開示しておりますので、GPL に従い複製、頒布および改変することができます。</p>
+
+    <h1>ドネーション</h1>
+    <p>開発へのご支援は、ソースコードの共有を通じた直接のご支援のほか、ドネーションを受け付けております。ご協力いただける方はぜひよろしくお願いします。</p>
+    <p>ドネーションは<a href="https://ymck.net/app/magical-8bit-plug">こちら</a>のページからお申込みいただけます。</p>
+  </div>
+</body>
+
+</html>
