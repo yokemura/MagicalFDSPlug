@@ -93,16 +93,16 @@ ColorScheme::ColorScheme (ColorSchemeType type)
             break;
 
         case kColorSchemeFds:
-            background          = juce::Colour (0xff1d1d1d);
+            background          = juce::Colour (0xff3c3c3c);
             boxFill             = juce::Colour (0xffc04136);
-            textBoxFill         = juce::Colour (0xff3c3c3c);
+            textBoxFill         = juce::Colour (0xff1d1d1d);
             main                = juce::Colour (0xffeed27d);
             mainThinLine        = juce::Colour (0xffeed27d);
-            mainDarkened        = juce::Colour (0xff3c3c3c);
+            mainDarkened        = juce::Colour (0xff1d1d1d);
             accent              = juce::Colour (0xffeed27d);
             reversedForeground  = juce::Colour (0xff101010);
             genericBorder       = juce::Colour (0xff641c11);
-            warning             = juce::Colour (0xff641c11);
+            warning             = juce::Colour (0xffc04136);
             break;
 
         default:
