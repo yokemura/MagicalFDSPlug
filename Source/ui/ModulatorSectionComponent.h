@@ -2,7 +2,7 @@
   ==============================================================================
 
     ModulatorSectionComponent.h
-    Modulator wave preview, wave type (triangle / saw), rate, depth, ADSR.
+    Modulator wave preview, wave type (triangle / saw / custom opcodes), rate, depth, ADSR.
 
   ==============================================================================
 */
@@ -11,6 +11,9 @@
 
 #include <JuceHeader.h>
 
+#include <functional>
+
+#include "../FDSPatch.h"
 #include "ChoiceControl.h"
 #include "HorizontalSliderControl.h"
 #include "SectionLabel.h"
@@ -23,13 +26,28 @@ class ModulatorSectionComponent final : public juce::Component,
 {
 public:
     explicit ModulatorSectionComponent (juce::AudioProcessorValueTreeState& apvts);
+
+    /** Custom UI 表示切替時にエディタ全体の高さを更新する。 */
+    void setOnPreferredHeightChanged (std::function<void()> callback);
+
+    int getPreferredHeight() const;
+
     ~ModulatorSectionComponent() override;
 
     void resized() override;
 
 private:
     void parameterChanged (const juce::String& parameterID, float newValue) override;
+
     void syncWaveButtonsFromParameter();
+    void syncCustomUiVisibility();
+    void populateOpcodeEditorText();
+    void handleOpcodeEditorTextChanged();
+    void commitValidOpcodes (const std::array<uint8_t, FDSPatch::modWaveSteps>& opcodes);
+    void saveDraftFromEditor();
+    void setModWaveIndex (int index);
+    void setModLastPresetIndex (int index);
+    bool isCustomWaveSelected() const;
 
     void clampModRateToModeRange();
     void syncModRateSliderFromParameter();
@@ -39,9 +57,11 @@ private:
     void syncModDepthSliderFromParameter();
     void pushModDepthSliderToParameter();
 
-    void setModWaveIndex (int index);
+    void notifyPreferredHeightChanged();
 
     juce::AudioProcessorValueTreeState& apvts;
+
+    std::function<void()> onPreferredHeightChanged;
 
     SectionLabel heading { "Modulator" };
 
@@ -53,6 +73,14 @@ private:
     juce::ToggleButton modWaveSquare { "Square" };
     juce::ToggleButton modWaveRise   { "Rise" };
     juce::ToggleButton modWaveFall   { "Fall" };
+    juce::ToggleButton modWaveCustom { "Custom" };
+
+    juce::TextEditor modOpcodeEditor;
+    juce::Label      modOpcodeErrorLabel;
+
+    /** Custom 離脱後もセッション内で復元するテキスト（APVTS 非保存）。 */
+    juce::String modOpcodeDraftText;
+    bool         modOpcodeEditorSyncInProgress = false;
 
     ChoiceControl modRateUseControl;
     juce::Label modRateLabel;

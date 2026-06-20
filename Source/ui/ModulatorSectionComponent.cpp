@@ -8,7 +8,9 @@
 
 #include "ModulatorSectionComponent.h"
 
+#include "../ColorScheme.h"
 #include "../LayoutConstants.h"
+#include "../ModOpcodeText.h"
 #include "../Parameters.h"
 
 namespace MagicalFDS::UI
@@ -32,18 +34,13 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     modWaveSquare.setRadioGroupId (radioGroup);
     modWaveRise.setRadioGroupId (radioGroup);
     modWaveFall.setRadioGroupId (radioGroup);
-    modWaveTri.setClickingTogglesState (true);
-    modWaveSaw.setClickingTogglesState (true);
-    modWaveSine.setClickingTogglesState (true);
-    modWaveSquare.setClickingTogglesState (true);
-    modWaveRise.setClickingTogglesState (true);
-    modWaveFall.setClickingTogglesState (true);
-    addAndMakeVisible (modWaveTri);
-    addAndMakeVisible (modWaveSaw);
-    addAndMakeVisible (modWaveSine);
-    addAndMakeVisible (modWaveSquare);
-    addAndMakeVisible (modWaveRise);
-    addAndMakeVisible (modWaveFall);
+    modWaveCustom.setRadioGroupId (radioGroup);
+
+    for (auto* b : { &modWaveTri, &modWaveSaw, &modWaveSine, &modWaveSquare, &modWaveRise, &modWaveFall, &modWaveCustom })
+    {
+        b->setClickingTogglesState (true);
+        addAndMakeVisible (*b);
+    }
 
     modWaveTri.onClick = [this]
     {
@@ -75,6 +72,21 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
         if (modWaveFall.getToggleState())
             setModWaveIndex (ParamChoices::ModWaveOneShotDown);
     };
+    modWaveCustom.onClick = [this]
+    {
+        if (modWaveCustom.getToggleState())
+            setModWaveIndex (ParamChoices::ModWaveCustom);
+    };
+
+    modOpcodeEditor.setMultiLine (false);
+    modOpcodeEditor.setReturnKeyStartsNewLine (false);
+    modOpcodeEditor.setScrollbarsShown (false);
+    modOpcodeEditor.setFont (juce::FontOptions (14.f));
+    modOpcodeEditor.onTextChange = [this] { handleOpcodeEditorTextChanged(); };
+    addChildComponent (modOpcodeEditor);
+
+    modOpcodeErrorLabel.setJustificationType (juce::Justification::centredLeft);
+    addChildComponent (modOpcodeErrorLabel);
 
     addAndMakeVisible (modRateUseControl);
 
@@ -111,6 +123,7 @@ ModulatorSectionComponent::ModulatorSectionComponent (juce::AudioProcessorValueT
     apvts.addParameterListener (ParamIDs::modDepth, this);
 
     syncWaveButtonsFromParameter();
+    syncCustomUiVisibility();
     clampModRateToModeRange();
     syncModRateSliderFromParameter();
     clampModDepthToModeRange();
@@ -125,12 +138,45 @@ ModulatorSectionComponent::~ModulatorSectionComponent()
     apvts.removeParameterListener (ParamIDs::modDepth, this);
 }
 
+void ModulatorSectionComponent::setOnPreferredHeightChanged (std::function<void()> callback)
+{
+    onPreferredHeightChanged = std::move (callback);
+}
+
+int ModulatorSectionComponent::getPreferredHeight() const
+{
+    int h = Layout::modColumnBaseHeight;
+
+    if (isCustomWaveSelected())
+        h += Layout::modColumnCustomExtraHeight;
+
+    return h;
+}
+
+bool ModulatorSectionComponent::isCustomWaveSelected() const
+{
+    if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (
+            apvts.getParameter (ParamIDs::modWaveType)))
+        return p->getIndex() == ParamChoices::ModWaveCustom;
+
+    return false;
+}
+
+void ModulatorSectionComponent::notifyPreferredHeightChanged()
+{
+    if (onPreferredHeightChanged)
+        onPreferredHeightChanged();
+}
+
 void ModulatorSectionComponent::parameterChanged (const juce::String& parameterID, float newValue)
 {
     juce::ignoreUnused (newValue);
 
     if (parameterID == ParamIDs::modWaveType)
+    {
         syncWaveButtonsFromParameter();
+        syncCustomUiVisibility();
+    }
     else if (parameterID == ParamIDs::modRateUse)
     {
         clampModRateToModeRange();
@@ -142,6 +188,77 @@ void ModulatorSectionComponent::parameterChanged (const juce::String& parameterI
         syncModRateSliderFromParameter();
     else if (parameterID == ParamIDs::modDepth)
         syncModDepthSliderFromParameter();
+}
+
+void ModulatorSectionComponent::saveDraftFromEditor()
+{
+    modOpcodeDraftText = modOpcodeEditor.getText();
+}
+
+void ModulatorSectionComponent::populateOpcodeEditorText()
+{
+    juce::String text;
+
+    if (modOpcodeDraftText.isNotEmpty())
+        text = modOpcodeDraftText;
+    else if (isModCustomOpcodesActive (apvts))
+        text = formatModOpcodeText (readModOpcodesFromApvts (apvts));
+
+    modOpcodeEditorSyncInProgress = true;
+    modOpcodeEditor.setText (text, juce::dontSendNotification);
+    modOpcodeEditorSyncInProgress = false;
+
+    handleOpcodeEditorTextChanged();
+}
+
+void ModulatorSectionComponent::handleOpcodeEditorTextChanged()
+{
+    if (modOpcodeEditorSyncInProgress)
+        return;
+
+    modOpcodeDraftText = modOpcodeEditor.getText();
+
+    const auto parsed = parseModOpcodeText (modOpcodeEditor.getText());
+
+    if (! parsed.ok)
+    {
+        modOpcodeErrorLabel.setText (parsed.error, juce::dontSendNotification);
+        modOpcodeErrorLabel.setColour (juce::Label::textColourId,
+                                       findColour (MagicalFDSColours::warningTextColourId));
+        modOpcodeErrorLabel.setVisible (isCustomWaveSelected() && parsed.error.isNotEmpty());
+        return;
+    }
+
+    modOpcodeErrorLabel.setVisible (false);
+    commitValidOpcodes (parsed.opcodes);
+}
+
+void ModulatorSectionComponent::commitValidOpcodes (
+    const std::array<uint8_t, FDSPatch::modWaveSteps>& opcodes)
+{
+    const auto current = readModOpcodesFromApvts (apvts);
+    if (current == opcodes && isModCustomOpcodesActive (apvts))
+        return;
+
+    writeModOpcodesToApvts (apvts, opcodes);
+    setModCustomOpcodesActive (apvts, true);
+}
+
+void ModulatorSectionComponent::syncCustomUiVisibility()
+{
+    const bool custom = isCustomWaveSelected();
+
+    if (! custom)
+        saveDraftFromEditor();
+
+    modOpcodeEditor.setVisible (custom);
+    modOpcodeErrorLabel.setVisible (custom && modOpcodeErrorLabel.getText().isNotEmpty());
+
+    if (custom)
+        populateOpcodeEditorText();
+
+    notifyPreferredHeightChanged();
+    resized();
 }
 
 void ModulatorSectionComponent::clampModRateToModeRange()
@@ -285,8 +402,30 @@ void ModulatorSectionComponent::pushModDepthSliderToParameter()
     depthP->endChangeGesture();
 }
 
+void ModulatorSectionComponent::setModLastPresetIndex (int index)
+{
+    if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (
+            apvts.getParameter (ParamIDs::modLastPresetWaveType)))
+    {
+        const int clamped = juce::jlimit (0, (int) ParamChoices::ModWaveOneShotDown, index);
+        if (p->getIndex() == clamped)
+            return;
+
+        p->beginChangeGesture();
+        p->setValueNotifyingHost (p->getNormalisableRange().convertTo0to1 ((float) clamped));
+        p->endChangeGesture();
+    }
+}
+
 void ModulatorSectionComponent::setModWaveIndex (int index)
 {
+    const bool leavingCustom = isCustomWaveSelected() && index != ParamChoices::ModWaveCustom;
+    if (leavingCustom)
+        saveDraftFromEditor();
+
+    if (index >= ParamChoices::ModWaveTriangle && index <= ParamChoices::ModWaveOneShotDown)
+        setModLastPresetIndex (index);
+
     if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modWaveType)))
     {
         const float nv = p->getNormalisableRange().convertTo0to1 ((float) index);
@@ -294,6 +433,9 @@ void ModulatorSectionComponent::setModWaveIndex (int index)
         p->setValueNotifyingHost (nv);
         p->endChangeGesture();
     }
+
+    syncWaveButtonsFromParameter();
+    syncCustomUiVisibility();
 }
 
 void ModulatorSectionComponent::syncWaveButtonsFromParameter()
@@ -303,12 +445,13 @@ void ModulatorSectionComponent::syncWaveButtonsFromParameter()
     if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (apvts.getParameter (ParamIDs::modWaveType)))
         idx = p->getIndex();
 
-    modWaveTri.setToggleState    (idx == ParamChoices::ModWaveTriangle,   juce::dontSendNotification);
-    modWaveSaw.setToggleState    (idx == ParamChoices::ModWaveSawtooth,   juce::dontSendNotification);
-    modWaveSine.setToggleState   (idx == ParamChoices::ModWaveSine,       juce::dontSendNotification);
-    modWaveSquare.setToggleState (idx == ParamChoices::ModWaveSquare,     juce::dontSendNotification);
-    modWaveRise.setToggleState   (idx == ParamChoices::ModWaveOneShotUp,  juce::dontSendNotification);
-    modWaveFall.setToggleState   (idx == ParamChoices::ModWaveOneShotDown, juce::dontSendNotification);
+    modWaveTri.setToggleState    (idx == ParamChoices::ModWaveTriangle,     juce::dontSendNotification);
+    modWaveSaw.setToggleState    (idx == ParamChoices::ModWaveSawtooth,     juce::dontSendNotification);
+    modWaveSine.setToggleState   (idx == ParamChoices::ModWaveSine,         juce::dontSendNotification);
+    modWaveSquare.setToggleState (idx == ParamChoices::ModWaveSquare,       juce::dontSendNotification);
+    modWaveRise.setToggleState   (idx == ParamChoices::ModWaveOneShotUp,    juce::dontSendNotification);
+    modWaveFall.setToggleState   (idx == ParamChoices::ModWaveOneShotDown,  juce::dontSendNotification);
+    modWaveCustom.setToggleState (idx == ParamChoices::ModWaveCustom,       juce::dontSendNotification);
 }
 
 void ModulatorSectionComponent::resized()
@@ -341,6 +484,22 @@ void ModulatorSectionComponent::resized()
         modWaveSquare.setBounds (row.removeFromLeft (third).reduced (2, 1));
         modWaveRise.setBounds   (row.removeFromLeft (third).reduced (2, 1));
         modWaveFall.setBounds   (row.reduced (2, 1));
+    }
+
+    r.removeFromTop (Layout::componentMargin);
+
+    {
+        auto row = r.removeFromTop (Layout::rowHeight);
+        modWaveCustom.setBounds (row.removeFromLeft (row.getWidth() / 3).reduced (2, 1));
+    }
+
+    if (isCustomWaveSelected())
+    {
+        r.removeFromTop (Layout::componentMargin);
+        modOpcodeEditor.setBounds (r.removeFromTop (Layout::modOpcodeEditorHeight).reduced (0, 1));
+
+        r.removeFromTop (Layout::componentMargin);
+        modOpcodeErrorLabel.setBounds (r.removeFromTop (Layout::modOpcodeErrorHeight));
     }
 
     r.removeFromTop (Layout::componentMargin);

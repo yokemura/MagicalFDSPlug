@@ -39,5 +39,15 @@ struct ColorScheme
     juce::Colour genericBorder;
     juce::Colour warning;
 };
+
+/** Custom LookAndFeel colour IDs (registered in MagicalFDSLookAndFeel::applyColorScheme). */
+namespace MagicalFDSColours
+{
+    enum
+    {
+        /** Maps to ColorScheme::warning. */
+        warningTextColourId = 0x4d530001
+    };
+}
 } // namespace MagicalFDS
 

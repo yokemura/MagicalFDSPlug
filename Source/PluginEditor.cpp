@@ -26,11 +26,19 @@ NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioP
     addAndMakeVisible (carrierSection);
     addAndMakeVisible (modulatorSection);
 
+    modulatorSection.setOnPreferredHeightChanged ([this] { updateEditorSize(); });
+
     applyThemeFromParameters();
 
     audioProcessor.getParameters().addParameterListener (MagicalFDS::ParamIDs::colorTheme, this);
 
-    setSize (MagicalFDS::Layout::totalWidth, MagicalFDS::Layout::editorHeightHint);
+    updateEditorSize();
+}
+
+void NewProjectAudioProcessorEditor::updateEditorSize()
+{
+    setSize (MagicalFDS::Layout::totalWidth,
+             MagicalFDS::Layout::editorHeightForModColumn (modulatorSection.getPreferredHeight()));
 }
 
 NewProjectAudioProcessorEditor::~NewProjectAudioProcessorEditor()

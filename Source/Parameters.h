@@ -65,6 +65,13 @@ namespace ParamIDs
 
     // ---- Modulator controls ----
     inline constexpr const char* modWaveType = "modWaveType";
+    /** プリセット 0..5 のうち直近選択（Custom 未コミット時の opcode フォールバック）。 */
+    inline constexpr const char* modLastPresetWaveType = "modLastPresetWaveType";
+    /** Custom opcode 列が少なくとも 1 回有効コミット済み。 */
+    inline constexpr const char* modCustomOpcodesActive = "modCustomOpcodesActive";
+    /** Custom: 32×3bit opcode（modOpcode00 .. modOpcode31）。 */
+    inline constexpr const char* modOpcodePrefix = "modOpcode";
+    inline constexpr int         modOpcodeCount  = 32;
     /** LFO / FM / OFF — OFF のとき音源は modFreq12=0（変調ユニット停止）。 */
     inline constexpr const char* modRateUse = "modRateUse";
     inline constexpr const char* modRate     = "modRate";
@@ -91,6 +98,12 @@ namespace ParamChoices
 
     inline juce::StringArray modWaveNames()
     {
+        return { "Triangle", "Sawtooth", "Sine", "Square", "Rise", "Fall", "Custom" };
+    }
+
+    /** modLastPresetWaveType 用（Custom を除く 6 プリセット）。 */
+    inline juce::StringArray modPresetWaveNames()
+    {
         return { "Triangle", "Sawtooth", "Sine", "Square", "Rise", "Fall" };
     }
 
@@ -98,7 +111,8 @@ namespace ParamChoices
     enum CarrierPreset  { PresetTriangle = 0, PresetSawtooth, PresetSine };
     enum ModWaveType    { ModWaveTriangle = 0, ModWaveSawtooth,
                           ModWaveSine, ModWaveSquare,
-                          ModWaveOneShotUp, ModWaveOneShotDown };
+                          ModWaveOneShotUp, ModWaveOneShotDown,
+                          ModWaveCustom };
 
     inline juce::StringArray modRateUseNames()
     {
@@ -122,6 +136,12 @@ inline juce::String makeFreeDrawId (int index)
     return juce::String (ParamIDs::carrierFreeDrawPrefix) + juce::String::formatted ("%02d", index);
 }
 
+/** Build the parameter ID for the i-th modulator opcode step (i=0..31, two-digit zero-padded). */
+inline juce::String makeModOpcodeId (int index)
+{
+    return juce::String (ParamIDs::modOpcodePrefix) + juce::String::formatted ("%02d", index);
+}
+
 //==============================================================================
 /** Create the APVTS layout for the plugin's parameters. */
 inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout()
@@ -135,6 +155,8 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
 
     // Shared range for all ADSR A/D/R sliders (Magical8bitPlug2 准拠).
     const juce::NormalisableRange<float> adrRange { 0.0f, 5.0f, 0.001f, 0.5f };
+    // Gain / Sustain / drawbars: 0..1 リニア、表示は ADR と同様 3 桁（step 0.001）。
+    const juce::NormalisableRange<float> levelRange { 0.0f, 1.0f, 0.001f };
 
     std::vector<std::unique_ptr<juce::RangedAudioParameter>> params;
 
@@ -142,7 +164,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::gain, v },
         "Gain",
-        juce::NormalisableRange<float> (0.0f, 1.0f), 0.5f));
+        levelRange, 0.5f));
 
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::polyphony, v },
@@ -168,7 +190,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
         juce::ParameterID { ParamIDs::carrierD, v }, "Carrier Decay",   adrRange, 0.0f));
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::carrierS, v }, "Carrier Sustain",
-        juce::NormalisableRange<float> (0.0f, 1.0f), 1.0f));
+        levelRange, 1.0f));
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::carrierR, v }, "Carrier Release", adrRange, 0.0f));
 
@@ -189,7 +211,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
         params.push_back (std::make_unique<APF> (
             juce::ParameterID { makeDrawbarId (i), v },
             juce::String ("Drawbar ") + drawbarLabels[(size_t) i],
-            juce::NormalisableRange<float> (0.0f, 1.0f), defaultLevel));
+            levelRange, defaultLevel));
     }
 
     //--- (2) Preset morph -----------------------------------------------------
@@ -225,7 +247,7 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
         juce::ParameterID { ParamIDs::modD, v }, "Mod Decay",   adrRange, 0.0f));
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::modS, v }, "Mod Sustain",
-        juce::NormalisableRange<float> (0.0f, 1.0f), 1.0f));
+        levelRange, 1.0f));
     params.push_back (std::make_unique<APF> (
         juce::ParameterID { ParamIDs::modR, v }, "Mod Release", adrRange, 0.0f));
 
@@ -233,6 +255,27 @@ inline juce::AudioProcessorValueTreeState::ParameterLayout createParameterLayout
     params.push_back (std::make_unique<APC> (
         juce::ParameterID { ParamIDs::modWaveType, v },
         "Mod Wave Type", ParamChoices::modWaveNames(), ParamChoices::ModWaveTriangle));
+
+    params.push_back (std::make_unique<APC> (
+        juce::ParameterID { ParamIDs::modLastPresetWaveType, v },
+        "Mod Last Preset", ParamChoices::modPresetWaveNames(), ParamChoices::ModWaveTriangle));
+
+    params.push_back (std::make_unique<APB> (
+        juce::ParameterID { ParamIDs::modCustomOpcodesActive, v },
+        "Mod Custom Opcodes Active", false));
+
+    // Custom opcode 列の APVTS 既定は三角波プリセット相当（kFdsModTriangle と一致）。
+    static constexpr std::array<uint8_t, ParamIDs::modOpcodeCount> kDefaultModOpcodes {
+        0, 5, 0, 5, 0, 5, 0, 5, 0, 3, 0, 3, 0, 3, 0, 3,
+        0, 3, 0, 3, 0, 3, 0, 3, 0, 5, 0, 5, 0, 5, 0, 5
+    };
+    for (int i = 0; i < ParamIDs::modOpcodeCount; ++i)
+    {
+        params.push_back (std::make_unique<API> (
+            juce::ParameterID { makeModOpcodeId (i), v },
+            juce::String ("Mod Opcode ") + juce::String (i),
+            0, 7, (int) kDefaultModOpcodes[(size_t) i]));
+    }
 
     params.push_back (std::make_unique<APC> (
         juce::ParameterID { ParamIDs::modRateUse, v },

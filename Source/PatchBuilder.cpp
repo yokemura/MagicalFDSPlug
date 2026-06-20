@@ -8,6 +8,7 @@
 
 #include "PatchBuilder.h"
 
+#include "ModOpcodeText.h"
 #include "Parameters.h"
 
 #include <array>
@@ -222,6 +223,25 @@ namespace
         for (int i = 0; i < carrierN; ++i)
             dest[(size_t) i] = (uint8_t) juce::jlimit (0, 63, getIntParam (apvts, makeFreeDrawId (i)));
     }
+
+    void copyModPresetTable (int presetIndex, std::array<uint8_t, FDSPatch::modWaveSteps>& dest)
+    {
+        switch (presetIndex)
+        {
+            case ParamChoices::ModWaveSawtooth:    dest = kFdsModSaw;          break;
+            case ParamChoices::ModWaveSine:        dest = kFdsModSine;         break;
+            case ParamChoices::ModWaveSquare:      dest = kFdsModSquare;       break;
+            case ParamChoices::ModWaveOneShotUp:   dest = kFdsModOneShotUp;    break;
+            case ParamChoices::ModWaveOneShotDown: dest = kFdsModOneShotDown;  break;
+            default:                               dest = kFdsModTriangle;     break;
+        }
+    }
+
+    void buildModCustomFromApvts (juce::AudioProcessorValueTreeState& apvts,
+                                  std::array<uint8_t, FDSPatch::modWaveSteps>& dest)
+    {
+        dest = readModOpcodesFromApvts (apvts);
+    }
 } // namespace
 
 //==============================================================================
@@ -249,15 +269,16 @@ void applyApvtsToPatch (juce::AudioProcessorValueTreeState& apvts, FDSPatch& pat
     }
 
     const int modWaveIdx = getChoiceParam (apvts, ParamIDs::modWaveType);
-    switch (modWaveIdx)
+
+    if (modWaveIdx == ParamChoices::ModWaveCustom)
     {
-        case ParamChoices::ModWaveSawtooth:    patch.modWave = kFdsModSaw;          break;
-        case ParamChoices::ModWaveSine:        patch.modWave = kFdsModSine;         break;
-        case ParamChoices::ModWaveSquare:      patch.modWave = kFdsModSquare;       break;
-        case ParamChoices::ModWaveOneShotUp:   patch.modWave = kFdsModOneShotUp;    break;
-        case ParamChoices::ModWaveOneShotDown: patch.modWave = kFdsModOneShotDown;  break;
-        default:                               patch.modWave = kFdsModTriangle;     break;
+        if (isModCustomOpcodesActive (apvts))
+            buildModCustomFromApvts (apvts, patch.modWave);
+        else
+            copyModPresetTable (getChoiceParam (apvts, ParamIDs::modLastPresetWaveType), patch.modWave);
     }
+    else
+        copyModPresetTable (modWaveIdx, patch.modWave);
 
     const int rateUse = getChoiceParam (apvts, ParamIDs::modRateUse);
     const int rateRaw = getIntParam (apvts, ParamIDs::modRate);

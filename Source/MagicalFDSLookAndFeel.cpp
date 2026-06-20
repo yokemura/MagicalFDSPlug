@@ -64,6 +64,8 @@ void MagicalFDSLookAndFeel::applyColorScheme (const ColorScheme& newScheme)
     setColour (juce::PopupMenu::textColourId, scheme.mainThinLine);
     setColour (juce::PopupMenu::highlightedBackgroundColourId, scheme.main);
     setColour (juce::PopupMenu::highlightedTextColourId, scheme.reversedForeground);
+
+    setColour (MagicalFDSColours::warningTextColourId, scheme.warning);
 }
 
 //==============================================================================

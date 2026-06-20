@@ -26,6 +26,8 @@
       <FILE id="PaRb02" name="PatchBuilder.h" compile="0" resource="0" file="Source/PatchBuilder.h"/>
       <FILE id="MwPv01" name="ModWavePreview.h" compile="0" resource="0"
             file="Source/ModWavePreview.h"/>
+      <FILE id="MoTx01" name="ModOpcodeText.h" compile="0" resource="0"
+            file="Source/ModOpcodeText.h"/>
       <FILE id="FdMu01" name="FDSModulationUnit.h" compile="0" resource="0"
             file="Source/FDSModulationUnit.h"/>
       <FILE id="LyCt01" name="LayoutConstants.h" compile="0" resource="0"

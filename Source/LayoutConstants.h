@@ -51,13 +51,33 @@ namespace MagicalFDS::Layout
 
     constexpr int adsrBlockHeight = 4 * rowHeight;
 
+    /** Custom opcode テキスト入力（1 行）とエラーラベル。 */
+    constexpr int modOpcodeEditorHeight = rowHeight;
+    constexpr int modOpcodeErrorHeight  = 18;
+
+    /** モジュレータ列の基本高（opcode editor 除く。Custom ボタン行は常時表示）。 */
+    constexpr int modColumnBaseHeight = sectionHeaderHeight + sectionHeadingContentGap + modWaveDisplayHeight
+                                      + componentMargin + rowHeight * 3 + componentMargin * 3
+                                      + rowHeight + componentMargin + rowHeight + componentMargin
+                                      + rowHeight + componentMargin + adsrBlockHeight;
+
+    /** Custom 選択時の追加高（opcode editor + error）。 */
+    constexpr int modColumnCustomExtraHeight = modOpcodeEditorHeight + componentMargin + modOpcodeErrorHeight;
+
     /** キャリア列の縦積み（見出し+ギャップ+ADSR+余白+モード+余白+波形+余白+コントロール）。 */
     constexpr int carrierColumnContentHeight = sectionHeaderHeight + sectionHeadingContentGap + adsrBlockHeight + componentMargin + rowHeight
                                                + componentMargin + carrierWaveDisplayHeight + componentMargin
                                                + carrierControlPanelHeight;
 
-    /** 上余白 + グローバル + 区切り + キャリア列 + 下余白。 */
+    /** 上余白 + グローバル + 区切り + 列 + 下余白（Custom 非表示時の既定）。 */
     constexpr int editorHeightHint = outerMargin + sectionHeaderHeight + sectionHeadingContentGap + rowHeight * 3 + sectionSeparatorHeight
                                      + carrierColumnContentHeight + bottomMargin + rowHeight + componentMargin;
+
+    inline int editorHeightForModColumn (int modColumnHeight)
+    {
+        const int globalBlockHeight = sectionHeaderHeight + sectionHeadingContentGap + rowHeight * 3;
+        const int columnH = (modColumnHeight > carrierColumnContentHeight) ? modColumnHeight : carrierColumnContentHeight;
+        return outerMargin + globalBlockHeight + sectionSeparatorHeight + columnH + bottomMargin + rowHeight + componentMargin;
+    }
 }
 
