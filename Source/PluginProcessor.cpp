@@ -10,6 +10,7 @@
 #include "PluginEditor.h"
 #include "FDSVoice.h"
 #include "PatchBuilder.h"
+#include "PluginPreferences.h"
 
 #include <cmath>
 
@@ -51,6 +52,13 @@ NewProjectAudioProcessor::NewProjectAudioProcessor()
         synth.addVoice (new FDSVoice (&fdsPatch));
 
     synth.addSound (new FDSSound (&fdsPatch));
+
+    if (auto stored = MagicalFDS::PluginPreferences::getStoredColorThemeIndex())
+    {
+        if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (
+                apvts.getParameter (MagicalFDS::ParamIDs::colorTheme)))
+            p->setValueNotifyingHost (p->convertTo0to1 ((float) stored.value()));
+    }
 
     MagicalFDS::applyApvtsToPatch (apvts, fdsPatch);
     MagicalFDS::applyRuntimeParametersFromApvts (apvts, fdsPatch);

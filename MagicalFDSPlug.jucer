@@ -21,6 +21,10 @@
       <FILE id="FdVo01" name="FDSVoice.cpp" compile="1" resource="0" file="Source/FDSVoice.cpp"/>
       <FILE id="FdVo02" name="FDSVoice.h" compile="0" resource="0" file="Source/FDSVoice.h"/>
       <FILE id="PaRa01" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
+      <FILE id="PlPr01" name="PluginPreferences.cpp" compile="1" resource="0"
+            file="Source/PluginPreferences.cpp"/>
+      <FILE id="PlPr02" name="PluginPreferences.h" compile="0" resource="0"
+            file="Source/PluginPreferences.h"/>
       <FILE id="PaRb01" name="PatchBuilder.cpp" compile="1" resource="0"
             file="Source/PatchBuilder.cpp"/>
       <FILE id="PaRb02" name="PatchBuilder.h" compile="0" resource="0" file="Source/PatchBuilder.h"/>

@@ -65,6 +65,7 @@
 		A5F4225E18076E391709EAEF /* Standalone Plugin */ = {isa = PBXBuildFile; fileRef = 396E07FD89BF9DD1E0707E33; };
 		A706636B3FA40CCBD3973779 /* include_juce_audio_processors.mm */ = {isa = PBXBuildFile; fileRef = 57B7E276E510EB84094C19B4; };
 		B1F84E9D10449D0EFE36CC4C /* include_juce_data_structures.mm */ = {isa = PBXBuildFile; fileRef = DDE8043131A3B3B6DED6A50C; };
+		B54768C024AD001385D35094 /* PluginPreferences.cpp */ = {isa = PBXBuildFile; fileRef = 66A0AC25BC8A3E9B4B359226; };
 		BD242BFAC289D98FFFC2F943 /* include_juce_core_CompilationTime.cpp */ = {isa = PBXBuildFile; fileRef = 349F8D02BC448F669770B12A; };
 		BEB92687E8EE0303CEF5A7E9 /* include_juce_audio_devices.mm */ = {isa = PBXBuildFile; fileRef = 3205E6E84A7D1A9C0381483C; };
 		C01DD8E8E6BEB713F970C7B9 /* include_juce_graphics_Sheenbidi.c */ = {isa = PBXBuildFile; fileRef = B8A3DA45AFD0639DF9229E68; };
@@ -104,6 +105,7 @@
 		27402408C8893A16DE4B9245 /* include_juce_audio_plugin_client_ARA.cpp */ /* include_juce_audio_plugin_client_ARA.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_plugin_client_ARA.cpp; path = ../../JuceLibraryCode/include_juce_audio_plugin_client_ARA.cpp; sourceTree = SOURCE_ROOT; };
 		28548A06475788BA6B91FF75 /* ModulatorSectionComponent.h */ /* ModulatorSectionComponent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ModulatorSectionComponent.h; path = ../../Source/ui/ModulatorSectionComponent.h; sourceTree = SOURCE_ROOT; };
 		2883116B26CB67CDA8272BBA /* VerticalSliderControl.h */ /* VerticalSliderControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = VerticalSliderControl.h; path = ../../Source/ui/VerticalSliderControl.h; sourceTree = SOURCE_ROOT; };
+		28F61E67D7AECEC3A59E6853 /* ModOpcodeText.h */ /* ModOpcodeText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ModOpcodeText.h; path = ../../Source/ModOpcodeText.h; sourceTree = SOURCE_ROOT; };
 		2C1C3864CB9100D2063BEE32 /* HorizontalSliderControl.cpp */ /* HorizontalSliderControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = HorizontalSliderControl.cpp; path = ../../Source/ui/HorizontalSliderControl.cpp; sourceTree = SOURCE_ROOT; };
 		2D6B1432B0D7775C552BCDDB /* JuceHeader.h */ /* JuceHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = JuceHeader.h; path = ../../JuceLibraryCode/JuceHeader.h; sourceTree = SOURCE_ROOT; };
 		3205E6E84A7D1A9C0381483C /* include_juce_audio_devices.mm */ /* include_juce_audio_devices.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = include_juce_audio_devices.mm; path = ../../JuceLibraryCode/include_juce_audio_devices.mm; sourceTree = SOURCE_ROOT; };
@@ -128,6 +130,7 @@
 		5E7EAFBA3C4FF4B350D72CA1 /* AU */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "MagicalFDSPlug-debug.component"; sourceTree = BUILT_PRODUCTS_DIR; };
 		61BDD088A9404781EAC44FFE /* ChoiceControl.cpp */ /* ChoiceControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = ChoiceControl.cpp; path = ../../Source/ui/ChoiceControl.cpp; sourceTree = SOURCE_ROOT; };
 		633455BDF887D1C649363FD4 /* IOKit.framework */ /* IOKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IOKit.framework; path = System/Library/Frameworks/IOKit.framework; sourceTree = SDKROOT; };
+		66A0AC25BC8A3E9B4B359226 /* PluginPreferences.cpp */ /* PluginPreferences.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = PluginPreferences.cpp; path = ../../Source/PluginPreferences.cpp; sourceTree = SOURCE_ROOT; };
 		67D091D81BE227B9D3A6F192 /* include_juce_audio_processors_headless_ara.cpp */ /* include_juce_audio_processors_headless_ara.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = include_juce_audio_processors_headless_ara.cpp; path = ../../JuceLibraryCode/include_juce_audio_processors_headless_ara.cpp; sourceTree = SOURCE_ROOT; };
 		685B6EBCFDA61625B37F8262 /* juce_audio_plugin_client */ /* juce_audio_plugin_client */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_plugin_client; path = /Applications/JUCE/modules/juce_audio_plugin_client; sourceTree = "<absolute>"; };
 		68D00A6B0B3ED365A11A1137 /* juce_audio_basics */ /* juce_audio_basics */ = {isa = PBXFileReference; lastKnownFileType = folder; name = juce_audio_basics; path = /Applications/JUCE/modules/juce_audio_basics; sourceTree = "<absolute>"; };
@@ -143,6 +146,7 @@
 		882DE5A83439CD6D4A849FAC /* VerticalSliderControl.cpp */ /* VerticalSliderControl.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VerticalSliderControl.cpp; path = ../../Source/ui/VerticalSliderControl.cpp; sourceTree = SOURCE_ROOT; };
 		90E868C3D51908F8A273D1CB /* PluginEditor.h */ /* PluginEditor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginEditor.h; path = ../../Source/PluginEditor.h; sourceTree = SOURCE_ROOT; };
 		9246C36FFD2CE5011F0744E1 /* FDSVoice.cpp */ /* FDSVoice.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = FDSVoice.cpp; path = ../../Source/FDSVoice.cpp; sourceTree = SOURCE_ROOT; };
+		9402C741D9ECED3F60FDD2F0 /* PluginPreferences.h */ /* PluginPreferences.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PluginPreferences.h; path = ../../Source/PluginPreferences.h; sourceTree = SOURCE_ROOT; };
 		9877DD6A6102AE98E668F28E /* MagicalFDSLookAndFeel.cpp */ /* MagicalFDSLookAndFeel.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = MagicalFDSLookAndFeel.cpp; path = ../../Source/MagicalFDSLookAndFeel.cpp; sourceTree = SOURCE_ROOT; };
 		99FB97853BE215282C745B55 /* VST3 Manifest Helper */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = juce_vst3_helper; sourceTree = BUILT_PRODUCTS_DIR; };
 		9DEEBA0A1CBD27086BD6C951 /* CoreAudio.framework */ /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -365,9 +369,12 @@
 				9246C36FFD2CE5011F0744E1,
 				738BB9913F88C88DB1F49F5E,
 				1BF9A921A331BA003BDFECC1,
+				66A0AC25BC8A3E9B4B359226,
+				9402C741D9ECED3F60FDD2F0,
 				6CC51CA7DCCDF4AEFD9224D3,
 				D374CFC90AE1C2BC9646A9E4,
 				BA7B1D9B64466AC231682B79,
+				28F61E67D7AECEC3A59E6853,
 				78A7D3CBDDE07CBF8991E489,
 				37E5954F4C1282D0B0DFB48F,
 				E55BCCFAD6EEC233683E9A8F,
@@ -790,6 +797,7 @@
 				000D4CCEE3B9259628E6A7D1,
 				C4AEAAA4FB0405B12741C730,
 				CD54B590DC2C80C89FF1DF28,
+				B54768C024AD001385D35094,
 				165BB62387DF43837CA64786,
 				C96754BF017B5FA27A8D794B,
 				DA800BC0AAD1885C10991B9D,

@@ -10,6 +10,7 @@
 
 #include "../LayoutConstants.h"
 #include "../Parameters.h"
+#include "../PluginPreferences.h"
 #include "../PluginProcessor.h"
 
 namespace MagicalFDS::UI
@@ -18,6 +19,15 @@ namespace
 {
     constexpr const char* kPresetFileExtension = "*.xml";
     constexpr const char* kDefaultPresetFileName = "MagicalFDSPlug.xml";
+
+    juce::File getInitialPresetDirectory()
+    {
+        const auto stored = PluginPreferences::getLastPresetDirectory();
+        if (stored.exists())
+            return stored;
+
+        return juce::File::getSpecialLocation (juce::File::userDocumentsDirectory);
+    }
 }
 
 GlobalSectionComponent::GlobalSectionComponent (NewProjectAudioProcessor& processor,
@@ -41,6 +51,13 @@ GlobalSectionComponent::GlobalSectionComponent (NewProjectAudioProcessor& proces
 
     loadButton.onClick = [this] { showLoadDialog(); };
     saveButton.onClick = [this] { showSaveDialog(); };
+
+    colorTheme.getComboBox().onChange = [this]
+    {
+        if (auto* p = dynamic_cast<juce::AudioParameterChoice*> (
+                audioProcessor.getParameters().getParameter (ParamIDs::colorTheme)))
+            PluginPreferences::setStoredColorThemeIndex (p->getIndex());
+    };
 }
 
 void GlobalSectionComponent::resized()
@@ -71,7 +88,7 @@ void GlobalSectionComponent::showSaveDialog()
 {
     fileChooser = std::make_unique<juce::FileChooser> (
         "Save preset",
-        juce::File::getSpecialLocation (juce::File::userDocumentsDirectory).getChildFile (kDefaultPresetFileName),
+        getInitialPresetDirectory().getChildFile (kDefaultPresetFileName),
         kPresetFileExtension);
 
     const auto flags = juce::FileBrowserComponent::saveMode
@@ -84,7 +101,9 @@ void GlobalSectionComponent::showSaveDialog()
         if (file == juce::File())
             return;
 
-        if (! audioProcessor.saveStateToXmlFile (file))
+        if (audioProcessor.saveStateToXmlFile (file))
+            PluginPreferences::setLastPresetDirectory (file.getParentDirectory());
+        else
         {
             juce::AlertWindow::showMessageBoxAsync (
                 juce::AlertWindow::WarningIcon,
@@ -98,7 +117,7 @@ void GlobalSectionComponent::showLoadDialog()
 {
     fileChooser = std::make_unique<juce::FileChooser> (
         "Load preset",
-        juce::File::getSpecialLocation (juce::File::userDocumentsDirectory),
+        getInitialPresetDirectory(),
         kPresetFileExtension);
 
     const auto flags = juce::FileBrowserComponent::openMode
@@ -112,6 +131,8 @@ void GlobalSectionComponent::showLoadDialog()
 
         if (audioProcessor.loadStateFromXmlFile (file))
         {
+            PluginPreferences::setLastPresetDirectory (file.getParentDirectory());
+
             if (onStateLoadedCallback)
                 onStateLoadedCallback();
         }

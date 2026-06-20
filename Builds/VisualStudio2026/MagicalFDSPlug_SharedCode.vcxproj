@@ -147,6 +147,7 @@
     <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="..\..\Source\FDSVoice.cpp"/>
+    <ClCompile Include="..\..\Source\PluginPreferences.cpp"/>
     <ClCompile Include="..\..\Source\PatchBuilder.cpp"/>
     <ClCompile Include="..\..\Source\ColorScheme.cpp"/>
     <ClCompile Include="..\..\Source\MagicalFDSLookAndFeel.cpp"/>
@@ -2909,8 +2910,10 @@
     <ClInclude Include="..\..\Source\FDSPatch.h"/>
     <ClInclude Include="..\..\Source\FDSVoice.h"/>
     <ClInclude Include="..\..\Source\Parameters.h"/>
+    <ClInclude Include="..\..\Source\PluginPreferences.h"/>
     <ClInclude Include="..\..\Source\PatchBuilder.h"/>
     <ClInclude Include="..\..\Source\ModWavePreview.h"/>
+    <ClInclude Include="..\..\Source\ModOpcodeText.h"/>
     <ClInclude Include="..\..\Source\FDSModulationUnit.h"/>
     <ClInclude Include="..\..\Source\LayoutConstants.h"/>
     <ClInclude Include="..\..\Source\ColorScheme.h"/>

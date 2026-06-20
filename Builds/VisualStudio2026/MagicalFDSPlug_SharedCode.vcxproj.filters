@@ -691,6 +691,9 @@
     <ClCompile Include="..\..\Source\FDSVoice.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\PluginPreferences.cpp">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\PatchBuilder.cpp">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClCompile>
@@ -3663,10 +3666,16 @@
     <ClInclude Include="..\..\Source\Parameters.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Source\PluginPreferences.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\PatchBuilder.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\ModWavePreview.h">
+      <Filter>MagicalFDSPlug\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\ModOpcodeText.h">
       <Filter>MagicalFDSPlug\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\FDSModulationUnit.h">
