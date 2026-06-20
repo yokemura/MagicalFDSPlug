@@ -16,7 +16,7 @@
 NewProjectAudioProcessorEditor::NewProjectAudioProcessorEditor (NewProjectAudioProcessor& p)
     : AudioProcessorEditor (&p)
     , audioProcessor (p)
-    , globalSection (p.getParameters())
+    , globalSection (p, [this] { onStateLoaded(); })
     , carrierSection (p.getParameters())
     , modulatorSection (p.getParameters())
 {
@@ -106,4 +106,10 @@ void NewProjectAudioProcessorEditor::applyThemeFromParameters()
     const MagicalFDS::ColorScheme scheme (map[(size_t) idx]);
     lookAndFeel.applyColorScheme (scheme);
     repaint();
+}
+
+void NewProjectAudioProcessorEditor::onStateLoaded()
+{
+    applyThemeFromParameters();
+    updateEditorSize();
 }

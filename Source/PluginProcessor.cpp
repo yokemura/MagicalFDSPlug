@@ -231,6 +231,29 @@ juce::AudioProcessorEditor* NewProjectAudioProcessor::createEditor()
 }
 
 //==============================================================================
+bool NewProjectAudioProcessor::saveStateToXmlFile (const juce::File& file)
+{
+    if (auto xml = apvts.copyState().createXml())
+        return xml->writeTo (file);
+
+    return false;
+}
+
+bool NewProjectAudioProcessor::loadStateFromXmlFile (const juce::File& file)
+{
+    if (auto xml = juce::parseXML (file))
+    {
+        if (xml->hasTagName (apvts.state.getType()))
+        {
+            apvts.replaceState (juce::ValueTree::fromXml (*xml));
+            syncPolyphonyFromApvts();
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void NewProjectAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     if (auto xml = apvts.copyState().createXml())

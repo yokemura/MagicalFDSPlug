@@ -31,6 +31,7 @@ private:
     void parameterChanged (const juce::String& parameterID, float newValue) override;
     void applyThemeFromParameters();
     void updateEditorSize();
+    void onStateLoaded();
 
     NewProjectAudioProcessor& audioProcessor;
 

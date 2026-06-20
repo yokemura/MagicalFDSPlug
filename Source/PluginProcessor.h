@@ -62,6 +62,12 @@ public:
     /** UI から扱うパラメータツリー。エディタからは get/setParameterTree 経由で参照する。 */
     juce::AudioProcessorValueTreeState& getParameters() noexcept { return apvts; }
 
+    /** APVTS 状態をプレーン XML ファイルへ書き出す（DAW 保存と同形式）。 */
+    bool saveStateToXmlFile (const juce::File& file);
+
+    /** プレーン XML ファイルから APVTS 状態を復元する。 */
+    bool loadStateFromXmlFile (const juce::File& file);
+
 private:
     //==============================================================================
     static constexpr int maxPolyphonyCap = 16;
